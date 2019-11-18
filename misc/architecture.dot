@@ -1,0 +1,20 @@
+digraph {
+  bgcolor="#171310"
+
+  node[style=filled,shape=box,color="#c92d19",fontcolor="#ffffff",fontsize=10,fontname=Monospace]
+  gameserver         [label="OpenRA Game server(s)"]
+  backend            [label="Backend\n(ora-ladder)"]
+  frontend           [label="Frontend\n(web)"]
+  openrauseraccounts [label="OpenRA user accounts",color="#4d3d3d"]
+
+  node[shape=egg,color="#990d09"]
+  replays [label="Replay files"]
+  db      [label="SQLite database"]
+
+  edge[color="#ffa78d",fontcolor="#ffa78d",fontsize=10,fontname=Monospace,arrowsize=0.7]
+  gameserver -> replays            [label="write"]
+  backend    -> replays            [label="parse"]
+  backend    -> openrauseraccounts [label="query"]
+  backend    -> db                 [label="update"]
+  frontend   -> db                 [label="read"]
+}

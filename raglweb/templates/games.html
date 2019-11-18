@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% set active_page = "games" %}
+
+{% block title %}Latest games{% endblock %}
+
+{% block content %}
+<table>
+	<tr>
+		<th>Date</th>
+		<th>Map</th>
+		<th>Victorious</th>
+		<th>Defeated</th>
+	</tr>
+{% for game in games %}
+	<tr class="row">
+		<td>{{ game.date }}</td>
+		<td class="map">{{ game.map }}</td>
+		<td class="player">{{ game.p0 }}</td>
+		<td class="player">{{ game.p1 }}</td>
+	</tr>
+{% endfor %}
+</table>
+{% endblock %}

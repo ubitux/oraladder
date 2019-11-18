@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% set active_page = "leaderboard" %}
+
+{% block title %}Leaderboard{% endblock %}
+
+{% block content %}
+<table>
+	<tr>
+		<th>Rank</th>
+		<th colspan=2>Player</th>
+		<th>Rating</th>
+		<th>Played</th>
+		<th>Wins</th>
+		<th>Losses</th>
+		<th>Win rate</th>
+	</tr>
+	{% for e in leaderboard %}
+	<tr class="row">
+		<td class="position">{{ e.row_id }}</td>
+		<td class="avatar"><!--
+			<img src="" alt=" " />
+		--></td>
+		<td class="player"><a href="{{ url_for('player', profile_id=e.profile_id) }}">{{ e.player }}</a></td>
+		<td class="rating">
+			{{ e.rating }}
+			<span class="diff{%if e.diff >= 0 %}up{%else %}down{%endif%}"></span>
+		</td>
+		<td>{{ e.played }}</td>
+		<td>{{ e.wins }}</td>
+		<td>{{ e.losses }}</td>
+		<td>{{ '%.1f' | format(e.winrate) }}%</td>
+	</tr>
+	{% endfor %}
+</table>
+{% endblock %}

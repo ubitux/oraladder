@@ -1,0 +1,30 @@
+<!doctype html>
+<head>
+	<title>{% block title %}{% endblock %}</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width" />
+	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
+</head>
+<header>
+	<h1>OpenRA 1v1 Ladder</h1>
+</header>
+<nav>
+	<ul>
+	{%
+	set navbar_menus = [
+		('leaderboard', 'Leaderboard'),
+		('latest_games', 'Latest games'),
+		('globalstats', 'Global stats'),
+		('about', 'About'),
+	]
+	%}
+	{% for endpoint, caption in navbar_menus %}
+		<li class="{% if endpoint == active_page %}active{% endif %}">
+			<a href="{{ url_for(endpoint) }}">{{ caption }}</a>
+		</li>
+        {% endfor %}
+	</ul>
+</nav>
+{% block content %}{% endblock %}

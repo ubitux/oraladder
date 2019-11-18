@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% set active_page = "about" %}
+
+{% block title %}About{% endblock %}
+
+{% block content %}
+<dl>
+	<dt>Compatible game version:</dt><dd><a href="https://github.com/OpenRA/OpenRA/releases/tag/playtest-20201213">playtest-20201213</a></dd>
+	<dt>Game server instances:</dt><dd>|oraladder.net| Competitive 1v1 Ladder Server <i>N</i></dd>
+	<dt>Map pack:</dt><dd><a href="{{ url_for('static', filename='ladder-map-pack-2020-12-20.zip') }}">2020-12-20</a></dd>
+	<dt>Ranking algorithm:</dt><dd><a href="https://en.wikipedia.org/wiki/TrueSkill">Trueskill™</a></dd>
+	<dt>Contact:</dt><dd><strong>bµg</strong> on the official OpenRA Discord server</dd>
+</dl>
+{% endblock %}

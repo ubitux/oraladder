@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ player.profile_name }}{% endblock %}
+
+{% block content %}
+<h2>{{ player.profile_name }}</h2>
+<dl>
+	<dt>Rank</dt><dd>#{{ player.rank }}</dd>
+	<dt>Rating</dt><dd>{{ player.rating }}</dd>
+	<dt>Wins</dt><dd>{{ player.wins }}</dd>
+	<dt>Losses</dt><dd>{{ player.losses }}</dd>
+</dl>
+
+<h2>Rating evolution</h2>
+<canvas id="rating_chart"></canvas>
+<script>
+	Chart.defaults.global.defaultFontColor = "#e8e8e8";
+	var ctx = document.getElementById('rating_chart');
+	var myChart = new Chart(ctx, {
+		type: 'line',
+		data: {
+			labels: {{ rating_labels | safe }},
+			datasets: [{
+				label: 'Rating',
+				data: {{ rating_data | safe }},
+				backgroundColor: ['rgba(255, 99, 132, 0.2)'],
+				borderColor: ['rgba(255, 99, 132, 1)']
+			}]
+		}
+	});
+</script>
+
+<h2>Preferred factions</h2>
+<canvas id="faction_chart"></canvas>
+<script>
+	Chart.defaults.global.defaultFontColor = "#e8e8e8";
+	var ctx = document.getElementById('faction_chart');
+	var myChart = new Chart(ctx, {
+		type: 'doughnut',
+		data: {
+			labels: {{ faction_names | safe }},
+			datasets: [{
+				data: {{ faction_data | safe }},
+				backgroundColor: {{ faction_colors | safe }},
+				fontColor: '#fff'
+			}]
+		}
+	});
+</script>
+
+<h2>Map performances</h2>
+<canvas id="playermaps_chart"></canvas>
+<script>
+	Chart.defaults.global.defaultFontColor = "#e8e8e8";
+	var ctx = document.getElementById('playermaps_chart');
+	var myChart = new Chart(ctx, {
+		type: 'bar',
+		data: {
+			labels: {{ map_names | safe }},
+			datasets: [{
+				label: 'Wins',
+				data: {{ map_win_data | safe }},
+				backgroundColor: '#72ff72',
+				fontColor: '#fff'
+			}, {
+				label: 'Losses',
+				data: {{ map_loss_data | safe }},
+				backgroundColor: '#ff1a1a',
+				fontColor: '#fff'
+			}]
+		}
+	});
+</script>
+
+<h2>Latest games</h2>
+<table>
+	<tr>
+		<th>Date</th>
+		<th>Opponent</th>
+		<th>Map</th>
+		<th>Outcome</th>
+	</tr>
+{% for game in games %}
+	<tr class="row">
+		<td>{{ game.date }}</td>
+		<td class="player"><a href="{{ url_for('player', profile_id=game.opponent_id) }}">{{ game.opponent }}</a></td>
+		<td class="map">{{ game.map }}</td>
+		<td>
+			{{ game.outcome }}
+			<span class="diff{%if game.diff >= 0 %}up{%else %}down{%endif%}">{{ game.diff }}</span>
+		</td>
+	</tr>
+{% endfor %}
+</table>
+
+{% endblock %}

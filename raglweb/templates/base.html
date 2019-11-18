@@ -1,0 +1,26 @@
+<!doctype html>
+<head>
+	<title>{% block title %}{% endblock %}</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width" />
+	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<header>
+	<img src="{{ url_for('static', filename='ragl-logo.png') }}" alt="RAGL">
+</header>
+<nav>
+	<ul>
+	{%
+	set navbar_menus = [
+		('scoreboards', 'Scoreboards'),
+		('games', 'Games'),
+	]
+	%}
+	{% for endpoint, caption in navbar_menus %}
+		<li class="{% if endpoint == active_page %}active{% endif %}">
+			<a href="{{ url_for(endpoint) }}">{{ caption }}</a>
+		</li>
+        {% endfor %}
+	</ul>
+</nav>
+{% block content %}{% endblock %}

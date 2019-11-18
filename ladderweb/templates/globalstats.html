@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% set active_page = "globalstats" %}
+
+{% block title %}Global stats{% endblock %}
+
+{% block content %}
+<h2>Misc</h2>
+<dl>
+	<dt>Games:</dt><dd>{{ nb_games }}</dd>
+	<dt>Players:</dt><dd>{{ nb_players }}</dd>
+</dl>
+<h2>Maps</h2>
+<canvas id="maps_chart"></canvas>
+<script>
+	Chart.defaults.global.defaultFontColor = "#e8e8e8";
+	var ctx = document.getElementById('maps_chart');
+	var myChart = new Chart(ctx, {
+		type: 'doughnut',
+		data: {
+			labels: {{ map_names | safe }},
+			datasets: [{
+				data: {{ map_data | safe }},
+				backgroundColor: {{ map_colors | safe }},
+				fontColor: '#fff'
+			}]
+		}
+	});
+</script>
+{% endblock %}
