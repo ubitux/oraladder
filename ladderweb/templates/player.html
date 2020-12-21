@@ -79,6 +79,7 @@
 		<th>Opponent</th>
 		<th>Map</th>
 		<th>Outcome</th>
+		<th>Replay</th>
 	</tr>
 {% for game in games %}
 	<tr class="row">
@@ -89,6 +90,7 @@
 			{{ game.outcome }}
 			<span class="diff{%if game.diff >= 0 %}up{%else %}down{%endif%}">{{ game.diff }}</span>
 		</td>
+		<td><a href="{{ url_for('replay', replay_hash=game.hash) }}">📥</a></td>
 	</tr>
 {% endfor %}
 </table>

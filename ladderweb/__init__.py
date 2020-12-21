@@ -26,6 +26,7 @@ from flask import (
     current_app,
     g,
     render_template,
+    send_file,
 )
 
 
@@ -94,6 +95,7 @@ def latest_games():
     db = _db_get()
     cur = db.execute('''
         SELECT
+            hash,
             end_time,
             profile_id0,
             profile_id1,
@@ -115,6 +117,7 @@ def latest_games():
     games = []
     for match in matches:
         game = dict(
+            hash=match['hash'],
             date=match['end_time'],
             map=match['map_title'],
             p0=match['p0_name'],
@@ -230,6 +233,7 @@ def _get_player_map_stats(db, profile_id):
 def _get_latest_player_games(db, profile_id):
     cur = db.execute('''
         SELECT
+            hash,
             end_time,
             profile_id0,
             profile_id1,
@@ -266,7 +270,8 @@ def _get_latest_player_games(db, profile_id):
             opponent_id=opponent_id,
             date=match['end_time'],
             map=match['map_title'],
-            outcome=outcome
+            outcome=outcome,
+            hash=match['hash'],
         )
         games.append(game)
     cur.close()
@@ -340,3 +345,12 @@ def globalstats():
 @app.route('/about')
 def about():
     return render_template('about.html')
+
+
+@app.route('/replay/<replay_hash>')
+def replay(replay_hash):
+    db = _db_get()
+    cur = db.execute('SELECT filename FROM outcomes WHERE hash=:hash', dict(hash=replay_hash))
+    fullpath = cur.fetchone()['filename']
+    cur.close()
+    return send_file(fullpath, as_attachment=True)

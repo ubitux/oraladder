@@ -43,7 +43,7 @@ class GameResult:
     def __init__(self, start_time, end_time, filename, player0, player1, map_uid, map_title):
         self.start_time = start_time
         self.end_time = end_time
-        self.filename = filename
+        self.filename = op.abspath(filename)
         self.player0 = player0
         self.player1 = player1
         self.map_uid = map_uid
@@ -147,7 +147,7 @@ def get_result(filename):
             else:
                 raise Exception(f'players disconnected at the same time ({p0_disconnect}), draw')
 
-        return GameResult(start_time, end_time, op.basename(filename), p0, p1, map_uid, map_title)
+        return GameResult(start_time, end_time, filename, p0, p1, map_uid, map_title)
 
 
 def _log_result(filename):

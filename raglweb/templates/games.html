@@ -10,6 +10,7 @@
 		<th>Map</th>
 		<th>Victorious</th>
 		<th>Defeated</th>
+		<th>Replay<th>
 	</tr>
 {% for game in games %}
 	<tr class="row">
@@ -17,6 +18,7 @@
 		<td class="map">{{ game.map }}</td>
 		<td class="player">{{ game.p0 }}</td>
 		<td class="player">{{ game.p1 }}</td>
+		<td><a href="{{ url_for('replay', replay_hash=game.hash) }}">📥</a></td>
 	</tr>
 {% endfor %}
 </table>

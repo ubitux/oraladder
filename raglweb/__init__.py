@@ -23,6 +23,7 @@ from flask import (
     current_app,
     g,
     render_template,
+    send_file,
 )
 
 
@@ -91,6 +92,7 @@ def games():
     db = _db_get()
     cur = db.execute('''
         SELECT
+            hash,
             end_time,
             p0.profile_name as p0_name,
             p1.profile_name as p1_name,
@@ -106,6 +108,7 @@ def games():
     games = []
     for match in matches:
         game = dict(
+            hash=match['hash'],
             date=match['end_time'],
             map=match['map_title'],
             p0=match['p0_name'],
@@ -114,3 +117,12 @@ def games():
         games.append(game)
 
     return render_template('games.html', games=games)
+
+
+@app.route('/replay/<replay_hash>')
+def replay(replay_hash):
+    db = _db_get()
+    cur = db.execute('SELECT filename FROM outcomes WHERE hash=:hash', dict(hash=replay_hash))
+    fullpath = cur.fetchone()['filename']
+    cur.close()
+    return send_file(fullpath, as_attachment=True)

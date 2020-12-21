@@ -18,6 +18,7 @@
 
 import os
 import os.path as op
+import hashlib
 import logging
 import argparse
 import sqlite3
@@ -56,6 +57,7 @@ class _Player:
 class _OutCome:
 
     def __init__(self, result, p0, p1):
+        self._hash = hashlib.sha256(result.filename.encode()).hexdigest()
         self._filename = result.filename
         self._start_time = result.start_time
         self._end_time = result.end_time
@@ -79,6 +81,7 @@ class _OutCome:
     @property
     def sql_row(self):
         return (
+            self._hash,
             self._sql_date_fmt(self._start_time),
             self._sql_date_fmt(self._end_time),
             self._filename,
@@ -155,7 +158,7 @@ def _main(args):
 
     c.executemany('INSERT OR IGNORE INTO accounts VALUES (?,?,?)', accounts_sql)
     c.executemany('INSERT OR IGNORE INTO players VALUES (?,?,?,?,?,?)', players_sql)
-    c.executemany('INSERT OR IGNORE INTO outcomes VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', outcomes_sql)
+    c.executemany('INSERT OR IGNORE INTO outcomes VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', outcomes_sql)
 
     conn.commit()
     conn.close()

@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS players (
 );
 
 CREATE TABLE IF NOT EXISTS outcomes (
+	hash                  TEXT NOT NULL PRIMARY KEY,
 	start_time            TEXT NOT NULL,
 	end_time              TEXT NOT NULL,
 	filename              TEXT NOT NULL,
@@ -24,6 +25,5 @@ CREATE TABLE IF NOT EXISTS outcomes (
 	selected_faction_0    TEXT NOT NULL,
 	selected_faction_1    TEXT NOT NULL,
 	map_uid               TEXT NOT NULL,
-	map_title             TEXT NOT NULL,
-	UNIQUE(start_time, end_time, filename, profile_id0, profile_id1)
+	map_title             TEXT NOT NULL
 );
