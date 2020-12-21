@@ -63,7 +63,8 @@ cat <<EOF > $support_dir/motd.txt
 Welcome to the competitive 1v1 ladder server $n
 
 This server is linked to oraladder.net. The next game played here will be
-recorded, and the ranking of the players updated accordingly.
+recorded and made available publicly, and the ranking of the players updated
+accordingly.
 EOF
 
 
