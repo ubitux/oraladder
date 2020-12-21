@@ -33,12 +33,13 @@ class _Player:
         self.name = name
         self.wins = 0
         self.losses = 0
-        self.division = self._get_player_division(extra_info, profile_id)
+        self.division = self._get_player_division(extra_info['Divisions'], profile_id)
 
     @staticmethod
-    def _get_player_division(extra_info, profile_id):
-        for division, players in extra_info.items():
-            if profile_id in players:
+    def _get_player_division(divisions, profile_id):
+        for division, players in divisions.items():
+            profile_ids = [p[0] for p in players]
+            if profile_id in profile_ids:
                 return division
         return None
 
@@ -94,6 +95,12 @@ def _get_players_outcomes(accounts_db, results, players_info):
     profile2player = {}
     outcomes = []
 
+    # XXX: currently no sane way of querying profile names from profile IDs, so
+    # there are hardcoded in the info file
+    for division, players in players_info['Divisions'].items():
+        for profile_id, profile_name in players:
+            profile2player[profile_id] = _Player(profile_id, profile_name, players_info)
+
     for result in results:
         acc0 = accounts_db.get(result.player0.fingerprint)
         acc1 = accounts_db.get(result.player1.fingerprint)
@@ -101,14 +108,17 @@ def _get_players_outcomes(accounts_db, results, players_info):
             continue
         pid0, p0_name = acc0
         pid1, p1_name = acc1
-        p0 = profile2player.get(pid0, _Player(pid0, p0_name, players_info))
-        p1 = profile2player.get(pid1, _Player(pid1, p1_name, players_info))
+        p0 = profile2player.get(pid0)
+        p1 = profile2player.get(pid1)
+        if None in (p0, p1):  # players not registered
+            continue
+        # Replace hardcoded names with name obtained from the API
+        p0.name = p0_name
+        p1.name = p1_name
         if None in (p0.division, p1.division) or p0.division != p1.division:
             continue
         p0.wins += 1
         p1.losses += 1
-        profile2player[pid0] = p0
-        profile2player[pid1] = p1
         outcomes.append(_OutCome(result, p0, p1))
 
     players = profile2player.values()
