@@ -14,6 +14,7 @@
 		<th>Wins</th>
 		<th>Losses</th>
 		<th>Win rate</th>
+		<th>Status</th>
 	</tr>
 	{% for e in players %}
 	<tr class="row">
@@ -26,6 +27,7 @@
 		<td>{{ e.wins }}</td>
 		<td>{{ e.losses }}</td>
 		<td>{{ '%.1f' | format(e.winrate) }}%</td>
+		<td>{{ e.status }}</td>
 	</tr>
 	{% endfor %}
 </table>

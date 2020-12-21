@@ -9,7 +9,8 @@ CREATE TABLE IF NOT EXISTS players (
 	profile_name TEXT NOT NULL,
 	wins         INTEGER NOT NULL,
 	losses       INTEGER NOT NULL,
-	division     TEXT NOT NULL
+	division     TEXT NOT NULL,
+	status       TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS outcomes (

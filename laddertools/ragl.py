@@ -34,6 +34,7 @@ class _Player:
         self.wins = 0
         self.losses = 0
         self.division = self._get_player_division(extra_info['Divisions'], profile_id)
+        self.status = self._get_player_status(extra_info, profile_id)
 
     @staticmethod
     def _get_player_division(divisions, profile_id):
@@ -43,6 +44,10 @@ class _Player:
                 return division
         return None
 
+    @staticmethod
+    def _get_player_status(extra_info, profile_id):
+        return 'SF' if profile_id in extra_info['Forfeit'] else ''
+
     @property
     def sql_row(self):
         return (
@@ -51,6 +56,7 @@ class _Player:
             self.wins,
             self.losses,
             self.division,
+            self.status,
         )
 
 
@@ -117,6 +123,8 @@ def _get_players_outcomes(accounts_db, results, players_info):
         p1.name = p1_name
         if None in (p0.division, p1.division) or p0.division != p1.division:
             continue
+        if any((p0.status, p1.status)):
+            continue
         p0.wins += 1
         p1.losses += 1
         outcomes.append(_OutCome(result, p0, p1))
@@ -155,7 +163,7 @@ def _main(args):
     accounts_sql = [(fp, acc[0], acc[1]) for fp, acc in accounts_db.items()]
 
     c.executemany('INSERT OR IGNORE INTO accounts VALUES (?,?,?)', accounts_sql)
-    c.executemany('INSERT OR IGNORE INTO players VALUES (?,?,?,?,?)', players_sql)
+    c.executemany('INSERT OR IGNORE INTO players VALUES (?,?,?,?,?,?)', players_sql)
     c.executemany('INSERT OR IGNORE INTO outcomes VALUES (?,?,?,?,?,?,?,?,?,?,?)', outcomes_sql)
 
     conn.commit()

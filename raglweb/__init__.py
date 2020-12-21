@@ -61,14 +61,15 @@ def scoreboards():
             profile_name,
             wins,
             losses,
-            division
+            division,
+            status
         FROM players
         ORDER BY division, wins DESC
         '''
     )
 
     scoreboards = {}
-    for profile_id, profile_name, wins, losses, division in cur:
+    for profile_id, profile_name, wins, losses, division, status in cur:
         rows = scoreboards.get(division, [])
         nb_played = wins + losses
         rows.append(dict(
@@ -78,6 +79,7 @@ def scoreboards():
             wins=wins,
             losses=losses,
             winrate=wins / nb_played * 100 if nb_played else 0,
+            status=status,
         ))
         scoreboards[division] = rows
 
