@@ -70,13 +70,14 @@ def scoreboards():
     scoreboards = {}
     for profile_id, profile_name, wins, losses, division in cur:
         rows = scoreboards.get(division, [])
+        nb_played = wins + losses
         rows.append(dict(
             row_id=len(rows) + 1,
             name=profile_name,
             played=wins + losses,
             wins=wins,
             losses=losses,
-            winrate=wins / (wins + losses) * 100,
+            winrate=wins / nb_played * 100 if nb_played else 0,
         ))
         scoreboards[division] = rows
 
