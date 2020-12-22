@@ -279,7 +279,7 @@ def _get_latest_player_games(db, profile_id):
     return games
 
 
-@app.route('/player/<profile_id>')
+@app.route('/player/<int:profile_id>')
 def player(profile_id):
     db = _db_get()
 
