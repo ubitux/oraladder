@@ -22,7 +22,7 @@
 		<td class="avatar"><!--
 			<img src="" alt=" " />
 		--></td>
-		<td class="player">{{ e.name }}</td>
+		<td class="player"><a href="{{ url_for('player', profile_id=e.profile_id) }}">{{ e.name }}</a></td>
 		<td>{{ e.played }}</td>
 		<td>{{ e.wins }}</td>
 		<td>{{ e.losses }}</td>

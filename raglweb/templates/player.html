@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Player {{ player.profile_name }}{% endblock %}
+
+{% block content %}
+<h2>{{ player.profile_name }}</h2>
+<table>
+	<tr>
+		<th>Opponent</th>
+		<th>Played</th>
+		<th>Status</th>
+		<th colspan="4">Games</th>
+	</tr>
+{% for match in matches %}
+	<tr class="row">
+		{% set nb_games = match.games|length -%}
+		{% set rowspan = "rowspan=" ~ nb_games if nb_games > 0 else "" -%}
+		<td class="player" {{ rowspan }}><a href="{{ url_for('player', profile_id=match.opponent_id) }}">{{ match.opponent }}</a></td>
+		<td {{ rowspan }}>{{ nb_games }}/2</td>
+		<td class="status" {{ rowspan }}>{{ match.status }}</td>
+		{%- if nb_games > 0 %}
+		{%- for game in match.games %}
+		{%- if loop.index > 1 %}
+	</tr>
+	<tr class="row">
+		{%- endif %}
+		<td>{{ game.date }}</td>
+		<td class="map">{{ game.map }}</td>
+		<td class="spoiler">{{ game.outcome }}</td>
+		<td><a href="{{ url_for('replay', replay_hash=game.hash) }}">📥</a></td>
+		{%- endfor -%}
+		{% else -%}
+		<td class="nogame" colspan="4">No game recorded</td>
+		{%- endif %}
+	</tr>
+{% endfor %}
+</table>
+
+{% endblock %}

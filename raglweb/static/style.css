@@ -100,6 +100,29 @@ td.map {
 	text-align: left;
 }
 
+td.game {
+	text-align: left;
+}
+
+td.nogame {
+	font-style: italic;
+}
+
+td.status {
+	text-align: left;
+}
+
+td.spoiler {
+	background-color: black;
+	color: transparent;
+}
+
+td.spoiler:hover, span.spoiler:focus {
+	background-color: transparent;
+	color: inherit;
+}
+
+
 span.diffup   { font-weight: bold; color: #72ff72; }
 span.diffdown { font-weight: bold; color: #ff1a1a; }
 span.diffup::after   { content: '▲'; }

@@ -75,6 +75,7 @@ def scoreboards():
         nb_played = wins + losses
         rows.append(dict(
             row_id=len(rows) + 1,
+            profile_id=profile_id,
             name=profile_name,
             played=wins + losses,
             wins=wins,
@@ -94,6 +95,8 @@ def games():
         SELECT
             hash,
             end_time,
+            profile_id0,
+            profile_id1,
             p0.profile_name as p0_name,
             p1.profile_name as p1_name,
             map_title
@@ -113,10 +116,122 @@ def games():
             map=match['map_title'],
             p0=match['p0_name'],
             p1=match['p1_name'],
+            p0_id=match['profile_id0'],
+            p1_id=match['profile_id1'],
         )
         games.append(game)
 
     return render_template('games.html', games=games)
+
+
+def _get_player_info(db, profile_id):
+    cur = db.execute('''
+        SELECT
+            profile_name,
+            division
+        FROM players
+        WHERE profile_id = :pid
+        LIMIT 1''',
+        dict(pid=profile_id)
+    )
+    row = cur.fetchone()
+    player_info = dict(
+        profile_name = row['profile_name'],
+        division = row['division']
+    )
+    cur.close()
+    return player_info
+
+
+def _get_player_records(db, profile_id):
+    cur = db.execute('''
+        SELECT
+            hash,
+            end_time,
+            profile_id0,
+            profile_id1,
+            p0.profile_name as p0_name,
+            p1.profile_name as p1_name,
+            map_title
+        FROM outcomes o
+        LEFT JOIN players p0 ON p0.profile_id = o.profile_id0
+        LEFT JOIN players p1 ON p1.profile_id = o.profile_id1
+        WHERE :pid in (o.profile_id0, o.profile_id1)
+        ORDER BY o.end_time DESC''',
+        dict(pid=profile_id)
+    )
+    records = {}
+    for match in cur:
+        if match['profile_id0'] == profile_id:
+            opponent = match['p1_name']
+            opponent_id = match['profile_id1']
+            outcome = 'Won'
+        elif match['profile_id1'] == profile_id:
+            opponent = match['p0_name']
+            opponent_id = match['profile_id0']
+            outcome = 'Lost'
+        else:
+            assert False
+
+        game = dict(
+            opponent=opponent,
+            opponent_id=opponent_id,
+            date=match['end_time'],
+            map=match['map_title'],
+            outcome=outcome,
+            hash=match['hash'],
+        )
+
+        games = records.get(opponent_id, [])
+        games.append(game)
+        records[opponent_id] = games[:2]  # XXX: cap to 2 for now
+
+    cur.close()
+
+    return records
+
+
+def _get_player_opponents(db, profile_id, division):
+    cur = db.execute('''
+        SELECT
+            profile_id,
+            profile_name
+        FROM players
+        WHERE
+            profile_id != :pid AND
+            division = :division AND
+            status IS NULL
+        ORDER BY profile_name COLLATE NOCASE
+        ''',
+        dict(pid=profile_id, division=division)
+    )
+
+    for row in cur:
+        yield dict(
+            opponent_id=row['profile_id'],
+            opponent=row['profile_name'],
+        )
+
+    cur.close()
+
+
+@app.route('/player/<int:profile_id>')
+def player(profile_id):
+    db = _db_get()
+
+    player_info = _get_player_info(db, profile_id)
+    records = _get_player_records(db, profile_id)
+    opponents = _get_player_opponents(db, profile_id, player_info['division'])
+
+    # Complete opponent information with potential records
+    matches = []
+    for opponent in opponents:
+        games = records.get(opponent['opponent_id'], [])
+        opponent['games'] = games
+        opponent['status'] = '✅ All matches played' if len(games) == 2 else '🕒 Pending'
+        matches.append(opponent)
+
+    return render_template('player.html', player=player_info, matches=matches)
 
 
 @app.route('/replay/<replay_hash>')
