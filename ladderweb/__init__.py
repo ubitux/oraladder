@@ -182,10 +182,11 @@ def _get_player_info(db, profile_id):
             FROM players
             WHERE rating >= (SELECT rating FROM players WHERE profile_id=:pid)
         ) AS rank
-        FROM players WHERE profile_id=:pid''',
+        FROM players WHERE profile_id=:pid
+        LIMIT 1''',
         dict(pid=profile_id)
     )
-    player = cur.fetchall()
+    player = cur.fetchone()
     cur.close()
     return player
 
@@ -291,7 +292,7 @@ def player(profile_id):
 
     return render_template(
         'player.html',
-        player=player[0],
+        player=player,
         rating_labels=rating_labels,
         rating_data=rating_data,
         faction_names=faction_names,
