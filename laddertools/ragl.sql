@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS players (
 	wins         INTEGER NOT NULL,
 	losses       INTEGER NOT NULL,
 	division     TEXT NOT NULL,
-	status       TEXT NOT NULL
+	status       TEXT
 );
 
 CREATE TABLE IF NOT EXISTS outcomes (

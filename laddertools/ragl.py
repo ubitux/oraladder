@@ -47,7 +47,7 @@ class _Player:
 
     @staticmethod
     def _get_player_status(extra_info, profile_id):
-        return 'SF' if profile_id in extra_info['Forfeit'] else ''
+        return 'SF' if profile_id in extra_info['Forfeit'] else None
 
     @property
     def sql_row(self):

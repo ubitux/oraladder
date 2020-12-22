@@ -80,7 +80,7 @@ def scoreboards():
             wins=wins,
             losses=losses,
             winrate=wins / nb_played * 100 if nb_played else 0,
-            status=status,
+            status=status or '',
         ))
         scoreboards[division] = rows
 
