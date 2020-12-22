@@ -313,6 +313,21 @@ def _get_colors(n):
     return [_hexc(colorsys.hls_to_rgb(i / n, .4, .6)) for i in range(n)]
 
 
+def _get_global_faction_stats(db):
+    hist_factions = {}
+
+    # XXX: clumsy, patch welcome
+    for i in range(2):
+        cur = db.execute(f'SELECT COUNT(*) AS count, selected_faction_{i} AS faction FROM outcomes GROUP BY selected_faction_{i}')
+        hist_factions.update({r['faction']: r['count'] for r in cur})
+        cur.close()
+    hist_factions = hist_factions.items()
+
+    faction_names, faction_data = zip(*hist_factions)
+    faction_colors = _get_colors(len(hist_factions))
+    return list(faction_names), list(faction_data), faction_colors
+
+
 @app.route('/globalstats')
 def globalstats():
     db = _db_get()
@@ -328,6 +343,8 @@ def globalstats():
     nb_players = cur.fetchone()['nb_players']
     cur.close()
 
+    faction_names, faction_data, faction_colors = _get_global_faction_stats(db)
+
     if hist:
         map_names, map_data = zip(*hist)
         map_colors = _get_colors(len(hist))
@@ -335,6 +352,9 @@ def globalstats():
         map_names, map_data, map_colors = [], [], []
     return render_template(
         'globalstats.html',
+        faction_names=faction_names,
+        faction_data=faction_data,
+        faction_colors=faction_colors,
          map_names=list(map_names),
          map_data=list(map_data),
          map_colors=map_colors,

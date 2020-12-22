@@ -9,6 +9,7 @@
 	<dt>Games:</dt><dd>{{ nb_games }}</dd>
 	<dt>Players:</dt><dd>{{ nb_players }}</dd>
 </dl>
+
 <h2>Maps</h2>
 <canvas id="maps_chart"></canvas>
 <script>
@@ -21,6 +22,24 @@
 			datasets: [{
 				data: {{ map_data | safe }},
 				backgroundColor: {{ map_colors | safe }},
+				fontColor: '#fff'
+			}]
+		}
+	});
+</script>
+
+<h2>Preferred factions</h2>
+<canvas id="faction_chart"></canvas>
+<script>
+	Chart.defaults.global.defaultFontColor = "#e8e8e8";
+	var ctx = document.getElementById('faction_chart');
+	var myChart = new Chart(ctx, {
+		type: 'doughnut',
+		data: {
+			labels: {{ faction_names | safe }},
+			datasets: [{
+				data: {{ faction_data | safe }},
+				backgroundColor: {{ faction_colors | safe }},
 				fontColor: '#fff'
 			}]
 		}
