@@ -355,11 +355,11 @@ def globalstats():
         faction_names=faction_names,
         faction_data=faction_data,
         faction_colors=faction_colors,
-         map_names=list(map_names),
-         map_data=list(map_data),
-         map_colors=map_colors,
-         nb_games=nb_games,
-         nb_players=nb_players,
+        map_names=list(map_names),
+        map_data=list(map_data),
+        map_colors=map_colors,
+        nb_games=nb_games,
+        nb_players=nb_players,
     )
 
 
