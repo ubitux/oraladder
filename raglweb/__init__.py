@@ -136,8 +136,8 @@ def _get_player_info(db, profile_id):
     )
     row = cur.fetchone()
     player_info = dict(
-        profile_name = row['profile_name'],
-        division = row['division']
+        profile_name=row['profile_name'],
+        division=row['division'],
     )
     cur.close()
     return player_info
