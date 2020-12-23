@@ -323,11 +323,11 @@ def _get_global_faction_stats(db):
         cur.close()
     hist = hist.items()
 
-    if hist:
-        faction_names, faction_data = zip(*hist)
-        faction_colors = _get_colors(len(hist))
-    else:
-        faction_names, faction_data, faction_colors = [], [], []
+    if not hist:
+        return [], [], []
+
+    faction_names, faction_data = zip(*hist)
+    faction_colors = _get_colors(len(hist))
     return list(faction_names), list(faction_data), faction_colors
 
 
@@ -336,11 +336,11 @@ def _get_global_map_stats(db):
     hist = [(r['map_title'], r['count']) for r in cur]
     cur.close()
 
-    if hist:
-        map_names, map_data = zip(*hist)
-        map_colors = _get_colors(len(hist))
-    else:
-        map_names, map_data, map_colors = [], [], []
+    if not hist:
+        return [], [], []
+
+    map_names, map_data = zip(*hist)
+    map_colors = _get_colors(len(hist))
     return list(map_names), list(map_data), map_colors
 
 
