@@ -323,8 +323,11 @@ def _get_global_faction_stats(db):
         cur.close()
     hist_factions = hist_factions.items()
 
-    faction_names, faction_data = zip(*hist_factions)
-    faction_colors = _get_colors(len(hist_factions))
+    if hist_factions:
+        faction_names, faction_data = zip(*hist_factions)
+        faction_colors = _get_colors(len(hist_factions))
+    else:
+        faction_names, faction_data, faction_colors = [], [], []
     return list(faction_names), list(faction_data), faction_colors
 
 
