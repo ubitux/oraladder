@@ -342,7 +342,7 @@ def _get_global_map_stats(db):
     else:
         map_names, map_data, map_colors = [], [], []
 
-    return map_names, map_data, map_colors
+    return list(map_names), list(map_data), map_colors
 
 
 @app.route('/globalstats')
@@ -365,8 +365,8 @@ def globalstats():
         faction_names=faction_names,
         faction_data=faction_data,
         faction_colors=faction_colors,
-        map_names=list(map_names),
-        map_data=list(map_data),
+        map_names=map_names,
+        map_data=map_data,
         map_colors=map_colors,
         nb_games=nb_games,
         nb_players=nb_players,
