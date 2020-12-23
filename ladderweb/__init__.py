@@ -225,7 +225,7 @@ def _get_player_map_stats(db, profile_id):
     hist_losses = {r['map_title']: r['count'] for r in cur}
     cur.close()
 
-    map_names = sorted(list(set(list(hist_wins.keys()) + list(hist_losses.keys()))))
+    map_names = sorted(list(set(hist_wins.keys()) | set(hist_losses.keys())))
     map_win_data = [hist_wins.get(m, 0) for m in map_names]
     map_loss_data = [hist_losses.get(m, 0) for m in map_names]
     return map_names, map_win_data, map_loss_data
