@@ -183,7 +183,12 @@ def _get_player_info(db, profile_id):
             SELECT COUNT(*)
             FROM players
             WHERE rating >= (SELECT rating FROM players WHERE profile_id=:pid)
-        ) AS rank
+        ) AS rank,
+        (
+            SELECT strftime('%M:%S', AVG(julianday(end_time) - julianday(start_time)))
+            FROM outcomes
+            WHERE :pid IN (profile_id0, profile_id1)
+        ) AS avg_game_duration
         FROM players WHERE profile_id=:pid
         LIMIT 1''',
         dict(pid=profile_id)
@@ -352,8 +357,15 @@ def _get_global_map_stats(db):
 def globalstats():
     db = _db_get()
 
-    cur = db.execute('SELECT COUNT(*) AS nb_games FROM outcomes')
-    nb_games = cur.fetchone()['nb_games']
+    cur = db.execute('''
+        SELECT
+            COUNT(*) AS nb_games,
+            strftime('%M:%S', AVG(julianday(end_time) - julianday(start_time))) AS avg_duration
+        FROM outcomes'''
+    )
+    data = cur.fetchone()
+    nb_games = data['nb_games']
+    avg_duration = data['avg_duration']
     cur.close()
 
     cur = db.execute('SELECT COUNT(*) AS nb_players FROM players')
@@ -373,6 +385,7 @@ def globalstats():
         map_colors=map_colors,
         nb_games=nb_games,
         nb_players=nb_players,
+        avg_duration=avg_duration,
     )
 
 
