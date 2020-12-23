@@ -328,12 +328,23 @@ def _get_global_faction_stats(db):
     return list(faction_names), list(faction_data), faction_colors
 
 
-@app.route('/globalstats')
-def globalstats():
-    db = _db_get()
+def _get_global_map_stats(db):
     cur = db.execute('SELECT COUNT(*) AS count, map_title FROM outcomes GROUP BY map_title')
     hist = [(r['map_title'], r['count']) for r in cur]
     cur.close()
+
+    if hist:
+        map_names, map_data = zip(*hist)
+        map_colors = _get_colors(len(hist))
+    else:
+        map_names, map_data, map_colors = [], [], []
+
+    return map_names, map_data, map_colors
+
+
+@app.route('/globalstats')
+def globalstats():
+    db = _db_get()
 
     cur = db.execute('SELECT COUNT(*) AS nb_games FROM outcomes')
     nb_games = cur.fetchone()['nb_games']
@@ -343,13 +354,9 @@ def globalstats():
     nb_players = cur.fetchone()['nb_players']
     cur.close()
 
+    map_names, map_data, map_colors = _get_global_map_stats(db)
     faction_names, faction_data, faction_colors = _get_global_faction_stats(db)
 
-    if hist:
-        map_names, map_data = zip(*hist)
-        map_colors = _get_colors(len(hist))
-    else:
-        map_names, map_data, map_colors = [], [], []
     return render_template(
         'globalstats.html',
         faction_names=faction_names,
