@@ -129,10 +129,11 @@ def get_result(filename):
         # Unfortunately, it may be undefined, typicall in the case of a
         # disconnect loss.
         #
-        p0_outcome_time = player0.get('OutcomeTimestampUtc')
-        p1_outcome_time = player1.get('OutcomeTimestampUtc')
-        if p0_outcome_time and p0_outcome_time == p1_outcome_time:
-            end_time = _parse_date_fmt(p0_outcome_time)
+        if p0_outcome in ('Won', 'Lost') and p1_outcome in ('Won', 'Lost'):
+            p0_outcome_time = player0.get('OutcomeTimestampUtc')
+            p1_outcome_time = player1.get('OutcomeTimestampUtc')
+            if p0_outcome_time and p0_outcome_time == p1_outcome_time:
+                end_time = _parse_date_fmt(p0_outcome_time)
 
         pA = GamePlayerInfo(p0_fingerprint, p0_name, p0_faction, p0_selected_faction)
         pB = GamePlayerInfo(p1_fingerprint, p1_name, p1_faction, p1_selected_faction)
