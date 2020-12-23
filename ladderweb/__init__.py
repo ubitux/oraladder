@@ -314,18 +314,18 @@ def _get_colors(n):
 
 
 def _get_global_faction_stats(db):
-    hist_factions = {}
+    hist = {}
 
     # XXX: clumsy, patch welcome
     for i in range(2):
         cur = db.execute(f'SELECT COUNT(*) AS count, selected_faction_{i} AS faction FROM outcomes GROUP BY selected_faction_{i}')
-        hist_factions.update({r['faction']: r['count'] for r in cur})
+        hist.update({r['faction']: r['count'] for r in cur})
         cur.close()
-    hist_factions = hist_factions.items()
+    hist = hist.items()
 
-    if hist_factions:
-        faction_names, faction_data = zip(*hist_factions)
-        faction_colors = _get_colors(len(hist_factions))
+    if hist:
+        faction_names, faction_data = zip(*hist)
+        faction_colors = _get_colors(len(hist))
     else:
         faction_names, faction_data, faction_colors = [], [], []
     return list(faction_names), list(faction_data), faction_colors
@@ -341,7 +341,6 @@ def _get_global_map_stats(db):
         map_colors = _get_colors(len(hist))
     else:
         map_names, map_data, map_colors = [], [], []
-
     return list(map_names), list(map_data), map_colors
 
 
