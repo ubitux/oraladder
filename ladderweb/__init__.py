@@ -97,6 +97,7 @@ def latest_games():
         SELECT
             hash,
             end_time,
+            strftime('%M:%S', julianday(end_time) - julianday(start_time)) as duration,
             profile_id0,
             profile_id1,
             rating_0 - rating_0_prv as diff0,
@@ -119,6 +120,7 @@ def latest_games():
         game = dict(
             hash=match['hash'],
             date=match['end_time'],
+            duration=match['duration'],
             map=match['map_title'],
             p0=match['p0_name'],
             p1=match['p1_name'],
@@ -236,6 +238,7 @@ def _get_latest_player_games(db, profile_id):
         SELECT
             hash,
             end_time,
+            strftime('%M:%S', julianday(end_time) - julianday(start_time)) as duration,
             profile_id0,
             profile_id1,
             rating_0 - rating_0_prv as diff0,
@@ -270,6 +273,7 @@ def _get_latest_player_games(db, profile_id):
             opponent=opponent,
             opponent_id=opponent_id,
             date=match['end_time'],
+            duration=match['duration'],
             map=match['map_title'],
             outcome=outcome,
             hash=match['hash'],

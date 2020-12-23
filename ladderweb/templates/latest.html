@@ -10,6 +10,7 @@
 		<th>Map</th>
 		<th>Victorious</th>
 		<th>Defeated</th>
+		<th>Duration</th>
 		<th>Replay</th>
 	</tr>
 {% for game in games %}
@@ -24,6 +25,7 @@
 			<a href="{{ url_for('player', profile_id=game.p1_id) }}">{{ game.p1 }}</a>
 			<span class="diff{%if game.diff1 >= 0 %}up{%else %}down{%endif%}">{{ game.diff1 }}</span>
 		</td>
+		<td>{{ game.duration }}</td>
 		<td><a href="{{ url_for('replay', replay_hash=game.hash) }}">📥</a></td>
 	</tr>
 {% endfor %}
