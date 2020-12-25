@@ -128,7 +128,8 @@ def _get_player_info(db, profile_id):
     cur = db.execute('''
         SELECT
             profile_name,
-            division
+            division,
+            status
         FROM players
         WHERE profile_id = :pid
         LIMIT 1''',
@@ -138,6 +139,7 @@ def _get_player_info(db, profile_id):
     player_info = dict(
         profile_name=row['profile_name'],
         division=row['division'],
+        status=row['status'],
     )
     cur.close()
     return player_info
@@ -195,12 +197,12 @@ def _get_player_opponents(db, profile_id, division):
     cur = db.execute('''
         SELECT
             profile_id,
-            profile_name
+            profile_name,
+            status
         FROM players
         WHERE
             profile_id != :pid AND
-            division = :division AND
-            status IS NULL
+            division = :division
         ORDER BY profile_name COLLATE NOCASE
         ''',
         dict(pid=profile_id, division=division)
@@ -210,6 +212,7 @@ def _get_player_opponents(db, profile_id, division):
         yield dict(
             opponent_id=row['profile_id'],
             opponent=row['profile_name'],
+            status=row['status'],
         )
 
     cur.close()
@@ -228,7 +231,10 @@ def player(profile_id):
     for opponent in opponents:
         games = records.get(opponent['opponent_id'], [])
         opponent['games'] = games
-        opponent['status'] = '✅ All matches played' if len(games) == 2 else '🕒 Pending'
+        if 'SF' in (player_info['status'], opponent['status']):
+            opponent['status'] = '⛔ Canceled'
+        else:
+            opponent['status'] = '✅ All matches played' if len(games) == 2 else '🕒 Pending'
         matches.append(opponent)
 
     return render_template('player.html', player=player_info, matches=matches)
