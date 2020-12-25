@@ -126,10 +126,9 @@ def _get_players_outcomes(accounts_db, results, players_info):
         p1.name = p1_name
         if None in (p0.division, p1.division) or p0.division != p1.division:
             continue
-        if any((p0.status, p1.status)):
-            continue
-        p0.wins += 1
-        p1.losses += 1
+        if not any((p0.status, p1.status)):
+            p0.wins += 1
+            p1.losses += 1
         outcomes.append(_OutCome(result, p0, p1))
 
     players = profile2player.values()
