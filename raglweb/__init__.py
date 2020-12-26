@@ -18,7 +18,7 @@
 import os.path as op
 
 import sqlite3
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from flask import (
     Flask,
     current_app,
@@ -189,7 +189,7 @@ def _get_player_records(db, profile_id):
         game = dict(
             opponent=opponent,
             opponent_id=opponent_id,
-            date=match['end_time'],
+            date=datetime.fromisoformat(match['end_time']).strftime('%Y-%m-%d'),
             map=match['map_title'],
             outcome=outcome,
             hash=match['hash'],
