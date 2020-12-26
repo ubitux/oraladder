@@ -18,12 +18,23 @@
 import os.path as op
 
 import sqlite3
+from datetime import date, timedelta
 from flask import (
     Flask,
     current_app,
     g,
     render_template,
     send_file,
+)
+
+
+# XXX: store in a file probably
+_cfg = dict(
+    start_time=date(2020, 5, 12),
+    # We <matchup_count> done every <matchup_delay> (one matchup represents 2
+    # games between the same players)
+    matchup_delay=timedelta(weeks=1),
+    matchup_count=2,
 )
 
 
@@ -228,16 +239,45 @@ def player(profile_id):
 
     # Complete opponent information with potential records
     matches = []
+    matchup_count, matchup_done_count, matchup_canceled = 0, 0, 0
     for opponent in opponents:
         games = records.get(opponent['opponent_id'], [])
+        matchup_done = len(games) == 2
         opponent['games'] = games
         if 'SF' in (player_info['status'], opponent['status']):
             opponent['status'] = '⛔ Canceled'
+            matchup_canceled += 1
         else:
-            opponent['status'] = '✅ All matches played' if len(games) == 2 else '🕒 Pending'
+            opponent['status'] = '✅ All matches played' if matchup_done else '🕒 Pending'
+            matchup_done_count += matchup_done
+            matchup_count += 1
         matches.append(opponent)
 
-    return render_template('player.html', player=player_info, matches=matches)
+    # The final time should not change if some matches get canceled, so we take into account here
+    end_time = _cfg['start_time'] + (matchup_count + matchup_canceled) * _cfg['matchup_delay'] / _cfg['matchup_count']
+
+    matchup_expected_done = min(int((date.today() - _cfg['start_time']) / (_cfg['matchup_delay'] * _cfg['matchup_count'])), matchup_count)
+
+    if player_info['status'] == 'SF':
+        status = '⛔ Season Forfeit'
+    elif matchup_count == matchup_done_count:
+        status = '✅ All matchups completed'
+    elif matchup_expected_done > matchup_done_count:
+        status = f'⚠️ Late by {matchup_expected_done-matchup_done_count} matchup(s): ' \
+                 f'{matchup_expected_done}/{matchup_count} matchup(s) expected done by now'
+    else:
+        status = '🟢 In time'
+
+    player = dict(
+        profile_name=player_info['profile_name'],
+        status=status,
+        matchup_done_count=matchup_done_count,
+        matchup_count=matchup_count,
+        start_time=_cfg['start_time'],
+        end_time=end_time,
+    )
+
+    return render_template('player.html', player=player, matches=matches)
 
 
 @app.route('/replay/<replay_hash>')

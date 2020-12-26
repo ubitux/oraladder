@@ -4,6 +4,13 @@
 
 {% block content %}
 <h2>{{ player.profile_name }}</h2>
+<dl>
+	<dt>Matchups completed:</dt><dd>{{ player.matchup_done_count }}/{{ player.matchup_count }}</dd>
+	<dt>Playtime period:</dt><dd>{{ player.start_time }} - {{ player.end_time }}</dd>
+	<dt>Status:</dt><dd>{{ player.status }}</dd>
+</dl>
+
+<h2>Scores</h2>
 <table>
 	<tr>
 		<th>Opponent</th>
