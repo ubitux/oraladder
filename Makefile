@@ -20,19 +20,15 @@ ragldev: initwebdev
 wheel: $(VENV)
 	(. $(ACTIVATE) && pip install wheel && python setup.py bdist_wheel)
 
-maps:
-	$(WGET) -i misc/maps_list.txt --continue --content-disposition --directory-prefix $@
-
 mappack: $(MAP_PACK)
 
-$(MAP_PACK): maps
-	$(RM) $(MAP_PACK)
-	zip -9 -r $(MAP_PACK) $^
+$(MAP_PACK): $(VENV)
+	(. $(ACTIVATE) && ora-mapstool misc/map-pools/ladder.maps --pack $(MAP_PACK))
 
 clean:
 	$(RM) -r build
 	$(RM) -r dist
-	$(RM) -r maps $(MAP_PACK)
+	$(RM) -r $(MAP_PACK)
 	$(RM) -r oraladder.egg-info
 	$(RM) -r venv
 
