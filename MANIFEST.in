@@ -1,5 +1,6 @@
 include laddertools/ladder.sql
 include laddertools/ragl-s9.yml
+include laddertools/ragl-s10.yml
 include laddertools/ragl.sql
 include ladderweb/static/style.css
 include ladderweb/templates/*.html

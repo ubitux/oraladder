@@ -177,7 +177,7 @@ def run():
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--database', default='db.sqlite3')
     parser.add_argument('-s', '--schema', default=op.join(op.dirname(__file__), 'ragl.sql'))
-    parser.add_argument('-p', '--playersinfo', default=op.join(op.dirname(__file__), 'ragl-s9.yml'))
+    parser.add_argument('-p', '--playersinfo', default=op.join(op.dirname(__file__), 'ragl-s10.yml'))
     parser.add_argument('replays', nargs='*')
     args = parser.parse_args()
 

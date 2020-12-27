@@ -1,0 +1,46 @@
+# Warning: This file is standard YAML, *not* in OpenRA mini-yaml
+
+Divisions:
+
+    Masters:
+        - [3952,  anjew]
+        - [4527,  FiveAces]
+        - [6430,  Blackened]
+        - [6680,  Clockwork]
+        - [6771,  Mr Cloudy]
+        - [7304,  Upps]
+        - [7644,  KSK_Nico]
+        - [8869,  Sigil]
+        - [9599,  goat]
+        - [10757, i like men]
+
+    Minions Alpha:
+        - [5292,   Mo]
+        - [6881,   spetsnaz84]
+        - [6891,   DaolDnaKcol]
+        - [7387,   TTTPPP]
+        - [7787,   porcukor]
+        - [7813,   TiTo]
+        - [8269,   SlickSloth]
+        - [8860,   ROCKhardFISTnips]
+        - [11435,  Goremented]
+        - [11442,  Eugenator]
+        - [11913,  Duke Bones]
+        - [13060,  PallyRoy]
+        - [13096,  MR C]
+        - [13258,  copla201]
+
+    Minions Bravo:
+        - [2580,   KOYK_GR]
+        - [7299,   Kernel Panic]
+        - [7617,   smack]
+        - [7714,   Nilhall]
+        - [9342,   JackoDerp]
+        - [10569,  vvoj]
+        - [11705,  Pinkthoth]
+        - [11855,  Kaution]
+        - [12892,  poop]
+        - [12964,  Oafa]
+        - [13574,  paganini]
+        - [13674,  shavkat]
+        - [13710,  Ekanim]
