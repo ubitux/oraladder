@@ -209,7 +209,7 @@ gunicorn ladderweb:app
 
 One more thing: the map pack needs to be built and uploaded manually (it's not
 part of the Python package for ownership and size reasons). To build the zip,
-use `make mappack` and upload `ladderweb/static/ladder-map-pack-*.zip` into the
+use `make mappacks` and upload `ladderweb/static/ladder-map-pack-*.zip` into the
 corresponding directory (`~/venv/lib/python-*/site-packages/ladderweb/static`).
 
 Now that the server is listening in local, we can use `nginx` to expose it to
