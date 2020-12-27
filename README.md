@@ -88,38 +88,63 @@ chmod g+rx /home/ora
 
 ### Game server instances
 
-`ora` needs to setup the game server. We will need to upload `run.sh` and
-`maps_list.txt` (available in the `misc` directory) to `ora` home directory.
-
-As `ora` user, the first step is to fetch the restricted map pool:
+`ora` needs a virtualenv with the ladder installed in it. For that, we need to
+build a Python `wheel` of `oraladder`. This can be done with `make wheel`.  It
+will create an `oraladder-*-py3-none-any.whl` file. After uploading it into
+`ora` home directory, we can setup the game server instances:
 
 ```sh
-wget -i ~/maps_list.txt --continue --content-disposition --directory-prefix ~/maps
+# Setup virtualenv
+python -m venv venv
+
+# Enter the virtualenv
+. venv/bin/activate
+
+# Install the ladder wheel
+pip install oraladder-*-py3-none-any.whl
 ```
 
-Then, `run.sh` is a helper to bootstrap (if needed) and run the game server
-with competitive settings. This script does a lot of things:
+The game server instances need a map pool. Map pool examples can be found in
+`misc/map-pools/`.
+
+`ora-srvwrap` (available in the venv) is a helper to bootstrap (if needed) and
+run the game server with competitive settings. This tool does a lot of
+things:
 1. it fetches the OpenRA sources (if needed) at the specified version and build
    them
 2. it creates an isolated game server instance directory in which these sources
    are copied
 3. it patches the specified mod with locked competitive settings
-4. it drops all the internal maps and replace them with the previously
+4. it downloads all the maps of the map pool if not available in its cache
+5. it drops all the internal maps and replace them with the previously
    downloaded map pool
-5. it finally runs the game server instance on a port derived from the
+6. it finally runs the game server instance on a port derived from the
    specified argument
 
-A simple way of setting this up is to call `./run.sh 0`, `./run.sh 1`,
-`./run.sh 2`... for every instance we wish to start. Each instance will have
-their replays recording stored into `~/server-data-*/support_dir/Replays`.
+Assuming `ladder.maps` is present in the current directory, here is an example
+for running 3 game server instances:
+
+```sh
+ora-srvwrap map-pools/ladder.maps --label 'My Competitive 1v1 Ladder Server {id}' --baseport 10100 --basewkdir srv-ladder --instance-id 0
+ora-srvwrap map-pools/ladder.maps --label 'My Competitive 1v1 Ladder Server {id}' --baseport 10100 --basewkdir srv-ladder --instance-id 1
+ora-srvwrap map-pools/ladder.maps --label 'My Competitive 1v1 Ladder Server {id}' --baseport 10100 --basewkdir srv-ladder --instance-id 2
+```
+
+**Note**: a different shell will be required for each since this is not running
+in background.
+
+A `motd` template file can also be specified with `--motd-file`. See
+`ora-srvwrap --help` for more information.
+
+With our previous example, each instance will have their replays recording
+stored into `~/srv-ladder/instance-*/support_dir/Replays`.
 
 
 ### Backend
 
-`web` needs a virtualenv with the ladder installed in it. For that, we need to
-build a Python `wheel` of `oraladder`. This can be done with `make wheel`.  It
-will create an `oraladder-*-py3-none-any.whl` file. After uploading it into
-`web` home directory, we can setup the ladder:
+Just like `ora`, `web` needs a virtualenv with the ladder installed in it. Upload
+`oraladder-*-py3-none-any.whl` again, this time in `web` home directory. Then
+we can setup the ladder:
 
 ```sh
 # Setup virtualenv
@@ -139,7 +164,7 @@ ora-ladder -d venv/var/ladderweb-instance/db.sqlite3
 cat <<EOF > ~/updatedb.sh
 #!/bin/sh
 set -xeu
-~/venv/bin/ora-ladder /home/ora/server-data-*/support_dir/Replays/
+~/venv/bin/ora-ladder /home/ora/srv-ladder/instance-*/support_dir/Replays/
 cp db.sqlite3 /home/web/venv/var/ladderweb-instance
 EOF
 chmod +x ~/updatedb.sh

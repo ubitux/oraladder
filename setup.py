@@ -19,6 +19,7 @@ setup(
             'ora-mapstool = laddertools.mapstool:run',
             'ora-ragl   = laddertools.ragl:run',
             'ora-replay = laddertools.replay:run',
+            'ora-srvwrap  = laddertools.srvwrap:run',
         ],
     ),
 )
