@@ -24,6 +24,10 @@ body {
 	padding: 0.5em;
 }
 
+p {
+	text-align: justify;
+}
+
 header img {
 	width: 100%;
 }

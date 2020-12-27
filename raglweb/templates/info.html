@@ -4,6 +4,24 @@
 {% block title %}Information{% endblock %}
 
 {% block content %}
+<h2>Introduction</h2>
+<p>
+Red Alert Global League (RAGL), Season 10 is played starting {{ start_time }}.
+The end date can be flexible, however, we will aim to be finished in 12 weeks
+on March 29th. This timespan includes up to 8 weeks for the group stage and 4
+weeks reserved for unforeseen delays, tiebreakers and Playoffs.
+</p>
+
+<p>
+Timespan of the season is subject to change depending on actual player rosters
+and will be finalized after player registrations are closed.
+</p>
+
+<p>
+For details on prize pool contributions, check out the
+<a href="#prize_pool">Prize Pool section</a>.
+</p>
+
 <h2>The essentials</h2>
 <dl>
 	<dt>Game version:</dt><dd><a href="https://github.com/OpenRA/OpenRA/releases/tag/playtest-20201213">playtest-20201213</a></dd>
@@ -11,5 +29,236 @@
 	<dt>Map pack:</dt><dd><a href="{{ url_for('static', filename='ragl-map-pack-2020-12-27.zip') }}">2020-12-27</a></dd>
 	<dt>Contact:</dt><dd><a href="https://discord.gg/99zBDuS">Red Alert Competitive Discord</a></dd>
 	<dt>Start date:</dt><dd>{{ start_time }}</dd>
+	<dt>Current prize pool total:</dt><dd>TBA<dd>
 </dl>
+
+<h2>Format</h2>
+
+<h3>League structure</h3>
+
+<ol>
+	<li>The League is split into Masters (1st tier) and Minions (2nd tier) divisions.</li>
+	<!--
+	<ol>
+		<li>Recruits division (3rd tier) might be considered in case there are enough signups for its creation.</li>
+	</ol>
+	-->
+	<li>Masters division is always a single group of players. There is a minimum of 8 players in Masters division. There is a maximum of 16 players in Masters division.</li>
+	<li>Each division except Masters may consist of one or more groups of players. There is a minimum of 8 players per group. There is a maximum of 16 players per group.</li>
+	<li>Players are assigned to divisions according to their performance in the previous season. The ranking list is as follows:</li>
+	<ol>
+		<li>Players that finished above relegation spots in Masters</li>
+		<li>Promoted players from Minions</li>
+		<li>Relegated players from Masters</li>
+		<li>Players that finished below promotion spots in Minions</li>
+		<li>Disqualified/forfeited players from Masters</li>
+		<li>Players qualified through pre-season events</li>
+	</ol>
+	<li>In case the division is split into groups, seeding according to the ranking list takes place to prevent uneven draw of the groups rosters.</li>
+	<li>Players who feel like they've found themselves in a division above their skill level may request to be dropped a division lower to better accommodate them.</li>
+	<li>League officials reserve the rights to not honour the above rules in special cases (i.e. players that have substantial past experience in RAGL and would better be placed in Masters directly rather than Minions - or possess and displayed incredible talent for example Morkel and ILikeMen during season 9).</li>
+</ol>
+
+<h3>Group stage</h3>
+
+<ol>
+	<li>The group stage is held in a round robin format, where each player is to play a match against every opponent in his group.</li>
+	<li>A single match consists of 2 games. Game wins are added to score table as points. Must be played on the RAGL server.</li>
+</ol>
+
+<h3>Placements, promotions, relegations</h3>
+
+<ol>
+	<li>Players are ranked within their group based on game wins counted as points.</li>
+	<li>In the event of tied points at the end of the season, the players will be ranked against each other based on:</li>
+	<ol>
+		<li>Result of the players’ current season matchup</li>
+		<li>Total number of strikes accumulated by players (less strikes is better)</li>
+		<li>Best-of-3 rematch</li>
+	</ol>
+	<li>In the event of tied points for the first place in Minions group(s) at the end of the season, the players will be ranked against each other based on a Best-of-3 rematch, skipping all other tiebreakers.</li>
+	<li>Strikes can be given for a number of different reasons, including failure to report a match, cheating, etc. Each strike is marked in Scoreboards.</li>
+	<li>3 strikes accumulated during the season result in a straight Disqualification from the group stage. Disqualified players are cleared of any results in that season and are placed last in their respective group.</li>
+	<li>Players finishing in the top 4 spots of Masters are promoted into Masters Playoffs which decide final standings in Masters.</li>
+	<li>In case Minions division is split into several groups, players finishing in the 1st place in their respective groups are promoted into Minions Playoffs which decide the Minions division Champion.</li>
+	<li>Any required rematches are to be resolved in a week time following the end of the group stage. In case of failure of one of the players to schedule and play the rematch in the specified timeframe that player is automatically assigned a technical loss. In case of failure of both of the players to schedule and play the rematch in the specified timeframe both players are excluded from prize allocations and any following stages of the season.</li>
+	<li>Due to the nature of the League, actual promotions/relegations between divisions can’t be defined up until the start of the next season. Relegation zone size (Masters and Minions) is set by default as approx. 30% of the maximum player count for the respective group. Promotion zone size (Minions) is set according to Masters relegation zone and the number of Minions groups. Preliminary promotion/relegation spots are set once the season is started.</li>
+</ol>
+
+<h4>Playoffs</h4>
+
+<ol>
+	<li>Players finishing in the top 4 spots of Masters are promoted into Masters Playoffs. Playoffs consist of two Semi-final matches, Bronze Match and Final. All matches are Best-of-5.</li>
+	<li>Players finishing 1st and 4th play in the first Semi-final. Players finishing 2nd and 3rd play in the second Semi-final. Semi-final losers play in Bronze Match for the 3rd and 4th place overall. Semi-final winners play in Final for the Masters Champion title and 2nd place overall.</li>
+	<li>In case Minions division is split into 2 groups, players finishing 1st in their groups play in Minions Final for the Minions Champion title. The match is a Best-of-3.</li>
+	<li>In case Minions division is split into 4 groups, players finishing 1st in their groups play in Minions Semi-finals, drawn at random. Minions Semi-finals winners play in Minions Final for the Minions Champion title. All matches are Best-of-3.</li>
+	<li>Semi-final matches are to be resolved in 2 weeks time following the end of the group stage. In case of failure of one of the players to schedule and play the match in the specified timeframe that player is automatically assigned a technical loss. In case of failure of both of the players to schedule and play the match in the specified timeframe both players are excluded from prize allocations and any following stages of the season.</li>
+	<li>Final and 3rd place matches are to be resolved in 3 weeks time following the end of the group stage. In case of failure of one of the players to schedule and play the match in the specified timeframe that player is automatically assigned a technical loss. In case of failure of both of the players to schedule and play the match in the specified timeframe both players are excluded from prize allocations and any following stages of the season.</li>
+</ol>
+
+<h4 id="prize_pool">Prizes</h4>
+
+<ol>
+	<li>By estimate, the prize pool is split as follows (final shares might differ due to the prize pool size, transfer fees and values rounding):</li>
+	<ul>
+		<li>38% Masters Champion</li>
+		<li>21% Masters 2nd</li>
+		<li>16% Masters 3rd</li>
+		<li>10% Minions Champion</li>
+		<li>15% Season finisher prizes</li>
+		<li>$50 Mapmaker who wins the preliminary community voted map competition.</li>
+	</ul>
+	<li>Share of the prize pool (Season finisher prize) is given out to 3 players drawn randomly among those who successfully finished the season (Masters or Minions), did not accumulate strikes and are outside the normal prize spots.</li>
+	<li>Prize pools are completely voluntary and are not expected to be significant each season. If the prize pool for a particular season is thin the exact spread and rewards will be carefully considered.</li>
+</ol>
+
+<h2>Registrations</h2>
+
+<h3>New signups</h3>
+
+<ol>
+	<li>New players have until Nov 27th to send the registration info.</li>
+	<li>Registration takes place through Discord (<a href="https://discord.gg/99zBDuS">Red Alert Competitive Discord</a>, the primary channel of communication for RAGL or send a private message to @anjew), email (OpenRA.RAGL@Gmail.com) or in a relevant forum thread.</li>
+	<li>Registration info must include the forum account</li>
+	<li>Registered players are put onto Signup list. If the player sent his registration info but wasn’t put onto Signup list then he should subsequently contact the officials no later than the final date.</li>
+</ol>
+
+<h3>Returning players</h3>
+
+<ol>
+	<li>Players transferring over from the previous season have until Nov 29th to confirm their participation also.</li>
+	<li>Returning players don’t have to provide any other information than the expressed confirmation, officials are to request any of the above if mandatory information is missing.</li>
+	<li>Returning players are put onto Confirmations list in order of their performance in the previous season.</li>
+</ol>
+
+<h3>Qualifications</h3>
+
+<ol>
+<li>Players that forfeited the previous season, disqualified players from the previous season and new signups are put onto Signup list in the order of appearance.</li>
+<li>Qualification event is not held in case there are more spots in Minions than actual players. All the players from Signup list are put into Minions.</li>
+<li>Qualification event takes place to rank players in Signup list. Qualification event format is a double-elimination bracket drawn at random. All matches are Best-of-3. Qualification event takes as many rounds as needed to rank players in Signup list.</li>
+</ol>
+
+<h3>Waiting list</h3>
+
+<ol>
+	<li>In the event of players leaving the lowest division during first week for any reasons, vacant slots may be re-occupied by the players from Waiting list.</li>
+	<li>Waiting list is composed of players failing to qualify through pre-season qualification tournament and late signups that have missed the qualification tournament (or when the tournament didn't take place), in order of performance in qualification tournament and then by enlisting datetime.</li>
+	<li>Any matches that were scheduled to be played before the player promotion from Waiting list takes place are to be played out of order until the end of the group stage (same rules as player-delayed matches).</li>
+</ol>
+
+<h2>Communications</h2>
+
+Official communications between the players and with league officials are
+primarily done through Discord (<a href="https://discord.gg/99zBDuS">Red Alert
+Competitive Discord</a>, involving reporting results and various league
+business. Email address (OpenRA.RAGL@Gmail.com) is available as the auxiliary
+means of communication.
+
+<h3>Match scheduling</h3>
+
+<ol>
+	<li>All participating players are themselves responsible for their weekly matches. Special private per-division Discord channels are recognized as the official means of players communication. However, at the discretion of the players, any venue of contact can be used as long as you recognize that league officials will be of limited help should things go awry. League officials cannot guarantee or take responsibility for information processed outside of official channels.</li>
+	<li>Players are advised to contact their opponents early (i.e. via private messaging) and establish communication as well as schedule matches, as time zones and personal activities play a major part in match scheduling.</li>
+</ol>
+
+<h3>Match reporting</h3>
+
+Match reporting is done automatically by RAGL.org and playing on the
+official RAGL servers. Any attempts of playing games on any other server than
+the RAGL official server will void the replays and the games will not count.
+After you have completed your matches, it should appear on your player profile
+at ragl.org as completed.
+
+<h3>Failed contact notices</h3>
+
+<ol>
+	<li>In case match opponent is not responding or otherwise ignores the proper match scheduling, the player should inform officials of a Failed contact. Reporting a Failed contact notice protects a player that has filed such notice from receiving a strike for an unreported match.</li>
+	<li>Players caught dodging or scheduling matches at inappropriate times for their benefit will punished. Punishments include but are not limited to: warnings, strikes, season forfeits, and permanent banning from RAGL.</li>
+	<li>The player has to notify both officials and the opponent, preferably in the dedicated Discord channel. Any info regarding the contact failure should be present in the notice for officials to resolve the matter.</li>
+	<li>Failed contact notices must be sent ASAP, leaving a failed contact notice attempt till after the season is concluded will mean it will not be addressed; matches will be noted as a strike.</li>
+	<li>Failure to respond entirely will result in a 0-2 loss and a strike.</li>
+</ol>
+
+<h3>Season Forfeit</h3>
+
+<ol>
+	<li>Player is to explicitly state a season forfeit notice due to any reason that prevents finishing the season in a normal manner. Player has to notify officials, preferably in the dedicated Discord channel.</li>
+	<li>Players that forfeited the season are cleared of any results (except strikes) for that season and are placed last in their respective group.</li>
+</ol>
+
+<h3>Disputes</h3>
+
+<ol>
+	<li>Players are to contact officials explicitly in the event of a supposedly erroneous information in Scoreboards, incorrect handling of the situation or any other issues that concern the league, preferably in the dedicated Discord channel.</li>
+	<li>The league officials reserve the right to make the final call in disputed situations with the health of the league in mind.</li>
+	<li>CHEATING: any forms of cheating will be marked with various plenties decided by admins. Cheating can be anything deemed to give an unfair advantage to one player. This could be (but not limited to) Disconnecting on purpose, pausing and using actions, macros, GPS hacks etc. Plenties can range from a re-play of the game to a ban from the league. <strong>DO NOT CHEAT</strong>.</li>
+</ol>
+
+<h2>Match regulations</h2>
+
+<h3>Game setup</h3>
+
+<ol>
+	<li>Games are by default to be played on the latest game release at the moment of season start. In case a new release is shipped during an ongoing season, an explicit official notice is sent to all players regarding the versioning.</li>
+	<li>The player placed higher in the current group standings is to pick the map for the first game. The opponent is allowed to ban up to one map from the map pick. The roles are reversed for the second game. Players are free to make exceptions from this rule at the discretion of both parties.</li>
+	<ol>
+		<li>If a player wants to ban a map from his opponent's pick he should do that before the pick.</li>
+		<li>A player should be allowed to ban a map if he wishes to do so; so if a map is picked without asking to invoke the map ban, then a player is still allowed to ban a map afterwards.</li>
+	</ol>
+	<li>First map pick is pre-set by officials for Tiebreaker and Playoffs matches, followed by loser’s pick.</li>
+	<li>The game is played until one of the players is named defeated (either by all buildings and MCVs being destroyed or by pressing <code>Surrender</code>). Leaving the game before this occurs is highly discouraged as it prevents proper recording of a game result in a replay.</li>
+	<li>The use of external software macros (programmed keypress sequences of commands that are not possible to be executed by game engine means, i.e. ordering units automation) is an unsportsmanlike conduct and is forbidden. More obvious automation scripts resulting in APM spikes are detectable by replay parsing tools, other suspicious behaviours might be up for scrutiny by officials. Positive confirmation of using external tools to gain game advantage will impose a strict ruling, up to a possible ban from participation in RAGL for as long as admins see fit.</li>
+	<li>The use of modified clients that alter core gameplay in anyway are strictly forbidden. Positive confirmation of the use of a modified client to gain an unfair advantage will impose a strict ruling, up to a possible ban from participation in RAGL for as long as admins see fit.</li>
+	<li>Players found colluding in order to influence the result of their match and remove the uncertainty in the outcome of a match will be subject to strict ruling, up to a possible ban from participation in RAGL for as long as admins see fit.</li>
+</ol>
+
+<h3>Map pool</h3>
+
+<ol>
+	<li>Map pool consists of 10-12 maps specifically uploaded to the Resource Centre and marked as "Category: RAGL" and explicit naming and thumbnail watermarks. Usage of any other versions of these maps for the league games is disallowed and will be rejected from being reported as a valid match result.</li>
+	<li>All maps include a custom-made design of a Refinery (ERCC) made by Widow and FRenzy to improve the ore mining balance between various refinery positions. The refinery has reduced footprint (3x3 with no additional occupied cell at the top), all of its cells except bottom-left and top-right are passable.</li>
+	<li>Map pool will be announced as soon as it settled upon..</li>
+	<li>There will be a vote for the communities favourite map before RAGL, this map will be automatically included in the pool. Maps must ve submitted by Nov 6th.</li>
+</ol>
+
+<h3>Game disconnects</h3>
+
+<ol>
+	<li>Players are to decide between themselves the outcome of a disconnected game. If it is decided to re-play the game, the game that resulted in disconnect prior to this is deemed forfeit and cannot be used in a match result report.</li>
+	<li>If the players cannot come to an agreement with regards to a game that resulted in disconnect, a notice to the officials should be stated including the replay of the game in question, preferably in the dedicated Discord channel. The evaluation of such game will likely result in a re-play unless the game is undoubtedly decided towards one player. The final word will be up to the official evaluation regardless.</li>
+	<li>Players who get disconnected more than 3 times during a season will forfeit the game points of their following disconnected games regardless of the state of the ongoing game.</li>
+</ol>
+
+<h2>Miscellaneous</h2>
+
+<h3>Streaming/casting</h3>
+
+<ol>
+	<li>Streamers should add a minimum of 90 seconds delay to their streams when covering a league match, unless both players explicitly state their wish to disregard this rule.</li>
+	<li>Streamers who do not participate in the league but are officially recognised will receive the RAGL server password upon request.</li>
+</ol>
+
+<h3>Prize pool contributions</h3>
+
+<ol>
+	<li>Personal email account, OpenRA.RAGL@gmail.com, is connected via PayPal to host the prize pool contributions. Any person willing to contribute is to send a payment through PayPal to this email address. Name or a request to remain anonymous is to be stated in ‘Write a note’ section, as well as a request to a specific league contribution or a prize.</li>
+	<li>PayPal contributions are converted into Dollars ($), if you send money in your local currency the prize pool host will cover the conversion fees.</li>
+	<li>Current Season 10 prize pool: TBA</li>
+</ol>
+
+<h3>Officials</h3>
+
+<ol>
+	<li>The list of officials to contact is as follows:</li>
+	<ul>
+		<li>.won (.1)</li>
+		<li>Happy</li>
+		<li>Anjew</li>
+	</ul>
+	<li>RAGL has its own discord: <a href="https://discord.gg/99zBDuS">Red Alert Competitive Discord</a>. Please post in the discord with any questions. Please, refrain from using discord personal messages unless the matter is urgent and cannot be discussed by other means.</li>
+	<li>League officials reserve the rights to alter or override the rulebook at any time, including during an ongoing season. All players will be immediately notified if any substantial changes are made during the season. Any change to the rulebook after player registrations are over is duplicated via a post in this thread.</li>
+	<li>all inquiries you can contact us through Discord, at OpenRA.RAGL@Gmail.com or reply on this thread.</li>
+</ol>
+
 {% endblock %}
