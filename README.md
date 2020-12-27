@@ -121,8 +121,8 @@ things:
 6. it finally runs the game server instance on a port derived from the
    specified argument
 
-Assuming `ladder.maps` is present in the current directory, here is an example
-for running 3 game server instances:
+Assuming `misc/map-pools` was uploaded in the home directory, here is an
+example for running 3 game server instances:
 
 ```sh
 ora-srvwrap map-pools/ladder.maps --label 'My Competitive 1v1 Ladder Server {id}' --baseport 10100 --basewkdir srv-ladder --instance-id 0
