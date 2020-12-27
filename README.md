@@ -10,6 +10,11 @@ It contains:
 - detailed explanations on the setup
 - a work-in-progress RAGL integration
 
+For some context and history on the project, you can also read the following
+blog post: [Building a competitive ladder for OpenRA][blog-post].
+
+[blog-post]: http://blog.pkh.me/p/28-building-a-competitive-ladder-for-openra.html
+
 
 ## Developers
 
