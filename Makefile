@@ -10,10 +10,10 @@ RAGL_MAP_PACK = raglweb/static/ragl-map-pack-$(RAGL_MAP_PACK_VERSION).zip
 
 ACTIVATE = $(VENV)/bin/activate
 
-webdev: initwebdev
+ladderdev: initladderdev
 	(. $(ACTIVATE) && FLASK_APP=ladderweb FLASK_ENV=development flask run)
 
-initwebdev: $(VENV) $(LADDER_MAP_PACK)
+initladderdev: $(VENV) $(LADDER_MAP_PACK)
 	mkdir -p instance
 	$(RM) instance/db.sqlite3
 	(. $(ACTIVATE) && ora-ladder -d instance/db.sqlite3)
@@ -48,4 +48,4 @@ $(VENV):
 	$(PYTHON) -m venv $@
 	( . $(ACTIVATE) && pip install -e .)
 
-.PHONY: webdev initwebdev wheel clean mappacks ragldev initragldev
+.PHONY: ladderdev initladderdev wheel clean mappacks ragldev initragldev
