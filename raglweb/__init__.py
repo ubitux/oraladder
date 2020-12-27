@@ -280,6 +280,11 @@ def player(profile_id):
     return render_template('player.html', player=player, matches=matches)
 
 
+@app.route('/info')
+def info():
+    return render_template('info.html', start_time=_cfg['start_time'])
+
+
 @app.route('/replay/<replay_hash>')
 def replay(replay_hash):
     db = _db_get()

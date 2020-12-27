@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% set active_page = "info" %}
+
+{% block title %}Information{% endblock %}
+
+{% block content %}
+<h2>The essentials</h2>
+<dl>
+	<dt>Game version:</dt><dd><a href="https://github.com/OpenRA/OpenRA/releases/tag/playtest-20201213">playtest-20201213</a></dd>
+	<dt>Game server instances:</dt><dd>|ragl.org| RAGL Server <i>N</i></dd>
+	<dt>Map pack:</dt><dd><a href="{{ url_for('static', filename='ragl-map-pack-2020-12-27.zip') }}">2020-12-27</a></dd>
+	<dt>Contact:</dt><dd><a href="https://discord.gg/99zBDuS">Red Alert Competitive Discord</a></dd>
+	<dt>Start date:</dt><dd>{{ start_time }}</dd>
+</dl>
+{% endblock %}
