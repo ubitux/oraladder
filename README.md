@@ -161,19 +161,19 @@ mkdir -p venv/var/ladderweb-instance
 ora-ladder -d venv/var/ladderweb-instance/db.sqlite3
 
 # Create a useful DB update script
-cat <<EOF > ~/updatedb.sh
+cat <<EOF > ~/update-ladderdb.sh
 #!/bin/sh
 set -xeu
 ~/venv/bin/ora-ladder /home/ora/srv-ladder/instance-*/support_dir/Replays/
 cp db.sqlite3 /home/web/venv/var/ladderweb-instance
 EOF
-chmod +x ~/updatedb.sh
+chmod +x ~/update-ladderdb.sh
 ```
 
 The last step is to setup a crontab to update the database regularly; in
 `crontab -e` we can for example do:
 ```
-*/5 * * * * ~/updatedb.sh
+*/5 * * * * ~/update-ladderdb.sh
 0   0 0 * * rm -f ~/db.sqlite3
 ```
 
