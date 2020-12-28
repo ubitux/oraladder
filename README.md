@@ -35,7 +35,7 @@ interest. We can fill it using the `ora-ladder` backend command:
 . venv/bin/activate
 
 # Create a new database with your local RA replays
-ora-ladder ~/.openra/Replays/ra
+ora-ladder ~/.config/openra/Replays/ra
 
 # If everything went well, update the DB of the website atomically
 cp db.sqlite3 instance/
