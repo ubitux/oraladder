@@ -170,7 +170,7 @@ def _get_player_records(db, profile_id):
         LEFT JOIN players p0 ON p0.profile_id = o.profile_id0
         LEFT JOIN players p1 ON p1.profile_id = o.profile_id1
         WHERE :pid in (o.profile_id0, o.profile_id1)
-        ORDER BY o.end_time DESC''',
+        ORDER BY o.end_time ASC''',
         dict(pid=profile_id)
     )
     records = {}
