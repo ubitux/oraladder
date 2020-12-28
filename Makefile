@@ -2,10 +2,10 @@ PYTHON ?= python
 VENV   ?= venv
 WGET   ?= wget --no-check-certificate
 
-LADDER_MAP_PACK_VERSION = 2020-12-20
+LADDER_MAP_PACK_VERSION = 2020-12-28
 LADDER_MAP_PACK = ladderweb/static/ladder-map-pack-$(LADDER_MAP_PACK_VERSION).zip
 
-RAGL_MAP_PACK_VERSION = 2020-12-27
+RAGL_MAP_PACK_VERSION = 2020-12-28
 RAGL_MAP_PACK = raglweb/static/ragl-map-pack-$(RAGL_MAP_PACK_VERSION).zip
 
 ACTIVATE = $(VENV)/bin/activate
