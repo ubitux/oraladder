@@ -35,6 +35,7 @@ _cfg = dict(
     # games between the same players)
     matchup_delay=timedelta(weeks=1),
     matchup_count=2,
+    season=10,
 )
 
 
@@ -285,10 +286,44 @@ def info():
     return render_template('info.html', start_time=_cfg['start_time'])
 
 
+def _make_division_prefix(division_title):
+    """Convert human readable division title into prefix to use in filename."""
+    words = division_title.upper().split()
+    division_prefix = words[0]
+    if division_prefix.endswith('S'):
+        division_prefix = division_prefix[:-1]
+    division_prefix += ''.join(word[0] for word in words[1:])
+    season = _cfg['season']
+    prefix = f'RAGL-S{season:02d}-{division_prefix}-'
+    return prefix
+
+
 @app.route('/replay/<replay_hash>')
 def replay(replay_hash):
     db = _db_get()
-    cur = db.execute('SELECT filename FROM outcomes WHERE hash=:hash', dict(hash=replay_hash))
-    fullpath = cur.fetchone()['filename']
+    cur = db.execute('''
+        SELECT
+            filename,
+            p0.division as p0_division,
+            p1.division as p1_division
+        FROM outcomes o
+        LEFT JOIN players p0 ON p0.profile_id = o.profile_id0
+        LEFT JOIN players p1 ON p1.profile_id = o.profile_id1
+        WHERE hash=:hash
+    ''', dict(hash=replay_hash))
+    row = cur.fetchone()
+
+    p0_division = row['p0_division']
+    p1_division = row['p1_division']
+    assert p0_division == p1_division
+    prefix = _make_division_prefix(p0_division)
+
+    fullpath = row['filename']
+    original_filename = op.basename(fullpath)
+    attachment_filename = prefix + original_filename
     cur.close()
-    return send_file(fullpath, as_attachment=True)
+    return send_file(
+        fullpath,
+        as_attachment=True,
+        attachment_filename=attachment_filename
+    )
