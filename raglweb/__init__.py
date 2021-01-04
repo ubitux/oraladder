@@ -257,7 +257,7 @@ def player(profile_id):
     # The final time should not change if some matches get canceled, so we take into account here
     end_time = _cfg['start_time'] + (matchup_count + matchup_canceled) * _cfg['matchup_delay'] / _cfg['matchup_count']
 
-    matchup_expected_done = min(int((date.today() - _cfg['start_time']) / (_cfg['matchup_delay'] * _cfg['matchup_count'])), matchup_count)
+    matchup_expected_done = min(int((date.today() - _cfg['start_time']) * _cfg['matchup_count'] / _cfg['matchup_delay']), matchup_count)
 
     if player_info['status'] == 'SF':
         status = '⛔ Season Forfeit'
