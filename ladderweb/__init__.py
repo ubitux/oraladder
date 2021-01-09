@@ -74,11 +74,12 @@ def leaderboard():
     )
 
     rows = []
-    for i, (profile_id, profile_name, wins, losses, prv_rating, rating) in enumerate(cur, 1):
+    for i, (profile_id, profile_name, avatar_url, wins, losses, prv_rating, rating) in enumerate(cur, 1):
         rows.append(dict(
             row_id=i,
             profile_id=profile_id,
             player=profile_name,
+            avatar_url=avatar_url,
             rating=rating,
             diff=rating - prv_rating,
             played=wins + losses,

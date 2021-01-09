@@ -58,7 +58,9 @@ def _update_account_cache(accounts_db, player):
 
     profile_id = int(player_info['Player']['ProfileID'])
     profile_name = player_info['Player']['ProfileName']
-    accounts_db[fingerprint] = (profile_id, profile_name)
+    avatar = player_info['Player']['Avatar']
+    avatar_url = avatar['Src'] if avatar else ''
+    accounts_db[fingerprint] = (profile_id, profile_name, avatar_url)
 
     logging.info(f'{fingerprint}: {profile_name=} {profile_id=}')
     return True

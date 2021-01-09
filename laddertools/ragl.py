@@ -29,9 +29,10 @@ from .utils import get_results
 
 class _Player:
 
-    def __init__(self, profile_id, name, extra_info):
+    def __init__(self, profile_id, name, avatar_url, extra_info):
         self.profile_id = profile_id
         self.name = name
+        self.avatar_url = avatar_url
         self.wins = 0
         self.losses = 0
         self.division = self._get_player_division(extra_info['Divisions'], profile_id)
@@ -54,6 +55,7 @@ class _Player:
         return (
             self.profile_id,
             self.name,
+            self.avatar_url,
             self.wins,
             self.losses,
             self.division,
@@ -108,15 +110,15 @@ def _get_players_outcomes(accounts_db, results, players_info):
     # there are hardcoded in the info file
     for division, players in players_info['Divisions'].items():
         for profile_id, profile_name in players:
-            profile2player[profile_id] = _Player(profile_id, profile_name, players_info)
+            profile2player[profile_id] = _Player(profile_id, profile_name, '', players_info)
 
     for result in results:
         acc0 = accounts_db.get(result.player0.fingerprint)
         acc1 = accounts_db.get(result.player1.fingerprint)
         if acc0 is None or acc1 is None:
             continue
-        pid0, p0_name = acc0
-        pid1, p1_name = acc1
+        pid0, p0_name, p0_avatar = acc0
+        pid1, p1_name, p1_avatar = acc1
         p0 = profile2player.get(pid0)
         p1 = profile2player.get(pid1)
         if None in (p0, p1):  # players not registered
@@ -124,6 +126,9 @@ def _get_players_outcomes(accounts_db, results, players_info):
         # Replace hardcoded names with name obtained from the API
         p0.name = p0_name
         p1.name = p1_name
+        # Replace empty avatars with the one obtained from the API
+        p0.avatar_url = p0_avatar
+        p1.avatar_url = p1_avatar
         if None in (p0.division, p1.division) or p0.division != p1.division:
             continue
         if not any((p0.status, p1.status)):
@@ -152,7 +157,7 @@ def _main(args):
     # Re-use the cached OpenRA account information to prevent stressing too
     # much the service
     request_accounts = c.execute('SELECT * FROM accounts')
-    accounts_db = {fp: (pid, pname) for fp, pid, pname in request_accounts.fetchall()}
+    accounts_db = {fp: (pid, pname, avatar_url) for fp, pid, pname, avatar_url in request_accounts.fetchall()}
 
     results = get_results(accounts_db, args.replays)
 
@@ -162,10 +167,10 @@ def _main(args):
 
     outcomes_sql = [o.sql_row for o in outcomes]
     players_sql = [p.sql_row for p in players]
-    accounts_sql = [(fp, acc[0], acc[1]) for fp, acc in accounts_db.items()]
+    accounts_sql = [(fp, acc[0], acc[1], acc[2]) for fp, acc in accounts_db.items()]
 
-    c.executemany('INSERT OR IGNORE INTO accounts VALUES (?,?,?)', accounts_sql)
-    c.executemany('INSERT OR IGNORE INTO players VALUES (?,?,?,?,?,?)', players_sql)
+    c.executemany('INSERT OR IGNORE INTO accounts VALUES (?,?,?,?)', accounts_sql)
+    c.executemany('INSERT OR IGNORE INTO players VALUES (?,?,?,?,?,?,?)', players_sql)
     c.executemany('INSERT OR IGNORE INTO outcomes VALUES (?,?,?,?,?,?,?,?,?,?,?,?)', outcomes_sql)
 
     conn.commit()

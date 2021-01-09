@@ -30,13 +30,14 @@ from .utils import get_results
 
 class _Player:
 
-    def __init__(self, ranking, profile_id, name):
+    def __init__(self, ranking, profile_id, name, avatar_url):
         self.profile_id = profile_id
         self.name = name
         self.wins = 0
         self.losses = 0
         self.prv_rating = ranking.get_default_rating()
         self.rating = ranking.get_default_rating()
+        self.avatar_url = avatar_url
 
     def update_rating(self, new_rating):
         self.prv_rating = self.rating
@@ -47,6 +48,7 @@ class _Player:
         return (
             self.profile_id,
             self.name,
+            self.avatar_url,
             self.wins,
             self.losses,
             self.prv_rating.display_value,
@@ -112,10 +114,10 @@ def _get_players_outcomes(accounts_db, results, ranking_system):
         acc1 = accounts_db.get(result.player1.fingerprint)
         if acc0 is None or acc1 is None:
             continue
-        pid0, p0_name = acc0
-        pid1, p1_name = acc1
-        p0 = profile2player.get(pid0, _Player(ranking, pid0, p0_name))
-        p1 = profile2player.get(pid1, _Player(ranking, pid1, p1_name))
+        pid0, p0_name, p0_avatar = acc0
+        pid1, p1_name, p1_avatar = acc1
+        p0 = profile2player.get(pid0, _Player(ranking, pid0, p0_name, p0_avatar))
+        p1 = profile2player.get(pid1, _Player(ranking, pid1, p1_name, p1_avatar))
         p0_rating, p1_rating = ranking.record_result(p0.rating, p1.rating)
         p0.update_rating(p0_rating)
         p1.update_rating(p1_rating)
@@ -146,7 +148,7 @@ def _main(args):
     # Re-use the cached OpenRA account information to prevent stressing too
     # much the service
     request_accounts = c.execute('SELECT * FROM accounts')
-    accounts_db = {fp: (pid, pname) for fp, pid, pname in request_accounts.fetchall()}
+    accounts_db = {fp: (pid, pname, avatar_url) for fp, pid, pname, avatar_url in request_accounts.fetchall()}
 
     results = get_results(accounts_db, args.replays)
 
@@ -154,10 +156,10 @@ def _main(args):
 
     outcomes_sql = [o.sql_row for o in outcomes]
     players_sql = [p.sql_row for p in players]
-    accounts_sql = [(fp, acc[0], acc[1]) for fp, acc in accounts_db.items()]
+    accounts_sql = [(fp, acc[0], acc[1], acc[2]) for fp, acc in accounts_db.items()]
 
-    c.executemany('INSERT OR IGNORE INTO accounts VALUES (?,?,?)', accounts_sql)
-    c.executemany('INSERT OR IGNORE INTO players VALUES (?,?,?,?,?,?)', players_sql)
+    c.executemany('INSERT OR IGNORE INTO accounts VALUES (?,?,?,?)', accounts_sql)
+    c.executemany('INSERT OR IGNORE INTO players VALUES (?,?,?,?,?,?,?)', players_sql)
     c.executemany('INSERT OR IGNORE INTO outcomes VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', outcomes_sql)
 
     conn.commit()

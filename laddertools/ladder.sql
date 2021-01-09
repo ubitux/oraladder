@@ -1,12 +1,14 @@
 CREATE TABLE IF NOT EXISTS accounts (
 	fingerprint  TEXT PRIMARY KEY,
 	profile_id   INTEGER NOT NULL,
-	profile_name TEXT NOT NULL
+	profile_name TEXT NOT NULL,
+	avatar_url   TEXT
 );
 
 CREATE TABLE IF NOT EXISTS players (
 	profile_id   INTEGER PRIMARY KEY,
 	profile_name TEXT NOT NULL,
+	avatar_url   TEXT,
 	wins         INTEGER NOT NULL,
 	losses       INTEGER NOT NULL,
 	prv_rating   INTEGER NOT NULL,

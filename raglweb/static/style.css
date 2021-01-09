@@ -94,6 +94,10 @@ td.avatar img {
 	margin: 0;
 }
 
+img.avatar {
+	float: right;
+}
+
 td.player {
 	font-weight: bold;
 	text-align: left;

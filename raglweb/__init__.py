@@ -72,6 +72,7 @@ def scoreboards():
         SELECT
             profile_id,
             profile_name,
+            avatar_url,
             wins,
             losses,
             division,
@@ -82,13 +83,14 @@ def scoreboards():
     )
 
     scoreboards = {}
-    for profile_id, profile_name, wins, losses, division, status in cur:
+    for profile_id, profile_name, avatar_url, wins, losses, division, status in cur:
         rows = scoreboards.get(division, [])
         nb_played = wins + losses
         rows.append(dict(
             row_id=len(rows) + 1,
             profile_id=profile_id,
             name=profile_name,
+            avatar_url=avatar_url,
             played=wins + losses,
             wins=wins,
             losses=losses,
@@ -140,6 +142,7 @@ def _get_player_info(db, profile_id):
     cur = db.execute('''
         SELECT
             profile_name,
+            avatar_url,
             division,
             status
         FROM players
@@ -150,6 +153,7 @@ def _get_player_info(db, profile_id):
     row = cur.fetchone()
     player_info = dict(
         profile_name=row['profile_name'],
+        avatar_url=row['avatar_url'],
         division=row['division'],
         status=row['status'],
     )
@@ -271,6 +275,7 @@ def player(profile_id):
 
     player = dict(
         profile_name=player_info['profile_name'],
+        avatar_url=player_info['avatar_url'],
         status=status,
         matchup_done_count=matchup_done_count,
         matchup_count=matchup_count,

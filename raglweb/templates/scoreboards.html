@@ -19,9 +19,7 @@
 	{% for e in players %}
 	<tr class="row">
 		<td class="position">{{ e.row_id }}</td>
-		<td class="avatar"><!--
-			<img src="" alt=" " />
-		--></td>
+		<td class="avatar">{%if e.avatar_url %}<img src="{{ e.avatar_url }}" alt="" />{%endif%}</td>
 		<td class="player"><a href="{{ url_for('player', profile_id=e.profile_id) }}">{{ e.name }}</a></td>
 		<td>{{ e.played }}</td>
 		<td>{{ e.wins }}</td>
