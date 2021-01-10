@@ -43,6 +43,9 @@ class _Player:
         self.prv_rating = self.rating
         self.rating = new_rating
 
+    def __repr__(self):
+        return f"<Player {self.name}, id={self.profile_id}>"
+
     @property
     def sql_row(self):
         return (
