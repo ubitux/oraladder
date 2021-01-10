@@ -37,6 +37,9 @@ $(LADDER_MAP_PACK): $(VENV)
 $(RAGL_MAP_PACK): $(VENV)
 	(. $(ACTIVATE) && ora-mapstool misc/map-pools/ragl-s10.maps --pack $(RAGL_MAP_PACK))
 
+test: $(VENV)
+	(. $(ACTIVATE) && pytest -v)
+
 clean:
 	$(RM) -r build
 	$(RM) -r dist
@@ -48,4 +51,4 @@ $(VENV):
 	$(PYTHON) -m venv $@
 	( . $(ACTIVATE) && pip install -e .)
 
-.PHONY: ladderdev initladderdev wheel clean mappacks ragldev initragldev
+.PHONY: ladderdev initladderdev wheel clean mappacks ragldev initragldev test

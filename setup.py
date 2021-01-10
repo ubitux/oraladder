@@ -12,6 +12,7 @@ setup(
         'numpy',
         'pyyaml',
         'trueskill',
+        'pytest',
     ],
     entry_points=dict(
         console_scripts=[
