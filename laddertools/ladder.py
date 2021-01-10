@@ -23,13 +23,57 @@ import logging
 import argparse
 import sqlite3
 from filelock import FileLock, Timeout
+from collections import UserDict
 
+from .replay import GamePlayerInfo
 from .ranking import ranking_systems
 from .utils import get_results
 
 
-class _Player:
+class PlayerLookup(UserDict):
+    """Connects a `GamePlayerInfo` (or its fingerprint) to a `_Player`.
 
+    Several way to access a player:
+        1) From a `GamePlayerInfo`: `lookup[result.player0]`
+        2) From the unique id: `lookup[6003]`
+        3) From the player name (since it's also unique): `lookup['morkel']`.
+           Notice this only works for __getitem__ and not __setitem__. The name
+           is also case-sensitive.
+    """
+
+    def __init__(self, accounts_db, ranking):
+        super().__init__()
+        self.accounts_db = accounts_db
+        self.ranking = ranking
+        self._names = {}
+
+    def _insert_from_fingerprint(self, fingerprint):
+        profile_id, name, avatar_url = self.accounts_db.get(fingerprint)
+        self.data.setdefault(
+            profile_id, _Player(self.ranking, profile_id, name, avatar_url)
+        )
+        self._names.setdefault(self.data[profile_id].name, self.data[profile_id])
+        return self.data[profile_id]
+
+    def __getitem__(self, obj):
+        if isinstance(obj, GamePlayerInfo):
+            return self._insert_from_fingerprint(obj.fingerprint)
+        if isinstance(obj, str):  # we assume it's the name of the player, then.
+            if obj not in self._names:
+                raise KeyError(obj)
+            return self._names[obj]
+        return super().__getitem__(obj)
+
+    def __setitem__(self, key, obj):
+        assert isinstance(obj, _Player)
+        super().__setitem__(key, obj)
+        self._names[obj.name] = obj
+
+    def __repr__(self):
+        return f"<PlayerLookup dictionary with {len(self.data)} items>"
+
+
+class _Player:
     def __init__(self, ranking, profile_id, name, avatar_url):
         self.profile_id = profile_id
         self.name = name
@@ -109,29 +153,20 @@ def _get_players_outcomes(accounts_db, results, ranking_system):
 
     ranking = ranking_systems[ranking_system]()
 
-    profile2player = {}
+    player_lookup = PlayerLookup(accounts_db, ranking)
     outcomes = []
 
-    for result in results:
-        acc0 = accounts_db.get(result.player0.fingerprint)
-        acc1 = accounts_db.get(result.player1.fingerprint)
-        if acc0 is None or acc1 is None:
-            continue
-        pid0, p0_name, p0_avatar = acc0
-        pid1, p1_name, p1_avatar = acc1
-        p0 = profile2player.get(pid0, _Player(ranking, pid0, p0_name, p0_avatar))
-        p1 = profile2player.get(pid1, _Player(ranking, pid1, p1_name, p1_avatar))
-        p0_rating, p1_rating = ranking.record_result(p0.rating, p1.rating)
-        p0.update_rating(p0_rating)
-        p1.update_rating(p1_rating)
+    ratings = ranking.compute_ratings_from_series_of_games(results, player_lookup)
+
+    for result, (r0, r1) in zip(results, ratings):
+        p0 = player_lookup[result.player0]
+        p1 = player_lookup[result.player1]
+        p0.update_rating(r0)
+        p1.update_rating(r1)
         p0.wins += 1
         p1.losses += 1
-        profile2player[pid0] = p0
-        profile2player[pid1] = p1
         outcomes.append(_OutCome(result, p0, p1))
-
-    players = profile2player.values()
-
+    players = player_lookup.values()
     return players, outcomes
 
 
