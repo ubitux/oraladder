@@ -16,6 +16,36 @@
 #
 
 import trueskill
+from abc import ABC, abstractmethod
+
+
+class _RankingBase(ABC):
+
+    def compute_ratings_from_series_of_games(self, games, player_lookup):
+        player_ratings = {}
+        game_ratings = []
+        for g in games:
+            p0 = player_lookup[g.player0]
+            p1 = player_lookup[g.player1]
+            r0 = player_ratings.get(p0, self.get_default_rating())
+            r1 = player_ratings.get(p1, self.get_default_rating())
+
+            r0_new, r1_new = self.record_result(r0, r1)
+            player_ratings[p0] = r0_new
+            player_ratings[p1] = r1_new
+
+            item = (r0_new, r1_new)
+            game_ratings.append(item)
+        return game_ratings
+
+    @classmethod
+    @abstractmethod
+    def get_default_rating(cls):
+        """Returns a new rating for an unrated player."""
+
+    @abstractmethod
+    def record_result(self, winner_rating, loser_rating):
+        """Returns a pair of new ratings, one for the winner and one for the loser."""
 
 
 class _RatingTrueskill:
@@ -34,7 +64,7 @@ class _RatingTrueskill:
         return round(self.value * 100)
 
 
-class RankingTrueskill:
+class RankingTrueskill(_RankingBase):
 
     def __init__(self):
         self._env = trueskill.TrueSkill(draw_probability=0)
@@ -45,8 +75,9 @@ class RankingTrueskill:
         r1 = _RatingTrueskill(self._env, r1)
         return r0, r1
 
-    def get_default_rating(self):
-        return _RatingTrueskill(self._env)
+    @classmethod
+    def get_default_rating(cls):
+        return _RatingTrueskill(cls()._env)
 
 
 class _RatingELO:
@@ -59,7 +90,7 @@ class _RatingELO:
         return round(self.value)
 
 
-class RankingELO:
+class RankingELO(_RankingBase):
 
     _k = 32
 
@@ -78,7 +109,8 @@ class RankingELO:
         r1 = _RatingELO(self._elo(loser_rating, exp1, 0))
         return r0, r1
 
-    def get_default_rating(self):
+    @classmethod
+    def get_default_rating(cls):
         return _RatingELO(1000)
 
 
