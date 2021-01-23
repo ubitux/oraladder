@@ -29,7 +29,7 @@ from filelock import FileLock
 from laddertools.mapstool import download_maps
 
 
-def _download_openra_sources(tmpdir, version):
+def _download_openra_sources(tmpdir, repo, version):
     '''
     Download OpenRA source code at specified version.
     '''
@@ -37,7 +37,7 @@ def _download_openra_sources(tmpdir, version):
     release_tarball = f'{version}.tar.gz'
     release_tarball_path = op.join(tmpdir, release_tarball)
     if not op.exists(release_tarball_path):
-        release_tarball_url = f'https://github.com/OpenRA/OpenRA/archive/{release_tarball}'
+        release_tarball_url = f'{repo}/archive/{release_tarball}'
         logging.info('Downloading %s', release_tarball_url)
         urllib.request.urlretrieve(release_tarball_url, filename=release_tarball_path)
     return release_tarball_path
@@ -93,7 +93,7 @@ def _setup_sources(args):
         tmpdir = op.join(tempfile.gettempdir(), 'ora-srvwrap')
         mapsdir = op.join(tmpdir, 'maps', args.mod)
         map_paths = download_maps(mapsdir, args.maps_file)
-        release_tarball_path = _download_openra_sources(tmpdir, args.version)
+        release_tarball_path = _download_openra_sources(tmpdir, args.repo, args.version)
         base_src_dir = _prepare_openra_sources(tmpdir, args.version, release_tarball_path)
         return base_src_dir, map_paths
 
@@ -255,6 +255,7 @@ def run():
     parser.add_argument('--baseport', default=10100, type=int)
     parser.add_argument('--basewkdir', default='srvwrap')
     parser.add_argument('--version', default='playtest-20201213')
+    parser.add_argument('--repo', default='https://github.com/OpenRA/OpenRA')
     parser.add_argument('--password')
     args = parser.parse_args()
 
