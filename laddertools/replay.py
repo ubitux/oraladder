@@ -101,8 +101,11 @@ def get_result(filename):
         if len(players) != 2:
             raise Exception(f"game doesn't have 2 but {len(players)} players")
         player0, player1 = [game_info[f'Player@{i}'] for i in range(2)]
-        p0_name, p0_outcome, p0_fingerprint = player0['Name'], player0['Outcome'], player0['Fingerprint']
-        p1_name, p1_outcome, p1_fingerprint = player1['Name'], player1['Outcome'], player1['Fingerprint']
+        p0_name, p0_outcome, p0_fingerprint, p0_handicap = player0['Name'], player0['Outcome'], player0['Fingerprint'], int(player0.get('Handicap', 0))
+        p1_name, p1_outcome, p1_fingerprint, p1_handicap = player1['Name'], player1['Outcome'], player1['Fingerprint'], int(player1.get('Handicap', 0))
+
+        if p0_handicap or p1_handicap:
+            raise Exception(f'Handicap matchups are not allowed ({p0_name}:{p0_handicap}, {p1_name}:{p1_handicap})')
 
         p0_faction = player0['FactionName']
         p1_faction = player1['FactionName']
