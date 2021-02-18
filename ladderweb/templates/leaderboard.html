@@ -4,6 +4,16 @@
 {% block title %}Leaderboard{% endblock %}
 
 {% block content %}
+<nav>
+<ul>
+	<li{% if period %} class="active"{% endif %}>
+		<a href="{{ url_for('leaderboard', period='1m') }}">This month</a>
+	</li>
+	<li{% if not period %} class="active"{% endif %}>
+		<a href="{{ url_for('leaderboard') }}">All time</a>
+	</li>
+</ul>
+</nav>
 <table>
 	<tr>
 		<th>Rank</th>

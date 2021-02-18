@@ -18,6 +18,7 @@
 import os
 import os.path as op
 import logging
+from datetime import date
 from urllib.request import urlopen
 
 from . import miniyaml, replay
@@ -80,7 +81,19 @@ def _parse_replay(results, accounts_db, filename):
         logging.info(f'{op.basename(filename)}: recorded')
 
 
-def get_results(accounts_db, replays):
+def _filter_period(results, period):
+    if period is None:
+        return results
+
+    today = date.today()
+    if period == '1m':
+        start = date(today.year, today.month, 1)
+        return [r for r in results if r.end_time.date() >= start]
+
+    assert False
+
+
+def get_results(accounts_db, replays, period=None):
     results = []
     for filename in replays:
         if op.isdir(filename):
@@ -89,4 +102,5 @@ def get_results(accounts_db, replays):
                     _parse_replay(results, accounts_db, op.join(root, name))
         else:
             _parse_replay(results, accounts_db, filename)
+    results = _filter_period(results, period)
     return sorted(results, key=lambda r: r.end_time)

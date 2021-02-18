@@ -39,10 +39,12 @@ _cfg = dict(
 )
 
 
-def _db_get():
+def _db_get(period=None):
     if 'db' not in g:
-        g.db = sqlite3.connect(current_app.config['DATABASE'],
-                               detect_types=sqlite3.PARSE_DECLTYPES)
+        dbfile = current_app.config['DATABASE']
+        if period == '1m':
+            dbfile = current_app.config['DATABASE_1M']
+        g.db = sqlite3.connect(dbfile, detect_types=sqlite3.PARSE_DECLTYPES)
         g.db.row_factory = sqlite3.Row
     return g.db
 
@@ -58,6 +60,9 @@ def create_app():
     app.config.from_mapping(
         DATABASE=op.join(app.instance_path, 'db.sqlite3'),
     )
+    mdb = op.join(app.instance_path, 'db-1m.sqlite3')
+    if op.exists(mdb):
+        app.config['DATABASE_1M'] = mdb
     app.teardown_appcontext(_db_close)
     return app
 
@@ -66,8 +71,9 @@ app = create_app()
 
 
 @app.route('/')
-def leaderboard():
-    db = _db_get()
+@app.route('/period/<period>')
+def leaderboard(period=None):
+    db = _db_get(period)
     cur = db.execute('''
         SELECT * FROM players WHERE rating > 0 ORDER BY rating DESC LIMIT :limit''',
         dict(limit=_cfg['leaderboard_limit'])
@@ -88,7 +94,7 @@ def leaderboard():
             winrate=wins / (wins + losses) * 100,
         ))
 
-    return render_template('leaderboard.html', leaderboard=rows)
+    return render_template('leaderboard.html', leaderboard=rows, period=period)
 
 
 @app.route('/latest')
