@@ -78,7 +78,7 @@ def scoreboards():
             division,
             status
         FROM players
-        ORDER BY division, wins DESC
+        ORDER BY division, status, wins DESC
         '''
     )
 
