@@ -68,6 +68,19 @@ app = create_app()
 @app.route('/')
 def scoreboards():
     db = _db_get()
+
+    cur = db.execute('''
+        SELECT
+            COUNT(profile_id) as nb_profiles,
+            division
+        FROM players
+        WHERE status IS NULL
+        GROUP BY division
+        '''
+    )
+
+    max_matches = {row['division']: (row['nb_profiles'] - 1) * _cfg['matchup_count'] for row in cur}
+
     cur = db.execute('''
         SELECT
             profile_id,
@@ -86,12 +99,21 @@ def scoreboards():
     for profile_id, profile_name, avatar_url, wins, losses, division, status in cur:
         rows = scoreboards.get(division, [])
         nb_played = wins + losses
+        matchup_done_count = wins + losses
+        if status == 'SF':
+            status = '⛔ Season Forfeit'
+        elif nb_played == max_matches[division]:
+            status = '✅ All matchups completed'
+        else:
+            status = ''  # TODO: handle late status
+
         rows.append(dict(
             row_id=len(rows) + 1,
             profile_id=profile_id,
             name=profile_name,
             avatar_url=avatar_url,
-            played=wins + losses,
+            played=nb_played,
+            max_matches=max_matches[division],
             wins=wins,
             losses=losses,
             winrate=wins / nb_played * 100 if nb_played else 0,
