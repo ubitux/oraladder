@@ -35,6 +35,7 @@ _cfg = dict(
     leaderboard_limit=100,
     latest_games_limit=50,
     player_latest_games_limit=15,
+    min_datapoints=10,
     datapoints=50,
 )
 
@@ -166,6 +167,10 @@ def _get_player_ratings(db, profile_id):
             continue  # XXX shouldn't happen, assert?
         ratings.append(rating)
     cur.close()
+
+    ratings = ratings[_cfg['min_datapoints']:]
+    if not ratings:
+        return [], []
 
     datapoints = _cfg['datapoints']
     rating_labels = [str('') for x in range(datapoints)]

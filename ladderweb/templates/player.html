@@ -14,6 +14,7 @@
 </dl>
 
 <h2>Rating evolution</h2>
+{%if rating_data %}
 <canvas id="rating_chart"></canvas>
 <script>
 	Chart.defaults.global.defaultFontColor = "#e8e8e8";
@@ -31,6 +32,9 @@
 		}
 	});
 </script>
+{%else%}
+<p>Not enough data points</p>
+{%endif%}
 
 <h2>Preferred factions</h2>
 <canvas id="faction_chart"></canvas>
