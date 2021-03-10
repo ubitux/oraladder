@@ -179,7 +179,7 @@ The last step is to setup a crontab to update the database regularly; in
 `crontab -e` we can for example do:
 ```
 */5 * * * * ~/update-ladderdb.sh
-0   0 0 * * rm -f ~/db.sqlite3
+0   0 * * * rm -f ~/db.sqlite3
 ```
 
 This will update the database every 5 minutes. And every day, we remove the
