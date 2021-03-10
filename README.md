@@ -34,8 +34,9 @@ interest. We can fill it using the `ora-ladder` backend command:
 # Enter the virtualenv
 . venv/bin/activate
 
-# Create a new database with your local RA replays
-ora-ladder ~/.config/openra/Replays/ra
+# Create the 2 databases (all times and monthly) with your local RA replays
+ora-ladder -d db.sqlite3 ~/.config/openra/Replays/ra
+ora-ladder -d db-1m.sqlite3 -p 1m ~/.config/openra/Replays/ra
 
 # If everything went well, update the DB of the website atomically
 cp db.sqlite3 instance/
@@ -161,16 +162,18 @@ python -m venv venv
 # Install the ladder wheel
 pip install oraladder-*-py3-none-any.whl
 
-# Create an initial empty database
+# Create initial empty databases
 mkdir -p venv/var/ladderweb-instance
-ora-ladder -d venv/var/ladderweb-instance/db.sqlite3
+ora-ladder -d venv/var/ladderweb-instance/db.sqlite3  # all-time DB
+ora-ladder -d venv/var/ladderweb-instance/db-1m.sqlite3 -p 1m  # 1-month DB
 
 # Create a useful DB update script
 cat <<EOF > ~/update-ladderdb.sh
 #!/bin/sh
 set -xeu
-~/venv/bin/ora-ladder /home/ora/srv-ladder/instance-*/support_dir/Replays/
-cp db.sqlite3 /home/web/venv/var/ladderweb-instance
+~/venv/bin/ora-ladder -d db.sqlite          /home/ora/srv-ladder/instance-*/support_dir/Replays/
+~/venv/bin/ora-ladder -d db-1m.sqlite -p 1m /home/ora/srv-ladder/instance-*/support_dir/Replays/
+cp db.sqlite3 db-1m.sqlite /home/web/venv/var/ladderweb-instance
 EOF
 chmod +x ~/update-ladderdb.sh
 ```
@@ -179,13 +182,14 @@ The last step is to setup a crontab to update the database regularly; in
 `crontab -e` we can for example do:
 ```
 */5 * * * * ~/update-ladderdb.sh
-0   0 * * * rm -f ~/db.sqlite3
+0   0 * * * rm -f ~/db.sqlite3 ~/db-1m.sqlite
 ```
 
 This will update the database every 5 minutes. And every day, we remove the
-cached `db.sqlite3` so that the next update causes a full reconstruction of the
-database. This is an arbitrary trade-off to avoid spamming OpenRA user account
-service, and still get relatively up-to-date information displayed.
+cached `db.sqlite3` (and `db-1m.sqlite`) so that the next update causes a full
+reconstruction of the database. This is an arbitrary trade-off to avoid
+spamming OpenRA user account service, and still get relatively up-to-date
+information displayed.
 
 
 ### Frontend

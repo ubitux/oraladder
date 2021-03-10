@@ -40,9 +40,10 @@ _cfg = dict(
 )
 
 
-def _db_get():
+def _db_get(period=None):
     if 'db' not in g:
-        g.db = sqlite3.connect(current_app.config['DATABASE'],
+        dbname = 'DATABASE_1M' if period == '1m' else 'DATABASE'
+        g.db = sqlite3.connect(current_app.config[dbname],
                                detect_types=sqlite3.PARSE_DECLTYPES)
         g.db.row_factory = sqlite3.Row
     return g.db
@@ -58,6 +59,7 @@ def create_app():
     app = Flask(__name__)
     app.config.from_mapping(
         DATABASE=op.join(app.instance_path, 'db.sqlite3'),
+        DATABASE_1M=op.join(app.instance_path, 'db-1m.sqlite3'),
     )
     app.teardown_appcontext(_db_close)
     return app
@@ -66,9 +68,10 @@ def create_app():
 app = create_app()
 
 
-@app.route('/')
-def leaderboard():
-    db = _db_get()
+@app.route('/', defaults=dict(period=None))
+@app.route('/period/<period>')
+def leaderboard(period):
+    db = _db_get(period)
     cur = db.execute('''
         SELECT * FROM players WHERE rating > 0 ORDER BY rating DESC LIMIT :limit''',
         dict(limit=_cfg['leaderboard_limit'])
@@ -89,12 +92,13 @@ def leaderboard():
             winrate=wins / (wins + losses) * 100,
         ))
 
-    return render_template('leaderboard.html', leaderboard=rows)
+    return render_template('leaderboard.html', leaderboard=rows, period=period)
 
 
-@app.route('/latest')
-def latest_games():
-    db = _db_get()
+@app.route('/latest', defaults=dict(period=None))
+@app.route('/latest/period/<period>')
+def latest_games(period):
+    db = _db_get(period)
     cur = db.execute('''
         SELECT
             hash,
@@ -133,7 +137,7 @@ def latest_games():
         )
         games.append(game)
 
-    return render_template('latest.html', games=games)
+    return render_template('latest.html', games=games, period=period)
 
 
 def _scaled(a, m):
@@ -295,13 +299,14 @@ def _get_latest_player_games(db, profile_id):
     return games
 
 
-@app.route('/player/<int:profile_id>')
-def player(profile_id):
-    db = _db_get()
+@app.route('/player/<int:profile_id>', defaults=dict(period=None))
+@app.route('/player/<int:profile_id>/period/<period>')
+def player(profile_id, period):
+    db = _db_get(period)
 
     player = _get_player_info(db, profile_id)
     if not player:
-        return render_template('noplayer.html')
+        return render_template('noplayer.html', profile_id=profile_id, period=period)
 
     faction_names, faction_data, faction_colors = _get_player_faction_stats(db, profile_id)
     rating_labels, rating_data = _get_player_ratings(db, profile_id)
@@ -311,6 +316,7 @@ def player(profile_id):
     return render_template(
         'player.html',
         player=player,
+        profile_id=profile_id,
         rating_labels=rating_labels,
         rating_data=rating_data,
         faction_names=faction_names,
@@ -320,6 +326,7 @@ def player(profile_id):
         map_win_data=map_win_data,
         map_loss_data=map_loss_data,
         games=games,
+        period=period,
     )
 
 
@@ -362,9 +369,10 @@ def _get_global_map_stats(db):
     return list(map_names), list(map_data), map_colors
 
 
-@app.route('/globalstats')
-def globalstats():
-    db = _db_get()
+@app.route('/globalstats', defaults=dict(period=None))
+@app.route('/globalstats/period/<period>')
+def globalstats(period):
+    db = _db_get(period)
 
     cur = db.execute('''
         SELECT
@@ -395,6 +403,7 @@ def globalstats():
         nb_games=nb_games,
         nb_players=nb_players,
         avg_duration=avg_duration,
+        period=period,
     )
 
 

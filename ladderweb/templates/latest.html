@@ -4,6 +4,7 @@
 {% block title %}Latest games{% endblock %}
 
 {% block content %}
+{% include "period.html" %}
 <table>
 	<tr>
 		<th>Date</th>
@@ -18,11 +19,11 @@
 		<td>{{ game.date }}</td>
 		<td class="map">{{ game.map }}</td>
 		<td class="player">
-			<a href="{{ url_for('player', profile_id=game.p0_id) }}">{{ game.p0 }}</a>
+			<a href="{{ url_for('player', profile_id=game.p0_id, period=period) }}">{{ game.p0 }}</a>
 			<span class="diff{%if game.diff0 >= 0 %}up{%else %}down{%endif%}">{{ game.diff0 }}</span>
 		</td>
 		<td class="player">
-			<a href="{{ url_for('player', profile_id=game.p1_id) }}">{{ game.p1 }}</a>
+			<a href="{{ url_for('player', profile_id=game.p1_id, period=period) }}">{{ game.p1 }}</a>
 			<span class="diff{%if game.diff1 >= 0 %}up{%else %}down{%endif%}">{{ game.diff1 }}</span>
 		</td>
 		<td>{{ game.duration }}</td>
