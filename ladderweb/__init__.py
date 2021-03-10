@@ -295,6 +295,9 @@ def player(profile_id):
     db = _db_get()
 
     player = _get_player_info(db, profile_id)
+    if not player:
+        return render_template('noplayer.html')
+
     faction_names, faction_data, faction_colors = _get_player_faction_stats(db, profile_id)
     rating_labels, rating_data = _get_player_ratings(db, profile_id)
     games = _get_latest_player_games(db, profile_id)
