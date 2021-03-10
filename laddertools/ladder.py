@@ -188,7 +188,7 @@ def _main(args):
     request_accounts = c.execute('SELECT * FROM accounts')
     accounts_db = {fp: (pid, pname, avatar_url) for fp, pid, pname, avatar_url in request_accounts.fetchall()}
 
-    results = get_results(accounts_db, args.replays)
+    results = get_results(accounts_db, args.replays, args.period)
 
     players, outcomes = _get_players_outcomes(accounts_db, results, args.ranking)
 
@@ -210,6 +210,7 @@ def run():
     parser.add_argument('-d', '--database', default='db.sqlite3')
     parser.add_argument('-s', '--schema', default=op.join(op.dirname(__file__), 'ladder.sql'))
     parser.add_argument('-r', '--ranking', choices=ranking_systems.keys(), default='trueskill')
+    parser.add_argument('-p', '--period')
     parser.add_argument('replays', nargs='*')
     args = parser.parse_args()
 
