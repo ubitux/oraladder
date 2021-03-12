@@ -5,11 +5,11 @@
 
 {% block content %}
 {% include "period.html" %}
-<table>
+<table id="leaderboard-table">
 	<thead>
 		<tr>
 			<th>Rank</th>
-			<th colspan=2>Player</th>
+			<th>Player</th>
 			<th>Rating</th>
 			<th>Played</th>
 			<th>Wins</th>
@@ -17,22 +17,25 @@
 			<th>Win rate</th>
 		</tr>
 	</thead>
-	<tbody>
-		{%- for e in leaderboard %}
-		<tr>
-			<td class="position">{{ e.row_id }}</td>
-			<td class="avatar">{%if e.avatar_url %}<img src="{{ e.avatar_url }}" alt="" />{%endif%}</td>
-			<td class="player"><a href="{{ url_for('player', profile_id=e.profile_id, period=period) }}">{{ e.player }}</a></td>
-			<td class="rating">
-				{{ e.rating }}
-				<span class="diff{%if e.diff >= 0 %}up{%else %}down{%endif%}"></span>
-			</td>
-			<td>{{ e.played }}</td>
-			<td>{{ e.wins }}</td>
-			<td>{{ e.losses }}</td>
-			<td>{{ '%.1f' | format(e.winrate) }}%</td>
-		</tr>
-		{%- endfor %}
-	</tbody>
 </table>
+<script>
+$(document).ready(
+	function () {
+		$('#leaderboard-table').DataTable({
+			ajax: { url: "{{ url_for('leaderboard_js', period=period) }}", dataSrc:"" },
+			pageLength: 50,
+			columns: [
+				{ data: 'row_id', className: 'position' },
+				{ data: 'player', className: 'player_avatar', render: player_render },
+				{ data: 'rating', className: 'rating', render: rating_render },
+				{ data: 'played' },
+				{ data: 'wins' },
+				{ data: 'losses' },
+				{ data: 'winrate', render: winrate_render },
+			],
+			bSort: false,
+		});
+	}
+);
+</script>
 {% endblock %}

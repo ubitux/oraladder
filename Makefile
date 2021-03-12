@@ -9,10 +9,20 @@ LADDER_MAP_PACK = ladderweb/static/ladder-map-pack-$(LADDER_MAP_PACK_VERSION).zi
 RAGL_MAP_PACK_VERSION = 2020-12-28
 RAGL_MAP_PACK = raglweb/static/ragl-map-pack-$(RAGL_MAP_PACK_VERSION).zip
 
-LADDER_STATIC = ladderweb/static/Chart.min.css ladderweb/static/Chart.bundle.min.js $(LADDER_MAP_PACK)
+LADDER_STATIC = $(LADDER_MAP_PACK)                    \
+                ladderweb/static/Chart.bundle.min.js  \
+                ladderweb/static/Chart.min.css        \
+                ladderweb/static/datatables.min.js    \
+                ladderweb/static/jquery.min.js        \
 
 # https://github.com/chartjs/Chart.js/releases/latest
 CHART_JS_VERSION = 2.9.4
+
+# https://github.com/jquery/jquery/releases/latest
+JQUERY_VERSION = 3.6.0
+
+# https://github.com/DataTables/DataTables/releases/latest
+DATATABLES_VERSION = 1.10.24
 
 ladderdev: initladderdev
 	FLASK_APP=ladderweb FLASK_ENV=development FLASK_RUN_PORT=5000 $(VENV)/bin/flask run
@@ -24,6 +34,12 @@ ladderweb/static/Chart.min.css:
 
 ladderweb/static/Chart.bundle.min.js:
 	$(CURL) -L https://cdnjs.cloudflare.com/ajax/libs/Chart.js/$(CHART_JS_VERSION)/Chart.bundle.min.js -o $@
+
+ladderweb/static/datatables.min.js:
+	$(CURL) -L https://cdn.datatables.net/v/dt/dt-$(DATATABLES_VERSION)/datatables.min.js -o $@
+
+ladderweb/static/jquery.min.js:
+	$(CURL) -L https://code.jquery.com/jquery-$(JQUERY_VERSION).min.js -o $@
 
 instance/db.sqlite3: instance
 	$(VENV)/bin/ora-ladder -d $@

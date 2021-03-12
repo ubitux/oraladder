@@ -3,9 +3,12 @@
 	<title>OpenRA 1v1 Ladder - {% block title %}{% endblock %}</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width" />
-	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 	<link rel="stylesheet" href="{{ url_for('static', filename='Chart.min.css') }}">
-	<script src="{{ url_for('static', filename='Chart.bundle.min.js') }}"></script>
+	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+	<script type="text/javascript" src="{{ url_for('static', filename='Chart.bundle.min.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='datatables.min.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='dtfuncs.js') }}"></script>
 </head>
 <header>
 	<h1>OpenRA 1v1 Ladder</h1>

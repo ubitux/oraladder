@@ -24,17 +24,17 @@ import sqlite3
 from flask import (
     Flask,
     current_app,
+    escape,
     g,
+    jsonify,
     render_template,
     send_file,
+    url_for,
 )
 
 
 # XXX: store in a file probably
 _cfg = dict(
-    leaderboard_limit=100,
-    latest_games_limit=50,
-    player_latest_games_limit=15,
     min_datapoints=10,
     datapoints=50,
 )
@@ -71,33 +71,46 @@ app = create_app()
 @app.route('/', defaults=dict(period=None))
 @app.route('/period/<period>')
 def leaderboard(period):
+    return render_template('leaderboard.html', period=period)
+
+
+@app.route('/leaderboard-js', defaults=dict(period=None))
+@app.route('/leaderboard-js/period/<period>')
+def leaderboard_js(period):
     db = _db_get(period)
-    cur = db.execute('''
-        SELECT * FROM players WHERE rating > 0 ORDER BY rating DESC LIMIT :limit''',
-        dict(limit=_cfg['leaderboard_limit'])
-    )
+    cur = db.execute('''SELECT * FROM players WHERE rating > 0 ORDER BY rating DESC''')
 
     rows = []
     for i, (profile_id, profile_name, avatar_url, wins, losses, prv_rating, rating) in enumerate(cur, 1):
         rows.append(dict(
             row_id=i,
-            profile_id=profile_id,
-            player=profile_name,
-            avatar_url=avatar_url,
-            rating=rating,
-            diff=rating - prv_rating,
+            player=dict(
+                name=escape(profile_name),
+                url=url_for('player', profile_id=profile_id, period=period),
+                avatar_url=avatar_url,
+            ),
+            rating=dict(
+                value=rating,
+                diff=rating - prv_rating,
+            ),
             played=wins + losses,
             wins=wins,
             losses=losses,
             winrate=wins / (wins + losses) * 100,
         ))
 
-    return render_template('leaderboard.html', leaderboard=rows, period=period)
+    return jsonify(rows)
 
 
 @app.route('/latest', defaults=dict(period=None))
 @app.route('/latest/period/<period>')
 def latest_games(period):
+    return render_template('latest.html', period=period)
+
+
+@app.route('/latest-js', defaults=dict(period=None))
+@app.route('/latest-js/period/<period>')
+def latest_games_js(period):
     db = _db_get(period)
     cur = db.execute('''
         SELECT
@@ -115,8 +128,7 @@ def latest_games(period):
         LEFT JOIN players p0 ON p0.profile_id = o.profile_id0
         LEFT JOIN players p1 ON p1.profile_id = o.profile_id1
         ORDER BY o.end_time DESC
-        LIMIT :limit''',
-        dict(limit=_cfg['latest_games_limit'])
+        '''
     )
     matches = cur.fetchall()
     cur.close()
@@ -124,20 +136,24 @@ def latest_games(period):
     games = []
     for match in matches:
         game = dict(
-            hash=match['hash'],
+            replay_url=url_for('replay', replay_hash=match['hash']),
             date=match['end_time'],
             duration=match['duration'],
             map=match['map_title'],
-            p0=match['p0_name'],
-            p1=match['p1_name'],
-            p0_id=match['profile_id0'],
-            p1_id=match['profile_id1'],
-            diff0=match['diff0'],
-            diff1=match['diff1'],
+            p0=dict(
+                name=escape(match['p0_name']),
+                url=url_for('player', profile_id=match['profile_id0'], period=period),
+                diff=match['diff0'],
+            ),
+            p1=dict(
+                name=escape(match['p1_name']),
+                url=url_for('player', profile_id=match['profile_id1'], period=period),
+                diff=match['diff1'],
+            ),
         )
         games.append(game)
 
-    return render_template('latest.html', games=games, period=period)
+    return jsonify(games)
 
 
 def _scaled(a, m):
@@ -248,7 +264,10 @@ def _get_player_map_stats(db, profile_id):
     return map_names, map_win_data, map_loss_data
 
 
-def _get_latest_player_games(db, profile_id):
+@app.route('/player-games-js/<int:profile_id>', defaults=dict(period=None))
+@app.route('/player-games-js/<int:profile_id>/period/<period>')
+def player_games_js(profile_id, period):
+    db = _db_get(period)
     cur = db.execute('''
         SELECT
             hash,
@@ -266,37 +285,42 @@ def _get_latest_player_games(db, profile_id):
         LEFT JOIN players p1 ON p1.profile_id = o.profile_id1
         WHERE :pid in (o.profile_id0, o.profile_id1)
         ORDER BY o.end_time DESC
-        LIMIT :limit''',
-        dict(pid=profile_id, limit=_cfg['player_latest_games_limit'])
+        ''',
+        dict(pid=profile_id)
     )
     games = []
     for match in cur:
         if match['profile_id0'] == profile_id:
             diff = match['diff0']
-            opponent = match['p1_name']
+            opponent = escape(match['p1_name'])
             opponent_id = match['profile_id1']
             outcome = 'Won'
         elif match['profile_id1'] == profile_id:
             diff = match['diff1']
-            opponent = match['p0_name']
+            opponent = escape(match['p0_name'])
             opponent_id = match['profile_id0']
             outcome = 'Lost'
         else:
             continue  # XXX shouldn't happen, assert?
         game = dict(
-            diff=diff,
-            opponent=opponent,
-            opponent_id=opponent_id,
             date=match['end_time'],
-            duration=match['duration'],
+            opponent=dict(
+                name=opponent,
+                url=url_for('player', profile_id=opponent_id, period=period),
+                #avatar_url=avatar_url,
+            ),
             map=match['map_title'],
-            outcome=outcome,
-            hash=match['hash'],
+            outcome=dict(
+                desc=outcome,
+                diff=diff,
+            ),
+            duration=match['duration'],
+            replay_url=url_for('replay', replay_hash=match['hash']),
         )
         games.append(game)
     cur.close()
 
-    return games
+    return jsonify(games)
 
 
 @app.route('/player/<int:profile_id>', defaults=dict(period=None))
@@ -310,7 +334,6 @@ def player(profile_id, period):
 
     faction_names, faction_data, faction_colors = _get_player_faction_stats(db, profile_id)
     rating_labels, rating_data = _get_player_ratings(db, profile_id)
-    games = _get_latest_player_games(db, profile_id)
     map_names, map_win_data, map_loss_data = _get_player_map_stats(db, profile_id)
 
     return render_template(
@@ -325,7 +348,6 @@ def player(profile_id, period):
         map_names=map_names,
         map_win_data=map_win_data,
         map_loss_data=map_loss_data,
-        games=games,
         period=period,
     )
 

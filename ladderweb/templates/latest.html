@@ -5,7 +5,7 @@
 
 {% block content %}
 {% include "period.html" %}
-<table>
+<table id="latest-table">
 	<thead>
 		<tr>
 			<th>Date</th>
@@ -16,23 +16,23 @@
 			<th>Replay</th>
 		</tr>
 	</thead>
-	<tbody>
-		{%- for game in games %}
-		<tr>
-			<td>{{ game.date }}</td>
-			<td class="map">{{ game.map }}</td>
-			<td class="player">
-				<a href="{{ url_for('player', profile_id=game.p0_id, period=period) }}">{{ game.p0 }}</a>
-				<span class="diff{%if game.diff0 >= 0 %}up{%else %}down{%endif%}">{{ game.diff0 }}</span>
-			</td>
-			<td class="player">
-				<a href="{{ url_for('player', profile_id=game.p1_id, period=period) }}">{{ game.p1 }}</a>
-				<span class="diff{%if game.diff1 >= 0 %}up{%else %}down{%endif%}">{{ game.diff1 }}</span>
-			</td>
-			<td>{{ game.duration }}</td>
-			<td><a href="{{ url_for('replay', replay_hash=game.hash) }}">📥</a></td>
-		</tr>
-		{%- endfor %}
-	</tbody>
 </table>
+<script>
+$(document).ready(
+	function () {
+		$('#latest-table').DataTable({
+			ajax: { url: "{{ url_for('latest_games_js', period=period) }}", dataSrc:"" },
+			columns: [
+				{ data: 'date' },
+				{ data: 'map', className: 'map' },
+				{ data: 'p0', className: 'player', render: player_with_diff_render },
+				{ data: 'p1', className: 'player', render: player_with_diff_render },
+				{ data: 'duration' },
+				{ data: 'replay_url', render: replay_render },
+			],
+			bSort: false,
+		});
+	}
+);
+</script>
 {% endblock %}
