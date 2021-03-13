@@ -29,3 +29,31 @@ CREATE TABLE IF NOT EXISTS outcomes (
 	map_uid               TEXT NOT NULL,
 	map_title             TEXT NOT NULL
 );
+
+-- "CREATE TABLE playoff_outcomes LIKE outcomes;"
+-- is not supported with SQLite so we dup the layout
+-- XXX: use a bool flag field instead?
+CREATE TABLE IF NOT EXISTS playoff_outcomes (
+	hash                  TEXT NOT NULL PRIMARY KEY,
+	start_time            TEXT NOT NULL,
+	end_time              TEXT NOT NULL,
+	filename              TEXT NOT NULL,
+	profile_id0           INTEGER NOT NULL,
+	profile_id1           INTEGER NOT NULL,
+	faction_0             TEXT NOT NULL,
+	faction_1             TEXT NOT NULL,
+	selected_faction_0    TEXT NOT NULL,
+	selected_faction_1    TEXT NOT NULL,
+	map_uid               TEXT NOT NULL,
+	map_title             TEXT NOT NULL
+);
+
+CREATE TABLE playoff_playersets (
+	playoff_id  TEXT NOT NULL,
+	profile_id  INTEGER NOT NULL
+);
+
+CREATE TABLE playoffs (
+	label   TEXT NOT NULL PRIMARY KEY,
+	bestof  INTEGER NOT NULL
+);
