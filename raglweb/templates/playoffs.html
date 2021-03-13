@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% set active_page = "playoffs" %}
+
+{% block title %}Playoffs and Tiebreakers{% endblock %}
+
+{% block content %}
+
+{% if playoffs %}
+
+{% for playoff in playoffs %}
+<h2>{{ playoff.label }} playoffs (BO{{ playoff.bestof }})</h2>
+{% if playoff.matchups %}
+<table>
+	<thead>
+		<tr>
+			<th>Match</th>
+			<th colspan=2>Player</th>
+			<th>Score</th>
+			<th colspan=2>Player</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for category, (m0, m1), (p0, p1), (s0, s1) in playoff.matchups %}
+		<tr class="row">
+			<td>{{ category }}</td>
+			<td>{% if m0 %}{{ m0 }}{% endif %}</td>
+			<td class="player"><a href="{{ url_for('player', profile_id=p0[0]) }}">{{ p0[1] }}</a></td>
+			<td>{{ s0 }} - {{ s1 }}</td>
+			<td class="player"><a href="{{ url_for('player', profile_id=p1[0]) }}">{{ p1[1] }}</a></td>
+			<td>{% if m1 %}{{ m1 }}{% endif %}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% endif %}
+{% endfor %}
+
+{% if games %}
+<h2>Game records</h2>
+<table>
+	<thead>
+		<tr>
+			<th>Date</th>
+			<th>Map</th>
+			<th>Victorious</th>
+			<th>Defeated</th>
+			<th>Replay</th>
+		</tr>
+	</thead>
+	<tbody>
+{% for game in games %}
+		<tr class="row">
+			<td>{{ game.date }}</td>
+			<td class="map">{{ game.map }}</td>
+			<td class="player"><a href="{{ url_for('player', profile_id=game.p0_id) }}">{{ game.p0 }}</a></td>
+			<td class="player"><a href="{{ url_for('player', profile_id=game.p1_id) }}">{{ game.p1 }}</a></td>
+			<td><a href="{{ url_for('replay', replay_hash=game.hash) }}">📥</a></td>
+		</tr>
+{% endfor %}
+	</tbody>
+</table>
+{% endif %}
+
+{% else %}
+<p>No playoff scheduled yet.</p>
+{% endif %}
+{% endblock %}

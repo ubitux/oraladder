@@ -19,6 +19,7 @@ import os.path as op
 
 import sqlite3
 from datetime import date, datetime, timedelta
+from .playoffs import get_playoff2, get_playoff4, PlayoffOutcome
 from flask import (
     Flask,
     current_app,
@@ -124,10 +125,8 @@ def scoreboards():
     return render_template('scoreboards.html', scoreboards=scoreboards)
 
 
-@app.route('/games')
-def games():
-    db = _db_get()
-    cur = db.execute('''
+def _get_games(db, outcomes_table):
+    cur = db.execute(f'''
         SELECT
             hash,
             end_time,
@@ -136,7 +135,7 @@ def games():
             p0.profile_name as p0_name,
             p1.profile_name as p1_name,
             map_title
-        FROM outcomes o
+        FROM {outcomes_table} o
         LEFT JOIN players p0 ON p0.profile_id = o.profile_id0
         LEFT JOIN players p1 ON p1.profile_id = o.profile_id1
         ORDER BY o.end_time DESC'''
@@ -157,6 +156,54 @@ def games():
         )
         games.append(game)
 
+    return games
+
+
+@app.route('/playoffs')
+def playoffs():
+    db = _db_get()
+    games = _get_games(db, 'playoff_outcomes')
+
+    outcomes = [PlayoffOutcome((g['p0_id'], g['p0']), (g['p1_id'], g['p1'])) for g in games]
+
+    cur = db.execute('SELECT label, bestof FROM playoffs')
+    playoffs = cur.fetchall()
+    cur.close()
+
+    playoffs_data = []
+
+    for playoff in playoffs:
+        cur = db.execute('''
+            SELECT
+                pp.profile_id as id,
+                p.profile_name as name
+            FROM playoff_playersets pp
+            LEFT JOIN players p ON p.profile_id = pp.profile_id
+            WHERE pp.playoff_id=:label
+        ''', dict(label=playoff['label']))
+        players = [(r['id'], r['name']) for r in cur]
+        cur.close()
+
+        if len(players) == 4:
+            matchups = get_playoff4(playoff['bestof'], players, outcomes)
+        elif len(players) == 2:
+            matchups = get_playoff2(playoff['bestof'], players, outcomes)
+        else:
+            assert False
+
+        playoffs_data.append(dict(
+            label=playoff['label'],
+            bestof=playoff['bestof'],
+            matchups=matchups,
+        ))
+
+    return render_template('playoffs.html', games=games, playoffs=playoffs_data)
+
+
+@app.route('/games')
+def games():
+    db = _db_get()
+    games = _get_games(db, 'outcomes')
     return render_template('games.html', games=games)
 
 

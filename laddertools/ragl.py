@@ -84,6 +84,10 @@ class _OutCome:
         return dt.strftime('%Y-%m-%d %H:%M:%S')
 
     @property
+    def profile_pair(self):
+        return (self._p0_profile_id, self._p1_profile_id)
+
+    @property
     def sql_row(self):
         return (
             self._hash,
@@ -101,10 +105,15 @@ class _OutCome:
         )
 
 
+def _records_count(records, outcome):
+    return len([r for r in records if outcome == r.profile_pair])
+
+
 def _get_players_outcomes(accounts_db, results, players_info):
 
     profile2player = {}
     outcomes = []
+    extra_outcomes = []
 
     # XXX: currently no sane way of querying profile names from profile IDs, so
     # there are hardcoded in the info file
@@ -131,6 +140,13 @@ def _get_players_outcomes(accounts_db, results, players_info):
         p1.avatar_url = p1_avatar
         if None in (p0.division, p1.division) or p0.division != p1.division:
             continue
+
+        # Register playoffs (or whatever extra match) somewhere else
+        if _records_count(outcomes, (pid0, pid1)) + _records_count(outcomes, (pid1, pid0)) == 2:
+            extra_outcomes.append(_OutCome(result, p0, p1))
+            continue
+
+        # Register win/losses only if no special status
         if not any((p0.status, p1.status)):
             p0.wins += 1
             p1.losses += 1
@@ -138,7 +154,25 @@ def _get_players_outcomes(accounts_db, results, players_info):
 
     players = profile2player.values()
 
-    return players, outcomes
+    return players, outcomes, extra_outcomes
+
+
+def _handle_extra_outcomes(c, outcomes, playoffs):
+    playoff_outcomes_sql = [po.sql_row for po in outcomes]
+    playoffs_sql = []
+
+    for label, playoff_data in playoffs.items():
+        bestof = playoff_data['bestof']
+        players = playoff_data['players']
+        assert len(players) in (2, 4)
+
+        players_sql = [(label, player_id) for player_id in players]
+        c.executemany('INSERT OR IGNORE INTO playoff_playersets VALUES (?,?)', players_sql)
+
+        playoffs_sql.append((label, bestof))
+
+    c.executemany('INSERT OR IGNORE INTO playoffs VALUES (?,?)', playoffs_sql)
+    c.executemany('INSERT OR IGNORE INTO playoff_outcomes VALUES (?,?,?,?,?,?,?,?,?,?,?,?)', playoff_outcomes_sql)
 
 
 def _main(args):
@@ -150,6 +184,10 @@ def _main(args):
     # all the information needs to be reconstructed
     c.execute('DROP TABLE IF EXISTS players')
     c.execute('DROP TABLE IF EXISTS outcomes')
+
+    c.execute('DROP TABLE IF EXISTS playoff_outcomes')
+    c.execute('DROP TABLE IF EXISTS playoff_playersets')
+    c.execute('DROP TABLE IF EXISTS playoffs')
 
     with open(args.schema) as f:
         c.executescript(f.read())
@@ -163,7 +201,7 @@ def _main(args):
 
     with open(args.playersinfo) as f:
         players_info = yaml.safe_load(f)
-    players, outcomes = _get_players_outcomes(accounts_db, results, players_info)
+    players, outcomes, extra_outcomes = _get_players_outcomes(accounts_db, results, players_info)
 
     outcomes_sql = [o.sql_row for o in outcomes]
     players_sql = [p.sql_row for p in players]
@@ -172,6 +210,10 @@ def _main(args):
     c.executemany('INSERT OR IGNORE INTO accounts VALUES (?,?,?,?)', accounts_sql)
     c.executemany('INSERT OR IGNORE INTO players VALUES (?,?,?,?,?,?,?)', players_sql)
     c.executemany('INSERT OR IGNORE INTO outcomes VALUES (?,?,?,?,?,?,?,?,?,?,?,?)', outcomes_sql)
+
+    playoffs = players_info.get('Playoffs')
+    if playoffs:
+        _handle_extra_outcomes(c, extra_outcomes, playoffs)
 
     conn.commit()
     conn.close()
