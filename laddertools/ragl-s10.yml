@@ -72,10 +72,10 @@ Playoffs:
         players:
             - 3952
             - 6771
-    #Masters Finale:
-    #    bestof: 5
-    #    players:
-    #        - 9599
-    #        - 7304
-    #        - 3952
-    #        - 6771
+    Masters Finale:
+        bestof: 5
+        players:
+            - 9599
+            - 7304
+            - 6771
+            - 3952
