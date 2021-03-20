@@ -1,5 +1,9 @@
 build
 dist
 instance
+ladderweb/static/Chart.bundle.min.js
+ladderweb/static/Chart.min.css
+ladderweb/static/ladder-map-pack-*.zip
 oraladder.egg-info
+raglweb/static/ragl-map-pack-*.zip
 venv
