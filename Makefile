@@ -8,43 +8,41 @@ LADDER_MAP_PACK = ladderweb/static/ladder-map-pack-$(LADDER_MAP_PACK_VERSION).zi
 RAGL_MAP_PACK_VERSION = 2020-12-28
 RAGL_MAP_PACK = raglweb/static/ragl-map-pack-$(RAGL_MAP_PACK_VERSION).zip
 
-ACTIVATE = $(VENV)/bin/activate
-
 ladderdev: initladderdev
-	(. $(ACTIVATE) && FLASK_APP=ladderweb FLASK_ENV=development FLASK_RUN_PORT=5000 flask run)
+	FLASK_APP=ladderweb FLASK_ENV=development FLASK_RUN_PORT=5000 $(VENV)/bin/flask run
 
 initladderdev: $(VENV) $(LADDER_MAP_PACK) instance/db.sqlite3 instance/db-1m.sqlite3
 
 instance/db.sqlite3: instance
-	(. $(ACTIVATE) && ora-ladder -d $@)
+	$(VENV)/bin/ora-ladder -d $@
 
 instance/db-1m.sqlite3: instance
-	(. $(ACTIVATE) && ora-ladder -d $@)
+	$(VENV)/bin/ora-ladder -d $@
 
 ragldev: initragldev
-	(. $(ACTIVATE) && FLASK_APP=raglweb FLASK_ENV=development FLASK_RUN_PORT=5001 flask run)
+	FLASK_APP=raglweb FLASK_ENV=development FLASK_RUN_PORT=5001 $(VENV)/bin/flask run
 
 initragldev: $(VENV) $(RAGL_MAP_PACK) instance/db-ragl.sqlite3
 
 instance/db-ragl.sqlite3: instance
-	(. $(ACTIVATE) && ora-ragl -d $@)
+	$(VENV)/bin/ora-ragl -d $@
 
 instance:
 	mkdir -p $@
 
 wheel: $(VENV)
-	(. $(ACTIVATE) && pip install wheel && python setup.py bdist_wheel)
+	$(VENV)/bin/python -m pip install wheel && python setup.py bdist_wheel
 
 mappacks: $(LADDER_MAP_PACK) $(RAGL_MAP_PACK)
 
 $(LADDER_MAP_PACK): $(VENV)
-	(. $(ACTIVATE) && ora-mapstool misc/map-pools/ladder.maps --pack $(LADDER_MAP_PACK))
+	$(VENV)/bin/ora-mapstool misc/map-pools/ladder.maps --pack $(LADDER_MAP_PACK)
 
 $(RAGL_MAP_PACK): $(VENV)
-	(. $(ACTIVATE) && ora-mapstool misc/map-pools/ragl-s10.maps --pack $(RAGL_MAP_PACK))
+	$(VENV)/bin/ora-mapstool misc/map-pools/ragl-s10.maps --pack $(RAGL_MAP_PACK)
 
 test: $(VENV)
-	(. $(ACTIVATE) && pytest -v)
+	$(VENV)/bin/pytest -v
 
 clean:
 	$(RM) -r build
@@ -55,6 +53,6 @@ clean:
 
 $(VENV):
 	$(PYTHON) -m venv $@
-	( . $(ACTIVATE) && pip install -e .)
+	$(VENV)/bin/python -m pip install -e .
 
 .PHONY: ladderdev initladderdev wheel clean mappacks ragldev initragldev test
