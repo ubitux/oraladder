@@ -32,7 +32,7 @@ def _update_account_cache(accounts_db, player):
     fingerprint = player.fingerprint
 
     if fingerprint in accounts_db:  # already in cache
-        return True
+        return accounts_db[fingerprint] is not None
 
     logging.info(f'Querying {player.display_name} with fingerprint {fingerprint}...')
     player_url = f'https://forum.openra.net/openra/info/{fingerprint}'
@@ -41,20 +41,24 @@ def _update_account_cache(accounts_db, player):
         player_yaml = urlopen(player_url).read()
     except Exception:
         logging.error(f'Failed to fetch player info with {fingerprint=}')
+        accounts_db[fingerprint] = None
         return False
 
     if not player_yaml:
         logging.error('Player info is empty')
+        accounts_db[fingerprint] = None
         return False
 
     player_info = miniyaml.load(player_yaml)
     if 'Error' in player_info:
         logging.error(player_info['Error'])
+        accounts_db[fingerprint] = None
         return False
 
     profile_fp = player_info['Player']['Fingerprint']
     if profile_fp != fingerprint:
         logging.error(f"Player fingerprint doesn't match: {profile_fp} != {fingerprint}")
+        accounts_db[fingerprint] = None
         return False
 
     profile_id = int(player_info['Player']['ProfileID'])
