@@ -6,24 +6,24 @@
 {% block content %}
 <table>
 	<thead>
-	<tr>
-		<th>Date</th>
-		<th>Map</th>
-		<th>Victorious</th>
-		<th>Defeated</th>
-		<th>Replay</th>
-	</tr>
+		<tr>
+			<th>Date</th>
+			<th>Map</th>
+			<th>Victorious</th>
+			<th>Defeated</th>
+			<th>Replay</th>
+		</tr>
 	</thead>
 	<tbody>
-{% for game in games %}
-	<tr>
-		<td>{{ game.date }}</td>
-		<td class="map">{{ game.map }}</td>
-		<td class="player"><a href="{{ url_for('player', profile_id=game.p0_id) }}">{{ game.p0 }}</a></td>
-		<td class="player"><a href="{{ url_for('player', profile_id=game.p1_id) }}">{{ game.p1 }}</a></td>
-		<td><a href="{{ url_for('replay', replay_hash=game.hash) }}">📥</a></td>
-	</tr>
-{% endfor %}
+		{% for game in games %}
+		<tr>
+			<td>{{ game.date }}</td>
+			<td class="map">{{ game.map }}</td>
+			<td class="player"><a href="{{ url_for('player', profile_id=game.p0_id) }}">{{ game.p0 }}</a></td>
+			<td class="player"><a href="{{ url_for('player', profile_id=game.p1_id) }}">{{ game.p1 }}</a></td>
+			<td><a href="{{ url_for('replay', replay_hash=game.hash) }}">📥</a></td>
+		</tr>
+		{% endfor %}
 	</tbody>
 </table>
 {% endblock %}
