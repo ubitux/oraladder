@@ -13,18 +13,21 @@ ACTIVATE = $(VENV)/bin/activate
 ladderdev: initladderdev
 	(. $(ACTIVATE) && FLASK_APP=ladderweb FLASK_ENV=development FLASK_RUN_PORT=5000 flask run)
 
-initladderdev: $(VENV) $(LADDER_MAP_PACK)
-	mkdir -p instance
-	$(RM) instance/db.sqlite3
-	(. $(ACTIVATE) && ora-ladder -d instance/db.sqlite3)
+initladderdev: $(VENV) $(LADDER_MAP_PACK) instance/db.sqlite3
+
+instance/db.sqlite3: instance
+	(. $(ACTIVATE) && ora-ladder -d $@)
 
 ragldev: initragldev
 	(. $(ACTIVATE) && FLASK_APP=raglweb FLASK_ENV=development FLASK_RUN_PORT=5001 flask run)
 
-initragldev: $(VENV) $(RAGL_MAP_PACK)
-	mkdir -p instance
-	$(RM) instance/db-ragl.sqlite3
-	(. $(ACTIVATE) && ora-ragl -d instance/db-ragl.sqlite3)
+initragldev: $(VENV) $(RAGL_MAP_PACK) instance/db-ragl.sqlite3
+
+instance/db-ragl.sqlite3: instance
+	(. $(ACTIVATE) && ora-ragl -d $@)
+
+instance:
+	mkdir -p $@
 
 wheel: $(VENV)
 	(. $(ACTIVATE) && pip install wheel && python setup.py bdist_wheel)
