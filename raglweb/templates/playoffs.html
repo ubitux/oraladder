@@ -21,7 +21,7 @@
 	</thead>
 	<tbody>
 		{% for category, (m0, m1), (p0, p1), (s0, s1) in playoff.matchups %}
-		<tr class="row">
+		<tr>
 			<td>{{ category }}</td>
 			<td>{% if m0 %}{{ m0 }}{% endif %}</td>
 			<td class="player"><a href="{{ url_for('player', profile_id=p0[0]) }}">{{ p0[1] }}</a></td>
@@ -49,7 +49,7 @@
 	</thead>
 	<tbody>
 {% for game in games %}
-		<tr class="row">
+		<tr>
 			<td>{{ game.date }}</td>
 			<td class="map">{{ game.map }}</td>
 			<td class="player"><a href="{{ url_for('player', profile_id=game.p0_id) }}">{{ game.p0 }}</a></td>

@@ -16,7 +16,7 @@
 	</thead>
 	<tbody>
 {% for game in games %}
-	<tr class="row">
+	<tr>
 		<td>{{ game.date }}</td>
 		<td class="map">{{ game.map }}</td>
 		<td class="player"><a href="{{ url_for('player', profile_id=game.p0_id) }}">{{ game.p0 }}</a></td>

@@ -54,15 +54,15 @@ h1::before, h1::after {
 	padding: 0 1em 0 1em;
 }
 
-tr.row:nth-child(odd) {
+tbody tr:nth-child(odd) {
 	background-color: var(--color_row0);
 }
 
-tr.row:nth-child(even) {
+tbody tr:nth-child(even) {
 	background-color: var(--color_row1);
 }
 
-tr.row:hover {
+tbody tr:hover {
 	background-color: var(--color_hl);
 	transition: all 0.3s ease;
 }
