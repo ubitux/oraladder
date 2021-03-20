@@ -15,6 +15,7 @@ html {
 	background-color: var(--color_bg);
 	color: var(--color_text0);
 	font-family: Monaco, Courier, monospace;
+	font-variant-ligatures: none;
 }
 
 body {
