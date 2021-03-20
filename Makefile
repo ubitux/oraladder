@@ -13,9 +13,12 @@ ACTIVATE = $(VENV)/bin/activate
 ladderdev: initladderdev
 	(. $(ACTIVATE) && FLASK_APP=ladderweb FLASK_ENV=development FLASK_RUN_PORT=5000 flask run)
 
-initladderdev: $(VENV) $(LADDER_MAP_PACK) instance/db.sqlite3
+initladderdev: $(VENV) $(LADDER_MAP_PACK) instance/db.sqlite3 instance/db-1m.sqlite3
 
 instance/db.sqlite3: instance
+	(. $(ACTIVATE) && ora-ladder -d $@)
+
+instance/db-1m.sqlite3: instance
 	(. $(ACTIVATE) && ora-ladder -d $@)
 
 ragldev: initragldev
