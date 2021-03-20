@@ -125,7 +125,7 @@ def scoreboards():
     return render_template('scoreboards.html', scoreboards=scoreboards)
 
 
-def _get_games(db, outcomes_table):
+def _get_games(db, outcomes_table, order='DESC'):
     cur = db.execute(f'''
         SELECT
             hash,
@@ -138,7 +138,7 @@ def _get_games(db, outcomes_table):
         FROM {outcomes_table} o
         LEFT JOIN players p0 ON p0.profile_id = o.profile_id0
         LEFT JOIN players p1 ON p1.profile_id = o.profile_id1
-        ORDER BY o.end_time DESC'''
+        ORDER BY o.end_time {order}'''
     )
     matches = cur.fetchall()
     cur.close()
@@ -162,7 +162,7 @@ def _get_games(db, outcomes_table):
 @app.route('/playoffs')
 def playoffs():
     db = _db_get()
-    games = _get_games(db, 'playoff_outcomes')
+    games = _get_games(db, 'playoff_outcomes', order='ASC')
 
     outcomes = [PlayoffOutcome((g['p0_id'], g['p0']), (g['p1_id'], g['p1'])) for g in games]
 
