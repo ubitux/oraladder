@@ -7,6 +7,7 @@
 {% for division, players in scoreboards.items() %}
 <h2>{{ division }}</h2>
 <table>
+	<thead>
 	<tr>
 		<th>Rank</th>
 		<th colspan=2>Player</th>
@@ -16,6 +17,8 @@
 		<th>Win rate</th>
 		<th>Status</th>
 	</tr>
+	</thead>
+	<tbody>
 	{% for e in players %}
 	<tr class="row">
 		<td class="position">{{ e.row_id }}</td>
@@ -28,6 +31,7 @@
 		<td>{{ e.status }}</td>
 	</tr>
 	{% endfor %}
+	</tbody>
 </table>
 {% endfor %}
 {% endblock %}

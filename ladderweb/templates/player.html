@@ -81,6 +81,7 @@
 
 <h2>Latest games</h2>
 <table>
+	<thead>
 	<tr>
 		<th>Date</th>
 		<th>Opponent</th>
@@ -89,6 +90,8 @@
 		<th>Duration</th>
 		<th>Replay</th>
 	</tr>
+	</thead>
+	<tbody>
 {% for game in games %}
 	<tr class="row">
 		<td>{{ game.date }}</td>
@@ -102,6 +105,7 @@
 		<td><a href="{{ url_for('replay', replay_hash=game.hash) }}">📥</a></td>
 	</tr>
 {% endfor %}
+	</tbody>
 </table>
 
 {% endblock %}

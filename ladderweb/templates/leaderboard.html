@@ -6,6 +6,7 @@
 {% block content %}
 {% include "period.html" %}
 <table>
+	<thead>
 	<tr>
 		<th>Rank</th>
 		<th colspan=2>Player</th>
@@ -15,6 +16,8 @@
 		<th>Losses</th>
 		<th>Win rate</th>
 	</tr>
+	</thead>
+	<tbody>
 	{% for e in leaderboard %}
 	<tr class="row">
 		<td class="position">{{ e.row_id }}</td>
@@ -30,5 +33,6 @@
 		<td>{{ '%.1f' | format(e.winrate) }}%</td>
 	</tr>
 	{% endfor %}
+	</tbody>
 </table>
 {% endblock %}
