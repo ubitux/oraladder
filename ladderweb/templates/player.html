@@ -92,7 +92,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		{% for game in games %}
+		{%- for game in games %}
 		<tr>
 			<td>{{ game.date }}</td>
 			<td class="player"><a href="{{ url_for('player', profile_id=game.opponent_id, period=period) }}">{{ game.opponent }}</a></td>
@@ -104,7 +104,7 @@
 			<td>{{ game.duration }}</td>
 			<td><a href="{{ url_for('replay', replay_hash=game.hash) }}">📥</a></td>
 		</tr>
-		{% endfor %}
+		{%- endfor %}
 	</tbody>
 </table>
 

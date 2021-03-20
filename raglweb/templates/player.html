@@ -21,7 +21,7 @@
 			<th colspan="4">Games</th>
 		</tr>
 	</thead>
-	{% for match in matches %}
+	{%- for match in matches %}
 	<tbody class="row">
 		<tr>
 			{% set nb_games = match.games|length -%}
@@ -45,7 +45,6 @@
 			{%- endif %}
 		</tr>
 	</tbody>
-	{% endfor %}
+	{%- endfor %}
 </table>
-
 {% endblock %}

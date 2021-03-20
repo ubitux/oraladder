@@ -19,7 +19,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		{% for e in players %}
+		{%- for e in players %}
 		<tr>
 			<td class="position">{{ e.row_id }}</td>
 			<td class="avatar">{%if e.avatar_url %}<img src="{{ e.avatar_url }}" alt="" />{%endif%}</td>
@@ -30,7 +30,7 @@
 			<td>{{ '%.1f' | format(e.winrate) }}%</td>
 			<td>{{ e.status }}</td>
 		</tr>
-		{% endfor %}
+		{%- endfor %}
 	</tbody>
 </table>
 {% endfor %}

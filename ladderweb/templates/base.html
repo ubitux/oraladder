@@ -12,19 +12,19 @@
 </header>
 <nav>
 	<ul>
-	{%
+	{%-
 	set navbar_menus = [
 		('leaderboard', 'Leaderboard'),
 		('latest_games', 'Latest games'),
 		('globalstats', 'Global stats'),
 		('about', 'About'),
 	]
-	%}
-	{% for endpoint, caption in navbar_menus %}
+	-%}
+	{%- for endpoint, caption in navbar_menus %}
 		<li class="{% if endpoint == active_page %}active{% endif %}">
 			<a href="{{ url_for(endpoint) }}">{{ caption }}</a>
 		</li>
-        {% endfor %}
+	{%- endfor %}
 	</ul>
 </nav>
 {% block content %}{% endblock %}

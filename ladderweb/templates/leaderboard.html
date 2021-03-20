@@ -18,7 +18,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		{% for e in leaderboard %}
+		{%- for e in leaderboard %}
 		<tr>
 			<td class="position">{{ e.row_id }}</td>
 			<td class="avatar">{%if e.avatar_url %}<img src="{{ e.avatar_url }}" alt="" />{%endif%}</td>
@@ -32,7 +32,7 @@
 			<td>{{ e.losses }}</td>
 			<td>{{ '%.1f' | format(e.winrate) }}%</td>
 		</tr>
-		{% endfor %}
+		{%- endfor %}
 	</tbody>
 </table>
 {% endblock %}

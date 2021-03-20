@@ -17,7 +17,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		{% for game in games %}
+		{%- for game in games %}
 		<tr>
 			<td>{{ game.date }}</td>
 			<td class="map">{{ game.map }}</td>
@@ -32,7 +32,7 @@
 			<td>{{ game.duration }}</td>
 			<td><a href="{{ url_for('replay', replay_hash=game.hash) }}">📥</a></td>
 		</tr>
-		{% endfor %}
+		{%- endfor %}
 	</tbody>
 </table>
 {% endblock %}
