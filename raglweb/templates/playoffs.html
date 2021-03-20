@@ -54,7 +54,7 @@
 			<td class="map">{{ game.map }}</td>
 			<td class="player"><a href="{{ url_for('player', profile_id=game.p0_id) }}">{{ game.p0 }}</a></td>
 			<td class="player"><a href="{{ url_for('player', profile_id=game.p1_id) }}">{{ game.p1 }}</a></td>
-			<td><a href="{{ url_for('replay', replay_hash=game.hash) }}">📥</a></td>
+			<td><a href="{{ url_for('replay_playoff', replay_hash=game.hash) }}">📥</a></td>
 		</tr>
 {% endfor %}
 	</tbody>

@@ -401,3 +401,29 @@ def replay(replay_hash):
         as_attachment=True,
         attachment_filename=attachment_filename
     )
+
+
+@app.route('/replay_playoff/<replay_hash>')
+def replay_playoff(replay_hash):
+    db = _db_get()
+    cur = db.execute(f'''
+        SELECT filename
+        FROM playoff_outcomes o
+        LEFT JOIN players p0 ON p0.profile_id = o.profile_id0
+        LEFT JOIN players p1 ON p1.profile_id = o.profile_id1
+        WHERE hash=:hash
+    ''', dict(hash=replay_hash))
+    row = cur.fetchone()
+
+    season = _cfg['season']
+    prefix = f'RAGL-S{season:02d}-PLAYOFF-'
+
+    fullpath = row['filename']
+    original_filename = op.basename(fullpath)
+    attachment_filename = prefix + original_filename
+    cur.close()
+    return send_file(
+        fullpath,
+        as_attachment=True,
+        attachment_filename=attachment_filename
+    )
