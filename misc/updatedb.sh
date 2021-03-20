@@ -8,4 +8,4 @@ set -xeu
 
 cp db-ladder.sqlite3 /home/web/venv/var/ladderweb-instance/db.sqlite3
 cp db-ladder-1m.sqlite3 /home/web/venv/var/ladderweb-instance/db-1m.sqlite3
-cp db-ragl.sqlite3   /home/web/venv/var/raglweb-instance/db.sqlite3
+cp db-ragl.sqlite3   /home/web/venv/var/raglweb-instance/db-ragl.sqlite3

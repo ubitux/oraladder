@@ -225,7 +225,7 @@ def _main(args):
 def run():
     logging.basicConfig(level='INFO')
     parser = argparse.ArgumentParser()
-    parser.add_argument('-d', '--database', default='db.sqlite3')
+    parser.add_argument('-d', '--database', default='db-ragl.sqlite3')
     parser.add_argument('-s', '--schema', default=op.join(op.dirname(__file__), 'ragl.sql'))
     parser.add_argument('-p', '--playersinfo', default=op.join(op.dirname(__file__), 'ragl-s10.yml'))
     parser.add_argument('replays', nargs='*')

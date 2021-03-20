@@ -23,8 +23,8 @@ ragldev: initragldev
 
 initragldev: $(VENV) $(RAGL_MAP_PACK)
 	mkdir -p instance
-	$(RM) instance/db.sqlite3
-	(. $(ACTIVATE) && ora-ragl -d instance/db.sqlite3)
+	$(RM) instance/db-ragl.sqlite3
+	(. $(ACTIVATE) && ora-ragl -d instance/db-ragl.sqlite3)
 
 wheel: $(VENV)
 	(. $(ACTIVATE) && pip install wheel && python setup.py bdist_wheel)
