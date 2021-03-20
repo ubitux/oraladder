@@ -12,7 +12,7 @@ RAGL_MAP_PACK = raglweb/static/ragl-map-pack-$(RAGL_MAP_PACK_VERSION).zip
 LADDER_STATIC = ladderweb/static/Chart.min.css ladderweb/static/Chart.bundle.min.js $(LADDER_MAP_PACK)
 
 # https://github.com/chartjs/Chart.js/releases/latest
-CHART_JS_VERSION = 2.9.3
+CHART_JS_VERSION = 2.9.4
 
 ladderdev: initladderdev
 	FLASK_APP=ladderweb FLASK_ENV=development FLASK_RUN_PORT=5000 $(VENV)/bin/flask run
