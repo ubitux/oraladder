@@ -60,3 +60,15 @@ Forfeit:
     - 13258
     - 13574
     - 13674
+
+Playoffs:
+    Minions Championship:
+        bestof: 3
+        players:
+            - 11435
+            - 11705
+    Masters Tiebreaker:
+        bestof: 3
+        players:
+            - 3952
+            - 6771
