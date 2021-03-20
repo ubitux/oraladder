@@ -138,11 +138,14 @@ def _get_players_outcomes(accounts_db, results, players_info):
         # Replace empty avatars with the one obtained from the API
         p0.avatar_url = p0_avatar
         p1.avatar_url = p1_avatar
-        if None in (p0.division, p1.division) or p0.division != p1.division:
+        if None in (p0.division, p1.division):
             continue
 
-        # Register playoffs (or whatever extra match) somewhere else
-        if _records_count(outcomes, (pid0, pid1)) + _records_count(outcomes, (pid1, pid0)) == 2:
+        # Register playoffs (or whatever extra match) somewhere else. Note that
+        # playoffs can happen between divisions (Minion finale for example), in
+        # which case there won't be any previous records between these players.
+        matchup_counts = _records_count(outcomes, (pid0, pid1)) + _records_count(outcomes, (pid1, pid0))
+        if matchup_counts == 2 or p0.division != p1.division:
             extra_outcomes.append(_OutCome(result, p0, p1))
             continue
 
