@@ -2,8 +2,10 @@ include laddertools/ladder.sql
 include laddertools/ragl-s9.yml
 include laddertools/ragl-s10.yml
 include laddertools/ragl.sql
-include ladderweb/static/style.css
+include ladderweb/static/*.css
+include ladderweb/static/*.js
 include ladderweb/templates/*.html
 include raglweb/static/ragl-logo.png
-include raglweb/static/style.css
+include raglweb/static/*.css
+include raglweb/static/*.js
 include raglweb/templates/*.html
