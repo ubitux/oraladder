@@ -254,7 +254,7 @@ def run():
     parser.add_argument('--label', default='Ladder Server {id}')
     parser.add_argument('--baseport', default=10100, type=int)
     parser.add_argument('--basewkdir', default='srvwrap')
-    parser.add_argument('--version', default='playtest-20210131')
+    parser.add_argument('--version', default='release-20210321')
     parser.add_argument('--repo', default='https://github.com/OpenRA/OpenRA')
     parser.add_argument('--password')
     args = parser.parse_args()
