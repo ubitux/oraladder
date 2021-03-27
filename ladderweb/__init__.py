@@ -16,6 +16,7 @@
 #
 
 import colorsys
+import os
 import os.path as op
 import json
 import numpy as np
@@ -66,6 +67,20 @@ def create_app():
 
 
 app = create_app()
+
+
+@app.context_processor
+def override_url_for():
+    return dict(url_for=dated_url_for)
+
+
+def dated_url_for(endpoint, **values):
+    if endpoint == 'static':
+        filename = values.get('filename', None)
+        if filename:
+            file_path = op.join(app.root_path, endpoint, filename)
+            values['q'] = int(os.stat(file_path).st_mtime)
+    return url_for(endpoint, **values)
 
 
 @app.route('/', defaults=dict(period=None))
