@@ -33,7 +33,6 @@ _STAR = '⭐'
 def get_playoff2(n, players, records):
     '''best of N with 2 players'''
 
-    records = list(records)
     p0, p1 = players
     p0_wins, p1_wins = _extract_records(records, p0, p1, n)
     win_score = n // 2 + 1
@@ -52,7 +51,6 @@ _GOLD, _SILVER, _BRONZE = '🥇', '🥈', '🥉'
 def get_playoff4(n, players, records):
     '''best of N with 4 players'''
 
-    records = list(records)
     p0, p1, p2, p3 = players
 
     p0_wins, p3_wins = _extract_records(records, p0, p3, n)
