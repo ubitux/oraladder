@@ -255,7 +255,7 @@ def _get_player_faction_stats(db, profile_id):
     cur.close()
     faction_names, faction_data = zip(*hist)
     faction_colors = _get_colors(len(hist))
-    return list(faction_names), list(faction_data), faction_colors
+    return list(faction_names), list(faction_data), sum(faction_data), faction_colors
 
 
 def _get_player_map_stats(db, profile_id):
@@ -347,7 +347,7 @@ def player(profile_id, period):
     if not player:
         return render_template('noplayer.html', profile_id=profile_id, period=period)
 
-    faction_names, faction_data, faction_colors = _get_player_faction_stats(db, profile_id)
+    faction_names, faction_data, faction_total, faction_colors = _get_player_faction_stats(db, profile_id)
     rating_labels, rating_data = _get_player_ratings(db, profile_id)
     map_names, map_win_data, map_loss_data = _get_player_map_stats(db, profile_id)
 
@@ -359,6 +359,7 @@ def player(profile_id, period):
         rating_data=rating_data,
         faction_names=faction_names,
         faction_data=faction_data,
+        faction_total=faction_total,
         faction_colors=faction_colors,
         map_names=map_names,
         map_win_data=map_win_data,
@@ -390,7 +391,7 @@ def _get_global_faction_stats(db):
 
     faction_names, faction_data = zip(*hist)
     faction_colors = _get_colors(len(hist))
-    return list(faction_names), list(faction_data), faction_colors
+    return list(faction_names), list(faction_data), sum(faction_data), faction_colors
 
 
 def _get_global_map_stats(db):
@@ -403,7 +404,7 @@ def _get_global_map_stats(db):
 
     map_names, map_data = zip(*hist)
     map_colors = _get_colors(len(hist))
-    return list(map_names), list(map_data), map_colors
+    return list(map_names), list(map_data), sum(map_data), map_colors
 
 
 @app.route('/globalstats', defaults=dict(period=None))
@@ -426,16 +427,18 @@ def globalstats(period):
     nb_players = cur.fetchone()['nb_players']
     cur.close()
 
-    map_names, map_data, map_colors = _get_global_map_stats(db)
-    faction_names, faction_data, faction_colors = _get_global_faction_stats(db)
+    map_names, map_data, map_total, map_colors = _get_global_map_stats(db)
+    faction_names, faction_data, faction_total, faction_colors = _get_global_faction_stats(db)
 
     return render_template(
         'globalstats.html',
         faction_names=faction_names,
         faction_data=faction_data,
+        faction_total=faction_total,
         faction_colors=faction_colors,
         map_names=map_names,
         map_data=map_data,
+        map_total=map_total,
         map_colors=map_colors,
         nb_games=nb_games,
         nb_players=nb_players,

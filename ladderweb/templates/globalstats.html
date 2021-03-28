@@ -26,7 +26,19 @@
 				backgroundColor: {{ map_colors | safe }},
 				fontColor: '#fff'
 			}]
-		}
+		},
+		options: {
+			tooltips: {
+				callbacks: {
+					label: function(tooltipItem, data) {
+						var label = data['labels'][tooltipItem['index']]
+						var value = data['datasets'][0]['data'][tooltipItem['index']]
+						var pcent = value / {{ map_total }} * 100
+						return label + ': ' + pcent.toFixed(1) + '% (' + value + '/' + {{ map_total }} + ')'
+					},
+				},
+			},
+		},
 	});
 </script>
 
@@ -44,7 +56,19 @@
 				backgroundColor: {{ faction_colors | safe }},
 				fontColor: '#fff'
 			}]
-		}
+		},
+		options: {
+			tooltips: {
+				callbacks: {
+					label: function(tooltipItem, data) {
+						var label = data['labels'][tooltipItem['index']]
+						var value = data['datasets'][0]['data'][tooltipItem['index']]
+						var pcent = value / {{ faction_total }} * 100
+						return label + ': ' + pcent.toFixed(1) + '% (' + value + '/' + {{ faction_total }} + ')'
+					},
+				},
+			},
+		},
 	});
 </script>
 {% endblock %}
