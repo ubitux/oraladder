@@ -39,6 +39,8 @@ def get_playoff2(n, players, records):
     win_score = n // 2 + 1
     if win_score in {p0_wins, p1_wins}:
         win_status = (_STAR, None) if p0_wins == win_score else (None, _STAR)
+    else:
+        win_status = (None, None)
     return [
         ('TieBreaker', win_status, (p0, p1), (p0_wins, p1_wins)),
     ]
