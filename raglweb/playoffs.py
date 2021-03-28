@@ -27,14 +27,20 @@ def _extract_records(records, p0, p1, n):
     return p0_wins, p1_wins
 
 
+_STAR = '⭐'
+
+
 def get_playoff2(n, players, records):
     '''best of N with 2 players'''
 
     records = list(records)
     p0, p1 = players
     p0_wins, p1_wins = _extract_records(records, p0, p1, n)
+    win_score = n // 2 + 1
+    if win_score in {p0_wins, p1_wins}:
+        win_status = (_STAR, None) if p0_wins == win_score else (None, _STAR)
     return [
-        ('TieBreaker', (None, None), (p0, p1), (p0_wins, p1_wins)),
+        ('TieBreaker', win_status, (p0, p1), (p0_wins, p1_wins)),
     ]
 
 
