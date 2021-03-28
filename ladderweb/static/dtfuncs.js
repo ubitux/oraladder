@@ -1,7 +1,7 @@
 function replay_render(data, type, row, meta) {
-	var replay = '<a href="' + data.url + '">📥</a>'
+	var replay = '<a href="' + data.url + '" title="Download">📥</a>'
 	var info_url = 'https://dragunoff.github.io/OpenRA-replay-analytics/#/oraladder/' + data.hash
-	var info = '<a href="' + info_url + '">🔍</a>'
+	var info = '<a href="' + info_url + '" title="Information/Analysis">🔍</a>'
 	return replay + ' ' + info
 }
 
