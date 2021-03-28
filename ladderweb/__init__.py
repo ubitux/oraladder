@@ -214,7 +214,10 @@ def _get_player_ratings(db, profile_id):
     ratings = _scaled(ratings, datapoints)  # rescale all ratings to a fixed number of data points
     rating_data = json.dumps(ratings)
 
-    return rating_labels, rating_data
+    return dict(
+        labels=rating_labels,
+        data=rating_data,
+    )
 
 
 def _get_player_info(db, profile_id):
@@ -255,7 +258,12 @@ def _get_player_faction_stats(db, profile_id):
     cur.close()
     faction_names, faction_data = zip(*hist)
     faction_colors = _get_colors(len(hist))
-    return list(faction_names), list(faction_data), sum(faction_data), faction_colors
+    return dict(
+        names=list(faction_names),
+        data=list(faction_data),
+        total=sum(faction_data),
+        colors=faction_colors,
+    )
 
 
 def _get_player_map_stats(db, profile_id):
@@ -276,7 +284,11 @@ def _get_player_map_stats(db, profile_id):
     map_names = sorted(list(set(hist_wins.keys()) | set(hist_losses.keys())))
     map_win_data = [hist_wins.get(m, 0) for m in map_names]
     map_loss_data = [hist_losses.get(m, 0) for m in map_names]
-    return map_names, map_win_data, map_loss_data
+    return dict(
+        names=map_names,
+        win_data=map_win_data,
+        loss_data=map_loss_data,
+    )
 
 
 @app.route('/player-games-js/<int:profile_id>', defaults=dict(period=None))
@@ -347,23 +359,13 @@ def player(profile_id, period):
     if not player:
         return render_template('noplayer.html', profile_id=profile_id, period=period)
 
-    faction_names, faction_data, faction_total, faction_colors = _get_player_faction_stats(db, profile_id)
-    rating_labels, rating_data = _get_player_ratings(db, profile_id)
-    map_names, map_win_data, map_loss_data = _get_player_map_stats(db, profile_id)
-
     return render_template(
         'player.html',
         player=player,
         profile_id=profile_id,
-        rating_labels=rating_labels,
-        rating_data=rating_data,
-        faction_names=faction_names,
-        faction_data=faction_data,
-        faction_total=faction_total,
-        faction_colors=faction_colors,
-        map_names=map_names,
-        map_win_data=map_win_data,
-        map_loss_data=map_loss_data,
+        rating_stats=_get_player_ratings(db, profile_id),
+        faction_stats=_get_player_faction_stats(db, profile_id),
+        map_stats=_get_player_map_stats(db, profile_id),
         period=period,
     )
 
@@ -391,7 +393,12 @@ def _get_global_faction_stats(db):
 
     faction_names, faction_data = zip(*hist)
     faction_colors = _get_colors(len(hist))
-    return list(faction_names), list(faction_data), sum(faction_data), faction_colors
+    return dict(
+        names=list(faction_names),
+        data=list(faction_data),
+        total=sum(faction_data),
+        colors=faction_colors,
+    )
 
 
 def _get_global_map_stats(db):
@@ -404,7 +411,12 @@ def _get_global_map_stats(db):
 
     map_names, map_data = zip(*hist)
     map_colors = _get_colors(len(hist))
-    return list(map_names), list(map_data), sum(map_data), map_colors
+    return dict(
+        names=list(map_names),
+        data=list(map_data),
+        total=sum(map_data),
+        colors=map_colors,
+    )
 
 
 @app.route('/globalstats', defaults=dict(period=None))
@@ -427,19 +439,10 @@ def globalstats(period):
     nb_players = cur.fetchone()['nb_players']
     cur.close()
 
-    map_names, map_data, map_total, map_colors = _get_global_map_stats(db)
-    faction_names, faction_data, faction_total, faction_colors = _get_global_faction_stats(db)
-
     return render_template(
         'globalstats.html',
-        faction_names=faction_names,
-        faction_data=faction_data,
-        faction_total=faction_total,
-        faction_colors=faction_colors,
-        map_names=map_names,
-        map_data=map_data,
-        map_total=map_total,
-        map_colors=map_colors,
+        faction_stats=_get_global_faction_stats(db),
+        map_stats=_get_global_map_stats(db),
         nb_games=nb_games,
         nb_players=nb_players,
         avg_duration=avg_duration,

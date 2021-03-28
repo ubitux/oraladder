@@ -15,7 +15,7 @@
 </dl>
 
 <h2>Rating evolution</h2>
-{%if rating_data %}
+{%if rating_stats.data %}
 <canvas id="rating_chart"></canvas>
 <script>
 	Chart.defaults.global.defaultFontColor = "#e8e8e8";
@@ -23,10 +23,10 @@
 	var myChart = new Chart(ctx, {
 		type: 'line',
 		data: {
-			labels: {{ rating_labels | safe }},
+			labels: {{ rating_stats.labels | safe }},
 			datasets: [{
 				label: 'Rating',
-				data: {{ rating_data | safe }},
+				data: {{ rating_stats.data | safe }},
 				backgroundColor: ['rgba(255, 99, 132, 0.2)'],
 				borderColor: ['rgba(255, 99, 132, 1)']
 			}]
@@ -45,10 +45,10 @@
 	var myChart = new Chart(ctx, {
 		type: 'doughnut',
 		data: {
-			labels: {{ faction_names | safe }},
+			labels: {{ faction_stats.names | safe }},
 			datasets: [{
-				data: {{ faction_data | safe }},
-				backgroundColor: {{ faction_colors | safe }},
+				data: {{ faction_stats.data | safe }},
+				backgroundColor: {{ faction_stats.colors | safe }},
 				fontColor: '#fff'
 			}]
 		},
@@ -58,8 +58,8 @@
 					label: function(tooltipItem, data) {
 						var label = data['labels'][tooltipItem['index']]
 						var value = data['datasets'][0]['data'][tooltipItem['index']]
-						var pcent = value / {{ faction_total }} * 100
-						return label + ': ' + pcent.toFixed(1) + '% (' + value + '/' + {{ faction_total }} + ')'
+						var pcent = value / {{ faction_stats.total }} * 100
+						return label + ': ' + pcent.toFixed(1) + '% (' + value + '/' + {{ faction_stats.total }} + ')'
 					},
 				},
 			},
@@ -75,15 +75,15 @@
 	var myChart = new Chart(ctx, {
 		type: 'bar',
 		data: {
-			labels: {{ map_names | safe }},
+			labels: {{ map_stats.names | safe }},
 			datasets: [{
 				label: 'Wins',
-				data: {{ map_win_data | safe }},
+				data: {{ map_stats.win_data | safe }},
 				backgroundColor: '#72ff72',
 				fontColor: '#fff'
 			}, {
 				label: 'Losses',
-				data: {{ map_loss_data | safe }},
+				data: {{ map_stats.loss_data | safe }},
 				backgroundColor: '#ff1a1a',
 				fontColor: '#fff'
 			}]

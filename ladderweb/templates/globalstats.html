@@ -20,10 +20,10 @@
 	var myChart = new Chart(ctx, {
 		type: 'doughnut',
 		data: {
-			labels: {{ map_names | safe }},
+			labels: {{ map_stats.names | safe }},
 			datasets: [{
-				data: {{ map_data | safe }},
-				backgroundColor: {{ map_colors | safe }},
+				data: {{ map_stats.data | safe }},
+				backgroundColor: {{ map_stats.colors | safe }},
 				fontColor: '#fff'
 			}]
 		},
@@ -33,8 +33,8 @@
 					label: function(tooltipItem, data) {
 						var label = data['labels'][tooltipItem['index']]
 						var value = data['datasets'][0]['data'][tooltipItem['index']]
-						var pcent = value / {{ map_total }} * 100
-						return label + ': ' + pcent.toFixed(1) + '% (' + value + '/' + {{ map_total }} + ')'
+						var pcent = value / {{ map_stats.total }} * 100
+						return label + ': ' + pcent.toFixed(1) + '% (' + value + '/' + {{ map_stats.total }} + ')'
 					},
 				},
 			},
@@ -50,10 +50,10 @@
 	var myChart = new Chart(ctx, {
 		type: 'doughnut',
 		data: {
-			labels: {{ faction_names | safe }},
+			labels: {{ faction_stats.names | safe }},
 			datasets: [{
-				data: {{ faction_data | safe }},
-				backgroundColor: {{ faction_colors | safe }},
+				data: {{ faction_stats.data | safe }},
+				backgroundColor: {{ faction_stats.colors | safe }},
 				fontColor: '#fff'
 			}]
 		},
@@ -63,8 +63,8 @@
 					label: function(tooltipItem, data) {
 						var label = data['labels'][tooltipItem['index']]
 						var value = data['datasets'][0]['data'][tooltipItem['index']]
-						var pcent = value / {{ faction_total }} * 100
-						return label + ': ' + pcent.toFixed(1) + '% (' + value + '/' + {{ faction_total }} + ')'
+						var pcent = value / {{ faction_stats.total }} * 100
+						return label + ': ' + pcent.toFixed(1) + '% (' + value + '/' + {{ faction_stats.total }} + ')'
 					},
 				},
 			},
