@@ -1,5 +1,8 @@
 function replay_render(data, type, row, meta) {
-	return '<a href="' + data + '">📥</a>'
+	var replay = '<a href="' + data.url + '">📥</a>'
+	var info_url = 'https://dragunoff.github.io/OpenRA-replay-analytics/#/oraladder/' + data.hash
+	var info = '<a href="' + info_url + '">🔍</a>'
+	return replay + ' ' + info
 }
 
 function get_diff_html(diff) {

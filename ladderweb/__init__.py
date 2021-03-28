@@ -151,7 +151,10 @@ def latest_games_js(period):
     games = []
     for match in matches:
         game = dict(
-            replay_url=url_for('replay', replay_hash=match['hash']),
+            replay=dict(
+                hash=match['hash'],
+                url=url_for('replay', replay_hash=match['hash']),
+            ),
             date=match['end_time'],
             duration=match['duration'],
             map=match['map_title'],
@@ -342,7 +345,10 @@ def player_games_js(profile_id, period):
                 diff=diff,
             ),
             duration=match['duration'],
-            replay_url=url_for('replay', replay_hash=match['hash']),
+            replay=dict(
+                hash=match['hash'],
+                url=url_for('replay', replay_hash=match['hash']),
+            ),
         )
         games.append(game)
     cur.close()
