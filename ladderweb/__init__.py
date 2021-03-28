@@ -131,13 +131,13 @@ def latest_games_js(period):
         SELECT
             hash,
             end_time,
-            strftime('%M:%S', julianday(end_time) - julianday(start_time)) as duration,
+            strftime('%M:%S', julianday(end_time) - julianday(start_time)) AS duration,
             profile_id0,
             profile_id1,
-            rating_0 - rating_0_prv as diff0,
-            rating_1 - rating_1_prv as diff1,
-            p0.profile_name as p0_name,
-            p1.profile_name as p1_name,
+            rating_0 - rating_0_prv AS diff0,
+            rating_1 - rating_1_prv AS diff1,
+            p0.profile_name AS p0_name,
+            p1.profile_name AS p1_name,
             map_title
         FROM outcomes o
         LEFT JOIN players p0 ON p0.profile_id = o.profile_id0
@@ -287,13 +287,13 @@ def player_games_js(profile_id, period):
         SELECT
             hash,
             end_time,
-            strftime('%M:%S', julianday(end_time) - julianday(start_time)) as duration,
+            strftime('%M:%S', julianday(end_time) - julianday(start_time)) AS duration,
             profile_id0,
             profile_id1,
-            rating_0 - rating_0_prv as diff0,
-            rating_1 - rating_1_prv as diff1,
-            p0.profile_name as p0_name,
-            p1.profile_name as p1_name,
+            rating_0 - rating_0_prv AS diff0,
+            rating_1 - rating_1_prv AS diff1,
+            p0.profile_name AS p0_name,
+            p1.profile_name AS p1_name,
             map_title
         FROM outcomes o
         LEFT JOIN players p0 ON p0.profile_id = o.profile_id0
