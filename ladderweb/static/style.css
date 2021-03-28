@@ -141,6 +141,21 @@ nav li a:hover, nav li.active {
 	background-color: var(--color_hl);
 }
 
+dl#faq dt {
+	font-weight: bold;
+}
+dl#faq dt::before {
+	content: '❓ ';
+}
+
+dl#faq dd {
+	border-left: 1px solid var(--color_hl);
+	padding-left: 10px;
+	margin-left: 10px;
+	margin-top: 10px;
+	margin-bottom: 30px;
+}
+
 /* datatables garbage */
 select, input,
 .dataTables_wrapper .dataTables_length,
