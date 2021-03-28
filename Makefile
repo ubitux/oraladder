@@ -3,7 +3,7 @@ CURL   ?= curl
 VENV   ?= venv
 WGET   ?= wget --no-check-certificate
 
-LADDER_MAP_PACK_VERSION = 2020-12-28
+LADDER_MAP_PACK_VERSION = 2021-03-29
 LADDER_MAP_PACK = ladderweb/static/ladder-map-pack-$(LADDER_MAP_PACK_VERSION).zip
 
 RAGL_MAP_PACK_VERSION = 2020-12-28
