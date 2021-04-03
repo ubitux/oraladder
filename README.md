@@ -211,11 +211,6 @@ python -c 'import os;print(f"SECRET_KEY = {repr(os.urandom(16))}")' > ~/venv/var
 gunicorn ladderweb:app
 ```
 
-One more thing: the map pack needs to be built and uploaded manually (it's not
-part of the Python package for ownership and size reasons). To build the zip,
-use `make mappacks` and upload `ladderweb/static/ladder-map-pack-*.zip` into the
-corresponding directory (`~/venv/lib/python*/site-packages/ladderweb/static`).
-
 Now that the server is listening in local, we can use `nginx` to expose it to
 the outside. A `nginx.conf` configuration example file is available in the
 `misc` directory. After this last step, we are done.

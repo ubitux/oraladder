@@ -3,14 +3,10 @@ CURL   ?= curl
 VENV   ?= venv
 WGET   ?= wget --no-check-certificate
 
-LADDER_MAP_PACK_VERSION = 2021-03-29
-LADDER_MAP_PACK = ladderweb/static/ladder-map-pack-$(LADDER_MAP_PACK_VERSION).zip
-
 RAGL_MAP_PACK_VERSION = 2020-12-28
 RAGL_MAP_PACK = raglweb/static/ragl-map-pack-$(RAGL_MAP_PACK_VERSION).zip
 
-LADDER_STATIC = $(LADDER_MAP_PACK)                    \
-                ladderweb/static/Chart.bundle.min.js  \
+LADDER_STATIC = ladderweb/static/Chart.bundle.min.js  \
                 ladderweb/static/Chart.min.css        \
                 ladderweb/static/datatables.min.js    \
                 ladderweb/static/jquery.min.js        \
@@ -61,10 +57,7 @@ instance:
 wheel: $(VENV)
 	$(VENV)/bin/python -m pip install wheel && python setup.py bdist_wheel
 
-mappacks: $(LADDER_MAP_PACK) $(RAGL_MAP_PACK)
-
-$(LADDER_MAP_PACK): $(VENV)
-	$(VENV)/bin/ora-mapstool misc/map-pools/ladder.maps --pack $(LADDER_MAP_PACK)
+mappacks: $(RAGL_MAP_PACK)
 
 $(RAGL_MAP_PACK): $(VENV)
 	$(VENV)/bin/ora-mapstool misc/map-pools/ragl-s10.maps --pack $(RAGL_MAP_PACK)
@@ -75,7 +68,7 @@ test: $(VENV)
 clean:
 	$(RM) -r build
 	$(RM) -r dist
-	$(RM) -r $(LADDER_MAP_PACK) $(RAGL_MAP_PACK)
+	$(RM) -r $(RAGL_MAP_PACK)
 	$(RM) -r oraladder.egg-info
 	$(RM) -r venv
 
