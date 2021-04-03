@@ -93,7 +93,7 @@ def _create_pack(zipname, map_files, prefix):
     if op.exists(zipname):
         os.remove(zipname)
     logging.info('Creating %s', zipname)
-    with zipfile.ZipFile(zipname, 'w') as pack_zfile:
+    with zipfile.ZipFile(zipname, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as pack_zfile:
         for map_file in map_files:
             arcname = op.join(prefix, op.basename(map_file))
             pack_zfile.write(map_file, arcname)
