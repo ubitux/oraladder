@@ -15,17 +15,9 @@
 </header>
 <nav>
 	<ul>
-	{%-
-	set navbar_menus = [
-		('leaderboard', 'Leaderboard'),
-		('latest_games', 'Latest games'),
-		('globalstats', 'Global stats'),
-		('info', 'Information'),
-	]
-	-%}
-	{%- for endpoint, caption in navbar_menus %}
-		<li class="{% if endpoint == active_page %}active{% endif %}">
-			<a href="{{ url_for(endpoint) }}">{{ caption }}</a>
+	{%- for page_id, menu_url, caption in navbar_menu %}
+		<li class="{% if active_page == page_id %}active{% endif %}">
+			<a href="{{ menu_url }}">{{ caption }}</a>
 		</li>
 	{%- endfor %}
 	</ul>

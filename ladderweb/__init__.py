@@ -96,10 +96,20 @@ def _get_current_period():
     )
 
 
+def _get_menu(period=None):
+    return (
+        ('leaderboard', url_for('leaderboard', period=period), 'Leaderboard'),
+        ('latest_games', url_for('latest_games', period=period), 'Latest games'),
+        ('globalstats', url_for('globalstats', period=period), 'Global stats'),
+        ('info', url_for('info'), 'Information'),
+    )
+
+
 @app.route('/', defaults=dict(period=None))
 @app.route('/period/<period>')
 def leaderboard(period):
-    return render_template('leaderboard.html', period=period, period_info=_get_current_period())
+    menu = _get_menu(period=period)
+    return render_template('leaderboard.html', navbar_menu=menu, period=period, period_info=_get_current_period())
 
 
 @app.route('/leaderboard-js', defaults=dict(period=None))
@@ -133,7 +143,8 @@ def leaderboard_js(period):
 @app.route('/latest', defaults=dict(period=None))
 @app.route('/latest/period/<period>')
 def latest_games(period):
-    return render_template('latest.html', period=period)
+    menu = _get_menu(period=period)
+    return render_template('latest.html', navbar_menu=menu, period=period)
 
 
 @app.route('/latest-js', defaults=dict(period=None))
@@ -373,13 +384,15 @@ def player_games_js(profile_id, period):
 @app.route('/player/<int:profile_id>/period/<period>')
 def player(profile_id, period):
     db = _db_get(period)
+    menu = _get_menu(period=period)
 
     player = _get_player_info(db, profile_id)
     if not player:
-        return render_template('noplayer.html', profile_id=profile_id, period=period)
+        return render_template('noplayer.html', navbar_menu=menu, profile_id=profile_id, period=period)
 
     return render_template(
         'player.html',
+        navbar_menu=menu,
         player=player,
         profile_id=profile_id,
         rating_stats=_get_player_ratings(db, profile_id),
@@ -458,8 +471,10 @@ def globalstats(period):
     nb_players = cur.fetchone()['nb_players']
     cur.close()
 
+    menu = _get_menu(period=period)
     return render_template(
         'globalstats.html',
+        navbar_menu=menu,
         faction_stats=_get_global_faction_stats(db),
         map_stats=_get_global_map_stats(db),
         nb_games=nb_games,
@@ -472,7 +487,8 @@ def globalstats(period):
 @app.route('/about')
 @app.route('/info')
 def info():
-    return render_template('info.html', period_info=_get_current_period())
+    menu = _get_menu()
+    return render_template('info.html', navbar_menu=menu, period_info=_get_current_period())
 
 
 @app.route('/replay/<replay_hash>')
