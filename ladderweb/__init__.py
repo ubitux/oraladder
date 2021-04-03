@@ -43,7 +43,7 @@ _cfg = dict(
 
 def _db_get(period=None):
     if 'db' not in g:
-        dbname = 'DATABASE_1M' if period == '1m' else 'DATABASE'
+        dbname = 'DATABASE_PERIOD' if period == '2m' else 'DATABASE'
         g.db = sqlite3.connect(current_app.config[dbname],
                                detect_types=sqlite3.PARSE_DECLTYPES)
         g.db.row_factory = sqlite3.Row
@@ -60,7 +60,7 @@ def create_app():
     app = Flask(__name__)
     app.config.from_mapping(
         DATABASE=op.join(app.instance_path, 'db.sqlite3'),
-        DATABASE_1M=op.join(app.instance_path, 'db-1m.sqlite3'),
+        DATABASE_PERIOD=op.join(app.instance_path, 'db-2m.sqlite3'),
     )
     app.teardown_appcontext(_db_close)
     return app

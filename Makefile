@@ -27,7 +27,7 @@ DATATABLES_VERSION = 1.10.24
 ladderdev: initladderdev
 	FLASK_APP=ladderweb FLASK_ENV=development FLASK_RUN_PORT=5000 $(VENV)/bin/flask run
 
-initladderdev: $(VENV) $(LADDER_STATIC) instance/db.sqlite3 instance/db-1m.sqlite3
+initladderdev: $(VENV) $(LADDER_STATIC) instance/db.sqlite3 instance/db-2m.sqlite3
 
 ladderweb/static/Chart.min.css:
 	$(CURL) -L https://cdnjs.cloudflare.com/ajax/libs/Chart.js/$(CHART_JS_VERSION)/Chart.min.css -o $@
@@ -44,7 +44,7 @@ ladderweb/static/jquery.min.js:
 instance/db.sqlite3: instance
 	$(VENV)/bin/ora-ladder -d $@
 
-instance/db-1m.sqlite3: instance
+instance/db-2m.sqlite3: instance
 	$(VENV)/bin/ora-ladder -d $@
 
 ragldev: initragldev

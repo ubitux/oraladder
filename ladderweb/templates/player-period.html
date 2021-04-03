@@ -1,7 +1,7 @@
 <nav>
 <ul>
 	<li{% if period %} class="active"{% endif %}>
-		<a href="{{ url_for('player', profile_id=profile_id, period='1m') }}">This month</a>
+		<a href="{{ url_for('player', profile_id=profile_id, period='2m') }}">This month</a>
 	</li>
 	<li{% if not period %} class="active"{% endif %}>
 		<a href="{{ url_for('player', profile_id=profile_id) }}">All time</a>
