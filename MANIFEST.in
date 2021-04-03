@@ -1,12 +1,12 @@
 include laddertools/ladder.sql
-include laddertools/ragl-s9.yml
 include laddertools/ragl-s10.yml
+include laddertools/ragl-s9.yml
 include laddertools/ragl.sql
 include ladderweb/static/*.css
 include ladderweb/static/*.js
 include ladderweb/static/ladder-map-pack-*.zip
 include ladderweb/templates/*.html
-include raglweb/static/ragl-logo.png
 include raglweb/static/*.css
 include raglweb/static/*.js
+include raglweb/static/ragl-logo.png
 include raglweb/templates/*.html
