@@ -93,6 +93,10 @@ def _filter_period(results, period):
     if period == '1m':
         start = date(today.year, today.month, 1)
         return [r for r in results if r.end_time.date() >= start]
+    elif period == '2m':
+        start_month = ((today.month - 1) & ~1) + 1
+        start = date(today.year, start_month, 1)
+        return [r for r in results if r.end_time.date() >= start]
 
     assert False
 
