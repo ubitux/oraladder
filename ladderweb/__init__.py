@@ -20,8 +20,9 @@ import os
 import os.path as op
 import json
 import numpy as np
-
 import sqlite3
+import calendar
+from datetime import date
 from flask import (
     Flask,
     current_app,
@@ -83,10 +84,22 @@ def dated_url_for(endpoint, **values):
     return url_for(endpoint, **values)
 
 
+def _get_current_period():
+    today = date.today()
+    start_month = ((today.month - 1) & ~1) + 1
+    end_month = start_month + 1
+    _, end_day = calendar.monthrange(today.year, end_month)
+    return dict(
+        start=date(today.year, start_month, 1),
+        end=date(today.year, end_month, end_day),
+        duration='2 months',
+    )
+
+
 @app.route('/', defaults=dict(period=None))
 @app.route('/period/<period>')
 def leaderboard(period):
-    return render_template('leaderboard.html', period=period)
+    return render_template('leaderboard.html', period=period, period_info=_get_current_period())
 
 
 @app.route('/leaderboard-js', defaults=dict(period=None))
@@ -459,7 +472,7 @@ def globalstats(period):
 @app.route('/about')
 @app.route('/info')
 def info():
-    return render_template('info.html')
+    return render_template('info.html', period_info=_get_current_period())
 
 
 @app.route('/replay/<replay_hash>')

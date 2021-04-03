@@ -5,6 +5,11 @@
 
 {% block content %}
 {% include "period.html" %}
+<p>
+	{% if period %}
+	<strong>Current Period</strong>: from <strong>{{ period_info.start }}</strong> to <strong>{{ period_info.end }}</strong> ({{ period_info.duration }})
+	{% endif %}
+</p>
 <table id="leaderboard-table">
 	<thead>
 		<tr>
