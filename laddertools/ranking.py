@@ -74,7 +74,7 @@ class RankingTrueskill(_RankingBase):
         self._env = trueskill.TrueSkill(draw_probability=0)
 
     def record_result(self, winner_rating, loser_rating):
-        r0, r1 = trueskill.rate_1vs1(winner_rating.internal, loser_rating.internal)
+        r0, r1 = self._env.rate_1vs1(winner_rating.internal, loser_rating.internal)
         r0 = _RatingTrueskill(self._env, r0)
         r1 = _RatingTrueskill(self._env, r1)
         return r0, r1
