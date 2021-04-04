@@ -44,10 +44,18 @@ _cfg = dict(
 )
 
 
+_allowed_mods = list(mods.keys())
+_allowed_periods = ('2m', '1m', 'all')
+
+
 def _get_request_params():
     endpoint = request.endpoint
-    mod = request.args.get('mod', 'ra')
-    period = request.args.get('period', '2m')
+    mod = request.args.get('mod', _allowed_mods[0])
+    period = request.args.get('period', _allowed_periods[0])
+    if mod not in _allowed_mods:
+        mod = _allowed_mods[0]
+    if period not in {'1m', '2m', 'all'}:
+        period = _allowed_periods[0]
     return endpoint, mod, period
 
 
