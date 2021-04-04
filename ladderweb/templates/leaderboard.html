@@ -25,7 +25,7 @@
 $(document).ready(
 	function () {
 		$('#leaderboard-table').DataTable({
-			ajax: { url: "{{ ajax_url }}", dataSrc:"" },
+			ajax: { url: "{{ ajax_url|safe }}", dataSrc:"" },
 			pageLength: 50,
 			columns: [
 				{ data: 'row_id', className: 'position' },

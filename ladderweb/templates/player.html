@@ -107,7 +107,7 @@
 $(document).ready(
 	function () {
 		$('#latest-player-games-table').DataTable({
-			ajax: { url: "{{ ajax_url }}", dataSrc:"" },
+			ajax: { url: "{{ ajax_url|safe }}", dataSrc:"" },
 			columns: [
 				{ data: 'date' },
 				{ data: 'opponent', className: 'player', render: player_render },
