@@ -94,11 +94,13 @@ def _get_current_period():
 
 
 def _get_menu(period=None):
-    return (
-        ('leaderboard', url_for('leaderboard', period=period), 'Leaderboard'),
-        ('latest_games', url_for('latest_games', period=period), 'Latest games'),
-        ('globalstats', url_for('globalstats', period=period), 'Global stats'),
-        ('info', url_for('info'), 'Information'),
+    return dict(
+        pages=(
+            ('leaderboard', url_for('leaderboard', period=period), 'Leaderboard'),
+            ('latest_games', url_for('latest_games', period=period), 'Latest games'),
+            ('globalstats', url_for('globalstats', period=period), 'Global stats'),
+            ('info', url_for('info'), 'Information'),
+        ),
     )
 
 

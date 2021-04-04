@@ -15,7 +15,7 @@
 </header>
 <nav>
 	<ul>
-	{%- for page_id, menu_url, caption in navbar_menu %}
+	{%- for page_id, menu_url, caption in navbar_menu.pages %}
 		<li class="{% if request.endpoint == page_id %}active{% endif %}">
 			<a href="{{ menu_url }}">{{ caption }}</a>
 		</li>
