@@ -129,8 +129,7 @@ def leaderboard(period):
         'leaderboard.html',
         navbar_menu=menu,
         ajax_url=ajax_url,
-        period=period,
-        period_info=_get_current_period(),
+        period_info=_get_current_period() if period else None,
     )
 
 
