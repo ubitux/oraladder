@@ -14,7 +14,7 @@
 	<h1>OpenRA 1v1 Ladder</h1>
 </header>
 {%- for menu_id, pages in navbar_menu.items() %}
-<nav>
+<nav id=menu_{{ menu_id }}>
 	<ul>
 		{%- for menu_entry in pages %}
 		<li class="{% if menu_entry.active %}active{% endif %}"><a href="{{ menu_entry.url }}">{{ menu_entry.caption }}</a></li>
