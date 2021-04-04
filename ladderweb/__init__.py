@@ -45,7 +45,7 @@ _cfg = dict(
 
 def _get_request_params():
     endpoint = request.endpoint
-    period = request.args.get('period', 'all')
+    period = request.args.get('period', '2m')
     return endpoint, period
 
 
