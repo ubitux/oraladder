@@ -22,4 +22,13 @@
 	{%- endfor %}
 	</ul>
 </nav>
+{% if navbar_menu.period %}
+<nav>
+	<ul>
+		{%- for menu_entry in navbar_menu.period %}
+		<li class="{% if menu_entry.active %}active{% endif %}"><a href="{{ menu_entry.url }}">{{ menu_entry.caption }}</a></li>
+		{%- endfor %}
+	</ul>
+</nav>
+{% endif %}
 {% block content %}{% endblock %}

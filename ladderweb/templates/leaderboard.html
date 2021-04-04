@@ -3,7 +3,6 @@
 {% block title %}Leaderboard{% endblock %}
 
 {% block content %}
-{% include "period.html" %}
 {% if period %}
 <p>
 	<strong>Current Period</strong>: from <strong>{{ period_info.start }}</strong> to <strong>{{ period_info.end }}</strong> ({{ period_info.duration }})

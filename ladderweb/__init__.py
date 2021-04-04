@@ -30,6 +30,7 @@ from flask import (
     g,
     jsonify,
     render_template,
+    request,
     send_file,
     url_for,
 )
@@ -93,8 +94,8 @@ def _get_current_period():
     )
 
 
-def _get_menu(cur_period=None):
-    return dict(
+def _get_menu(cur_period=None, **args):
+    ret = dict(
         pages=(
             ('leaderboard', url_for('leaderboard', period=cur_period), 'Leaderboard'),
             ('latest_games', url_for('latest_games', period=cur_period), 'Latest games'),
@@ -102,6 +103,21 @@ def _get_menu(cur_period=None):
             ('info', url_for('info'), 'Information'),
         ),
     )
+
+    period_pages = {'leaderboard', 'latest_games', 'player', 'globalstats'}
+    if request.endpoint in period_pages:
+        ret['period'] = [
+            dict(
+                caption=caption,
+                url=url_for(request.endpoint, period=period, **args),
+                active=period == cur_period,
+            ) for caption, period in (
+                ('This period', '2m'),
+                ('All time', None),
+            )
+        ]
+
+    return ret
 
 
 @app.route('/', defaults=dict(period=None))
@@ -383,11 +399,11 @@ def player_games_js(profile_id, period):
 @app.route('/player/<int:profile_id>/period/<period>')
 def player(profile_id, period):
     db = _db_get(period)
-    menu = _get_menu(cur_period=period)
+    menu = _get_menu(cur_period=period, profile_id=profile_id)
 
     player = _get_player_info(db, profile_id)
     if not player:
-        return render_template('noplayer.html', navbar_menu=menu, profile_id=profile_id, period=period)
+        return render_template('noplayer.html', navbar_menu=menu, profile_id=profile_id)
 
     return render_template(
         'player.html',
@@ -397,7 +413,6 @@ def player(profile_id, period):
         rating_stats=_get_player_ratings(db, profile_id),
         faction_stats=_get_player_faction_stats(db, profile_id),
         map_stats=_get_player_map_stats(db, profile_id),
-        period=period,
     )
 
 
@@ -479,7 +494,6 @@ def globalstats(period):
         nb_games=nb_games,
         nb_players=nb_players,
         avg_duration=avg_duration,
-        period=period,
     )
 
 
