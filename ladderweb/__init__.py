@@ -60,7 +60,7 @@ def _db_close(e=None):
 def create_app():
     app = Flask(__name__)
     app.config.from_mapping(
-        DATABASE=op.join(app.instance_path, 'db.sqlite3'),
+        DATABASE=op.join(app.instance_path, 'db-all.sqlite3'),
         DATABASE_PERIOD=op.join(app.instance_path, 'db-2m.sqlite3'),
     )
     app.teardown_appcontext(_db_close)
