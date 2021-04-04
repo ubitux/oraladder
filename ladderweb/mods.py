@@ -62,4 +62,28 @@ mods = dict(
             ),
         ),
     ),
+    td=dict(
+        label='Tiberian Dawn',
+        url='https://github.com/OpenRA/OpenRA/releases/tag/release-20210321',
+        release='release-20210321',
+        mappacks=(
+            dict(
+                label='2021-04-05',
+                filename='ladder-map-pack-td-2021-04-05.zip',
+                changelog='''
+                    First map pack with TDGL2+ maps (minus the disliked
+                    <strong>Masters Frontline</strong>) and custom balance
+                    removed.
+                ''',
+                maps=(
+                    ('16:9[Ladder]', 'norman'),
+                    ('African Gambit[Ladder]', 'MASTER, Jay'),
+                    ('Badland Ridges[Ladder]', 'The Echo of Damnation'),
+                    ('CrackPoint[Ladder]', 'MASTER'),
+                    ('Desert Mandarins[Ladder]', 'MASTER'),
+                    ('Tiberium Rift[Ladder]', 'ZxGanon'),
+                ),
+            ),
+        ),
+    ),
 )
