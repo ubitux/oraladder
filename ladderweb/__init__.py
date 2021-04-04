@@ -43,9 +43,9 @@ _cfg = dict(
 )
 
 
-def _db_get(period=None):
+def _db_get():
     if 'db' not in g:
-        period = 'all' if period is None else period
+        period = request.args.get('period', 'all')
         dbname = f'db-{period}.sqlite3'
         db = op.join(app.instance_path, dbname)
         g.db = sqlite3.connect(db, detect_types=sqlite3.PARSE_DECLTYPES)
@@ -94,12 +94,23 @@ def _get_current_period():
     )
 
 
-def _get_menu(cur_period=None, **args):
+def _args_url(**args):
+    base_args = dict()
+    period = request.args.get('period')
+    if period is not None:
+        base_args['period'] = period
+    base_args.update(args)
+    param_str = '&'.join(f'{k}={v}' for k, v in base_args.items())
+    return ('?' + param_str) if param_str else ''
+
+
+def _get_menu(**args):
+    cur_period = request.args.get('period', 'all')
     ret = dict(
         pages=(
-            ('leaderboard', url_for('leaderboard', period=cur_period), 'Leaderboard'),
-            ('latest_games', url_for('latest_games', period=cur_period), 'Latest games'),
-            ('globalstats', url_for('globalstats', period=cur_period), 'Global stats'),
+            ('leaderboard', url_for('leaderboard') + _args_url(), 'Leaderboard'),
+            ('latest_games', url_for('latest_games') + _args_url(), 'Latest games'),
+            ('globalstats', url_for('globalstats') + _args_url(), 'Global stats'),
             ('info', url_for('info'), 'Information'),
         ),
     )
@@ -109,34 +120,32 @@ def _get_menu(cur_period=None, **args):
         ret['period'] = [
             dict(
                 caption=caption,
-                url=url_for(request.endpoint, period=period, **args),
+                url=url_for(request.endpoint, **args) + _args_url(period=period),
                 active=period == cur_period,
             ) for caption, period in (
                 ('This period', '2m'),
-                ('All time', None),
+                ('All time', 'all'),
             )
         ]
 
     return ret
 
 
-@app.route('/', defaults=dict(period=None))
-@app.route('/period/<period>')
-def leaderboard(period):
-    menu = _get_menu(cur_period=period)
-    ajax_url = url_for('leaderboard_js', period=period)
+@app.route('/')
+def leaderboard():
+    menu = _get_menu()
+    ajax_url = url_for('leaderboard_js') + _args_url()
     return render_template(
         'leaderboard.html',
         navbar_menu=menu,
         ajax_url=ajax_url,
-        period_info=_get_current_period() if period else None,
+        period_info=_get_current_period() if request.args.get('period', 'all') != 'all' else None,
     )
 
 
-@app.route('/leaderboard-js', defaults=dict(period=None))
-@app.route('/leaderboard-js/period/<period>')
-def leaderboard_js(period):
-    db = _db_get(period)
+@app.route('/leaderboard-js')
+def leaderboard_js():
+    db = _db_get()
     cur = db.execute('''SELECT * FROM players WHERE rating > 0 ORDER BY rating DESC''')
 
     rows = []
@@ -145,7 +154,7 @@ def leaderboard_js(period):
             row_id=i,
             player=dict(
                 name=escape(profile_name),
-                url=url_for('player', profile_id=profile_id, period=period),
+                url=url_for('player', profile_id=profile_id) + _args_url(),
                 avatar_url=avatar_url,
             ),
             rating=dict(
@@ -161,18 +170,16 @@ def leaderboard_js(period):
     return jsonify(rows)
 
 
-@app.route('/latest', defaults=dict(period=None))
-@app.route('/latest/period/<period>')
-def latest_games(period):
-    menu = _get_menu(cur_period=period)
-    ajax_url = url_for('latest_games_js', period=period)
+@app.route('/latest')
+def latest_games():
+    menu = _get_menu()
+    ajax_url = url_for('latest_games_js') + _args_url()
     return render_template('latest.html', navbar_menu=menu, ajax_url=ajax_url)
 
 
-@app.route('/latest-js', defaults=dict(period=None))
-@app.route('/latest-js/period/<period>')
-def latest_games_js(period):
-    db = _db_get(period)
+@app.route('/latest-js')
+def latest_games_js():
+    db = _db_get()
     cur = db.execute('''
         SELECT
             hash,
@@ -206,12 +213,12 @@ def latest_games_js(period):
             map=match['map_title'],
             p0=dict(
                 name=escape(match['p0_name']),
-                url=url_for('player', profile_id=match['profile_id0'], period=period),
+                url=url_for('player', profile_id=match['profile_id0']) + _args_url(),
                 diff=match['diff0'],
             ),
             p1=dict(
                 name=escape(match['p1_name']),
-                url=url_for('player', profile_id=match['profile_id1'], period=period),
+                url=url_for('player', profile_id=match['profile_id1']) + _args_url(),
                 diff=match['diff1'],
             ),
         )
@@ -340,10 +347,9 @@ def _get_player_map_stats(db, profile_id):
     )
 
 
-@app.route('/player-games-js/<int:profile_id>', defaults=dict(period=None))
-@app.route('/player-games-js/<int:profile_id>/period/<period>')
-def player_games_js(profile_id, period):
-    db = _db_get(period)
+@app.route('/player-games-js/<int:profile_id>')
+def player_games_js(profile_id):
+    db = _db_get()
     cur = db.execute('''
         SELECT
             hash,
@@ -382,7 +388,7 @@ def player_games_js(profile_id, period):
             date=match['end_time'],
             opponent=dict(
                 name=opponent,
-                url=url_for('player', profile_id=opponent_id, period=period),
+                url=url_for('player', profile_id=opponent_id) + _args_url(),
                 #avatar_url=avatar_url,
             ),
             map=match['map_title'],
@@ -402,17 +408,16 @@ def player_games_js(profile_id, period):
     return jsonify(games)
 
 
-@app.route('/player/<int:profile_id>', defaults=dict(period=None))
-@app.route('/player/<int:profile_id>/period/<period>')
-def player(profile_id, period):
-    db = _db_get(period)
-    menu = _get_menu(cur_period=period, profile_id=profile_id)
+@app.route('/player/<int:profile_id>')
+def player(profile_id):
+    db = _db_get()
+    menu = _get_menu(profile_id=profile_id)
 
     player = _get_player_info(db, profile_id)
     if not player:
         return render_template('noplayer.html', navbar_menu=menu, profile_id=profile_id)
 
-    ajax_url = url_for('player_games_js', profile_id=profile_id, period=period)
+    ajax_url = url_for('player_games_js', profile_id=profile_id) + _args_url()
     return render_template(
         'player.html',
         navbar_menu=menu,
@@ -473,10 +478,9 @@ def _get_global_map_stats(db):
     )
 
 
-@app.route('/globalstats', defaults=dict(period=None))
-@app.route('/globalstats/period/<period>')
-def globalstats(period):
-    db = _db_get(period)
+@app.route('/globalstats')
+def globalstats():
+    db = _db_get()
 
     cur = db.execute('''
         SELECT
@@ -493,7 +497,7 @@ def globalstats(period):
     nb_players = cur.fetchone()['nb_players']
     cur.close()
 
-    menu = _get_menu(cur_period=period)
+    menu = _get_menu()
     return render_template(
         'globalstats.html',
         navbar_menu=menu,
