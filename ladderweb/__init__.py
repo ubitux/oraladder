@@ -45,14 +45,15 @@ _cfg = dict(
 
 def _get_request_params():
     endpoint = request.endpoint
+    mod = request.args.get('mod', 'ra')
     period = request.args.get('period', '2m')
-    return endpoint, period
+    return endpoint, mod, period
 
 
 def _db_get():
     if 'db' not in g:
-        _, period = _get_request_params()
-        dbname = f'db-{period}.sqlite3'
+        _, mod, period = _get_request_params()
+        dbname = f'db-{mod}-{period}.sqlite3'
         db = op.join(app.instance_path, dbname)
         g.db = sqlite3.connect(db, detect_types=sqlite3.PARSE_DECLTYPES)
         g.db.row_factory = sqlite3.Row
@@ -103,15 +104,18 @@ def _get_current_period():
 def _args_url(**args):
     base_args = dict()
     period = request.args.get('period')
+    mod = request.args.get('mod')
     if period is not None:
         base_args['period'] = period
+    if mod is not None:
+        base_args['mod'] = mod
     base_args.update(args)
     param_str = '&'.join(f'{k}={v}' for k, v in base_args.items())
     return ('?' + param_str) if param_str else ''
 
 
 def _get_menu(**args):
-    cur_endpoint, cur_period = _get_request_params()
+    cur_endpoint, _, cur_period = _get_request_params()
     ret = dict(
         pages=[
             dict(
@@ -147,7 +151,7 @@ def _get_menu(**args):
 def leaderboard():
     menu = _get_menu()
     ajax_url = url_for('leaderboard_js') + _args_url()
-    _, cur_period = _get_request_params()
+    _, _, cur_period = _get_request_params()
     return render_template(
         'leaderboard.html',
         navbar_menu=menu,
