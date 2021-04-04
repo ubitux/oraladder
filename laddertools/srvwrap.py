@@ -98,7 +98,8 @@ def _setup_sources(args):
         return base_src_dir, map_paths
 
 
-_overrides = '''
+_overrides = dict(
+    ra='''
 Player:
 	Shroud:
 		ExploredMapCheckboxEnabled: true
@@ -146,6 +147,7 @@ World:
 	TimeLimitManager:
 		TimeLimitLocked: true
 '''
+)
 
 
 def _patched_rules(mod, mod_file_path, overrides_rel_path):
@@ -201,7 +203,7 @@ def _prepare_instance(args, base_src_dir, map_paths):
     overrides_rel_path = 'rules/server-overrides.yaml'
     overrides_path = op.join(mod_dir, overrides_rel_path)
     with open(overrides_path, 'w') as f:
-        f.write(_overrides)
+        f.write(_overrides[args.mod])
     mod_file_path = op.join(mod_dir, 'mod.yaml')
     mod_file_content = _patched_rules(args.mod, mod_file_path, overrides_rel_path)
     with open(mod_file_path, 'w') as f:
