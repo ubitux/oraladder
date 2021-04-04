@@ -12,6 +12,7 @@
 	<dt>Average game duration:</dt><dd>{{ avg_duration }}</dd>
 </dl>
 
+{% if map_stats.data %}
 <h2>Maps</h2>
 <canvas id="maps_chart"></canvas>
 <script>
@@ -41,7 +42,9 @@
 		},
 	});
 </script>
+{% endif %}
 
+{% if faction_stats.data %}
 <h2>Preferred factions</h2>
 <canvas id="faction_chart"></canvas>
 <script>
@@ -71,4 +74,5 @@
 		},
 	});
 </script>
+{% endif %}
 {% endblock %}
