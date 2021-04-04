@@ -124,7 +124,7 @@ def _args_url(**args):
 
 
 def _get_menu(**args):
-    cur_endpoint, _, cur_period = _get_request_params()
+    cur_endpoint, cur_mod, cur_period = _get_request_params()
     ret = dict(
         pages=[
             dict(
@@ -139,6 +139,17 @@ def _get_menu(**args):
             )
         ],
     )
+
+    mods_menu = [
+        dict(
+            caption=mod_info['label'],
+            url=url_for(cur_endpoint, **args) + _args_url(mod=mod),
+            active=mod == cur_mod,
+        ) for mod, mod_info in mods.items()
+    ]
+    # Add the mod selection to the menu only if there is more than one
+    if len(mods_menu) > 1:
+        ret['mods'] = mods_menu
 
     period_pages = {'leaderboard', 'latest_games', 'player', 'globalstats'}
     if cur_endpoint in period_pages:
