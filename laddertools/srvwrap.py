@@ -148,7 +148,7 @@ World:
 '''
 
 
-def _patched_rules(mod_file_path, overrides_rel_path):
+def _patched_rules(mod, mod_file_path, overrides_rel_path):
     mod_file_content = ''
     with open(mod_file_path) as f:
         for line in f:
@@ -157,8 +157,8 @@ def _patched_rules(mod_file_path, overrides_rel_path):
                 # Add overrides at the end of the rules to make sure it is
                 # overriden
                 for line in f:
-                    if not line.strip().startswith('ra|'):
-                        mod_file_content += f'\tra|{overrides_rel_path}\n'
+                    if not line.strip().startswith(f'{mod}|'):
+                        mod_file_content += f'\t{mod}|{overrides_rel_path}\n'
                         mod_file_content += line
                         logging.info('Patching %s with custom overrides', mod_file_path)
                         break
@@ -203,7 +203,7 @@ def _prepare_instance(args, base_src_dir, map_paths):
     with open(overrides_path, 'w') as f:
         f.write(_overrides)
     mod_file_path = op.join(mod_dir, 'mod.yaml')
-    mod_file_content = _patched_rules(mod_file_path, overrides_rel_path)
+    mod_file_content = _patched_rules(args.mod, mod_file_path, overrides_rel_path)
     with open(mod_file_path, 'w') as f:
         f.write(mod_file_content)
 
