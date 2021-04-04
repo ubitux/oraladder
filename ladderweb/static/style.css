@@ -53,11 +53,6 @@ h2 {
 	border-bottom: 1px solid;
 }
 
-h1::before, h1::after {
-	content: '☭';
-	padding: 0 1em 0 1em;
-}
-
 table tbody tr:nth-child(odd) {
 	background-color: var(--color_row0);
 }
