@@ -34,6 +34,7 @@ from flask import (
     send_file,
     url_for,
 )
+from .mods import mods
 
 
 # XXX: store in a file probably
@@ -530,7 +531,8 @@ def globalstats():
 @app.route('/info')
 def info():
     menu = _get_menu()
-    return render_template('info.html', navbar_menu=menu, period_info=_get_current_period())
+    _, cur_mod, _ = _get_request_params()
+    return render_template('info.html', navbar_menu=menu, period_info=_get_current_period(), mod=mods[cur_mod])
 
 
 @app.route('/replay/<replay_hash>')
