@@ -93,12 +93,12 @@ def _get_current_period():
     )
 
 
-def _get_menu(period=None):
+def _get_menu(cur_period=None):
     return dict(
         pages=(
-            ('leaderboard', url_for('leaderboard', period=period), 'Leaderboard'),
-            ('latest_games', url_for('latest_games', period=period), 'Latest games'),
-            ('globalstats', url_for('globalstats', period=period), 'Global stats'),
+            ('leaderboard', url_for('leaderboard', period=cur_period), 'Leaderboard'),
+            ('latest_games', url_for('latest_games', period=cur_period), 'Latest games'),
+            ('globalstats', url_for('globalstats', period=cur_period), 'Global stats'),
             ('info', url_for('info'), 'Information'),
         ),
     )
@@ -107,7 +107,7 @@ def _get_menu(period=None):
 @app.route('/', defaults=dict(period=None))
 @app.route('/period/<period>')
 def leaderboard(period):
-    menu = _get_menu(period=period)
+    menu = _get_menu(cur_period=period)
     return render_template('leaderboard.html', navbar_menu=menu, period=period, period_info=_get_current_period())
 
 
@@ -142,7 +142,7 @@ def leaderboard_js(period):
 @app.route('/latest', defaults=dict(period=None))
 @app.route('/latest/period/<period>')
 def latest_games(period):
-    menu = _get_menu(period=period)
+    menu = _get_menu(cur_period=period)
     return render_template('latest.html', navbar_menu=menu, period=period)
 
 
@@ -383,7 +383,7 @@ def player_games_js(profile_id, period):
 @app.route('/player/<int:profile_id>/period/<period>')
 def player(profile_id, period):
     db = _db_get(period)
-    menu = _get_menu(period=period)
+    menu = _get_menu(cur_period=period)
 
     player = _get_player_info(db, profile_id)
     if not player:
@@ -470,7 +470,7 @@ def globalstats(period):
     nb_players = cur.fetchone()['nb_players']
     cur.close()
 
-    menu = _get_menu(period=period)
+    menu = _get_menu(cur_period=period)
     return render_template(
         'globalstats.html',
         navbar_menu=menu,
