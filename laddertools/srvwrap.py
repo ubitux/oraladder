@@ -146,6 +146,51 @@ World:
 		DropdownLocked: true
 	TimeLimitManager:
 		TimeLimitLocked: true
+''',
+    cnc='''
+Player:
+	Shroud:
+		ExploredMapCheckboxEnabled: true
+		ExploredMapCheckboxLocked: true
+		FogCheckboxEnabled: true
+		FogCheckboxLocked: true
+	PlayerResources:
+		DefaultCash: 7500
+		DefaultCashDropdownLocked: true
+	DeveloperMode:
+		CheckboxEnabled: false
+		CheckboxLocked: true
+	LobbyPrerequisiteCheckbox@GLOBALC17STEALTH
+		Enabled: true
+		Locked: true
+	LobbyPrerequisiteCheckbox@GLOBALFACTUNDEPLOY:
+		Enabled: true
+		Locked: true
+
+World:
+	CrateSpawner:
+		CheckboxEnabled: false
+		CheckboxLocked: true
+	MapBuildRadius:
+		AllyBuildRadiusCheckboxEnabled: true
+		AllyBuildRadiusCheckboxLocked: true
+		BuildRadiusCheckboxEnabled: true
+		BuildRadiusCheckboxLocked: true
+	MapOptions:
+		ShortGameCheckboxEnabled: true
+		ShortGameCheckboxLocked: true
+		TechLevel: unrestricted
+		TechLevelDropdownLocked: true
+		GameSpeed: default
+		GameSpeedDropdownLocked: true
+	MPStartLocations:
+		SeparateTeamSpawnsCheckboxEnabled: true
+		SeparateTeamSpawnsCheckboxLocked: true
+	SpawnMPUnits:
+		StartingUnitsClass: none
+		DropdownLocked: true
+	TimeLimitManager:
+		TimeLimitLocked: true
 '''
 )
 
