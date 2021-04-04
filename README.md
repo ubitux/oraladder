@@ -34,7 +34,7 @@ interest. We can fill it using the `ora-ladder` backend command:
 # Enter the virtualenv
 . venv/bin/activate
 
-# Create the 2 databases (all times and monthly) with your local RA replays
+# Create the 2 databases (all times and periodic) with your local RA replays
 ora-ladder -d db.sqlite3 ~/.config/openra/Replays/ra
 ora-ladder -d db-2m.sqlite3 -p 2m ~/.config/openra/Replays/ra
 
@@ -165,7 +165,7 @@ pip install oraladder-*-py3-none-any.whl
 # Create initial empty databases
 mkdir -p venv/var/ladderweb-instance
 ora-ladder -d venv/var/ladderweb-instance/db.sqlite3  # all-time DB
-ora-ladder -d venv/var/ladderweb-instance/db-2m.sqlite3 -p 2m  # 2-months DB
+ora-ladder -d venv/var/ladderweb-instance/db-2m.sqlite3 -p 2m  # periodic DB
 
 # Create a useful DB update script
 cat <<EOF > ~/update-ladderdb.sh
