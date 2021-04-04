@@ -19,7 +19,7 @@
 $(document).ready(
 	function () {
 		$('#latest-table').DataTable({
-			ajax: { url: "{{ url_for('latest_games_js', period=period) }}", dataSrc:"" },
+			ajax: { url: "{{ ajax_url }}", dataSrc:"" },
 			columns: [
 				{ data: 'date' },
 				{ data: 'map', className: 'map' },

@@ -124,7 +124,14 @@ def _get_menu(cur_period=None, **args):
 @app.route('/period/<period>')
 def leaderboard(period):
     menu = _get_menu(cur_period=period)
-    return render_template('leaderboard.html', navbar_menu=menu, period=period, period_info=_get_current_period())
+    ajax_url = url_for('leaderboard_js', period=period)
+    return render_template(
+        'leaderboard.html',
+        navbar_menu=menu,
+        ajax_url=ajax_url,
+        period=period,
+        period_info=_get_current_period(),
+    )
 
 
 @app.route('/leaderboard-js', defaults=dict(period=None))
@@ -159,7 +166,8 @@ def leaderboard_js(period):
 @app.route('/latest/period/<period>')
 def latest_games(period):
     menu = _get_menu(cur_period=period)
-    return render_template('latest.html', navbar_menu=menu, period=period)
+    ajax_url = url_for('latest_games_js', period=period)
+    return render_template('latest.html', navbar_menu=menu, ajax_url=ajax_url)
 
 
 @app.route('/latest-js', defaults=dict(period=None))
@@ -405,11 +413,12 @@ def player(profile_id, period):
     if not player:
         return render_template('noplayer.html', navbar_menu=menu, profile_id=profile_id)
 
+    ajax_url = url_for('player_games_js', profile_id=profile_id, period=period)
     return render_template(
         'player.html',
         navbar_menu=menu,
         player=player,
-        profile_id=profile_id,
+        ajax_url=ajax_url,
         rating_stats=_get_player_ratings(db, profile_id),
         faction_stats=_get_player_faction_stats(db, profile_id),
         map_stats=_get_player_map_stats(db, profile_id),
