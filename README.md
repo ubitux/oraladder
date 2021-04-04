@@ -187,7 +187,7 @@ The last step is to setup a crontab to update the database regularly; in
 
 This will update the database every 5 minutes. And every day, we remove the
 cached `db.sqlite3` (and `db-2m.sqlite3`) so that the next update causes a full
-reconstruction of the database. This is an arbitrary trade-off to avoid
+reconstruction of the databases. This is an arbitrary trade-off to avoid
 spamming OpenRA user account service, and still get relatively up-to-date
 information displayed.
 
