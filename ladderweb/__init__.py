@@ -113,12 +113,18 @@ def _args_url(**args):
 def _get_menu(**args):
     cur_endpoint, cur_period = _get_request_params()
     ret = dict(
-        pages=(
-            ('leaderboard', url_for('leaderboard') + _args_url(), 'Leaderboard'),
-            ('latest_games', url_for('latest_games') + _args_url(), 'Latest games'),
-            ('globalstats', url_for('globalstats') + _args_url(), 'Global stats'),
-            ('info', url_for('info'), 'Information'),
-        ),
+        pages=[
+            dict(
+                caption=caption,
+                url=url_for(endpoint) + _args_url(),
+                active=endpoint == cur_endpoint,
+            ) for caption, endpoint in (
+                ('Leaderboard', 'leaderboard'),
+                ('Latest games', 'latest_games'),
+                ('Global stats', 'globalstats'),
+                ('Information', 'info'),
+            )
+        ],
     )
 
     period_pages = {'leaderboard', 'latest_games', 'player', 'globalstats'}

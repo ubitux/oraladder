@@ -13,22 +13,13 @@
 <header>
 	<h1>OpenRA 1v1 Ladder</h1>
 </header>
+{%- for menu_id, pages in navbar_menu.items() %}
 <nav>
 	<ul>
-	{%- for page_id, menu_url, caption in navbar_menu.pages %}
-		<li class="{% if request.endpoint == page_id %}active{% endif %}">
-			<a href="{{ menu_url }}">{{ caption }}</a>
-		</li>
-	{%- endfor %}
-	</ul>
-</nav>
-{% if navbar_menu.period %}
-<nav>
-	<ul>
-		{%- for menu_entry in navbar_menu.period %}
+		{%- for menu_entry in pages %}
 		<li class="{% if menu_entry.active %}active{% endif %}"><a href="{{ menu_entry.url }}">{{ menu_entry.caption }}</a></li>
 		{%- endfor %}
 	</ul>
 </nav>
-{% endif %}
+{%- endfor %}
 {% block content %}{% endblock %}
