@@ -267,9 +267,8 @@ def _prepare_instance(args, base_src_dir, map_paths):
     return src_dir, support_dir
 
 
-def _run_game_server(src_dir, mod, name, port, support_dir, password):
+def _run_game_server(src_dir, mod, name, port, support_dir, password, bans_file):
     support_dir = op.abspath(support_dir)
-    os.chdir(src_dir)  # XXX: set PWD?
     server_args = [
         'mono', '--debug', 'bin/OpenRA.Server.exe',
         'Engine.EngineDir=..',
@@ -287,7 +286,12 @@ def _run_game_server(src_dir, mod, name, port, support_dir, password):
     ]
     if password:
         server_args.append(f'Server.Password={password}')
+    if bans_file:
+        with open(bans_file) as banf:
+            ban_str = ','.join(line.strip() for line in banf)
+            server_args.append(f'Server.ProfileIDBlacklist={ban_str}')
     logging.info('Spawning server with %s', server_args)
+    os.chdir(src_dir)  # XXX: set PWD?
     subprocess.run(server_args)
 
 
@@ -304,6 +308,7 @@ def run():
     parser.add_argument('--version', default='release-20210321')
     parser.add_argument('--repo', default='https://github.com/OpenRA/OpenRA')
     parser.add_argument('--password')
+    parser.add_argument('--bans-file')
     args = parser.parse_args()
 
     base_src_dir, map_paths = _setup_sources(args)
@@ -311,4 +316,4 @@ def run():
 
     server_name = args.label.format(id=args.instance_id)
     server_port = args.baseport + args.instance_id
-    _run_game_server(instance_src_dir, args.mod, server_name, server_port, support_dir, args.password)
+    _run_game_server(instance_src_dir, args.mod, server_name, server_port, support_dir, args.password, args.bans_file)
