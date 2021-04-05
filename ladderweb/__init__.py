@@ -244,7 +244,7 @@ def latest_games_js():
         game = dict(
             replay=dict(
                 hash=match['hash'],
-                url=url_for('replay', replay_hash=match['hash']),
+                url=url_for('replay', replay_hash=match['hash']) + _args_url(),
                 supports_analysis=mods[cur_mod].get('supports_analysis', False),
             ),
             date=match['end_time'],
@@ -439,7 +439,7 @@ def player_games_js(profile_id):
             duration=match['duration'],
             replay=dict(
                 hash=match['hash'],
-                url=url_for('replay', replay_hash=match['hash']),
+                url=url_for('replay', replay_hash=match['hash']) + _args_url(),
                 supports_analysis=mods[cur_mod].get('supports_analysis', False),
             ),
         )
