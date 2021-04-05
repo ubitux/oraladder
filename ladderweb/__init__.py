@@ -216,6 +216,7 @@ def latest_games():
 
 @app.route('/latest-js')
 def latest_games_js():
+    _, cur_mod, _ = _get_request_params()
     db = _db_get()
     cur = db.execute('''
         SELECT
@@ -244,6 +245,7 @@ def latest_games_js():
             replay=dict(
                 hash=match['hash'],
                 url=url_for('replay', replay_hash=match['hash']),
+                supports_analysis=mods[cur_mod].get('supports_analysis', False),
             ),
             date=match['end_time'],
             duration=match['duration'],
@@ -386,6 +388,7 @@ def _get_player_map_stats(db, profile_id):
 
 @app.route('/player-games-js/<int:profile_id>')
 def player_games_js(profile_id):
+    _, cur_mod, _ = _get_request_params()
     db = _db_get()
     cur = db.execute('''
         SELECT
@@ -437,6 +440,7 @@ def player_games_js(profile_id):
             replay=dict(
                 hash=match['hash'],
                 url=url_for('replay', replay_hash=match['hash']),
+                supports_analysis=mods[cur_mod].get('supports_analysis', False),
             ),
         )
         games.append(game)

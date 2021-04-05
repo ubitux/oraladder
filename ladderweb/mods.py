@@ -3,6 +3,7 @@ mods = dict(
         label='Red Alert',
         url='https://github.com/OpenRA/OpenRA/releases/tag/release-20210321',
         release='release-20210321',
+        supports_analysis=True,
         mappacks=(
             dict(
                 label='2021-03-29',
