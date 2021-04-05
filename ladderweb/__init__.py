@@ -144,6 +144,7 @@ def _get_menu(**args):
         dict(
             caption=mod_info['label'],
             url=url_for(cur_endpoint, **args) + _args_url(mod=mod),
+            icon=url_for('static', filename=mod_info['icon']) if 'icon' in mod_info else None,
             active=mod == cur_mod,
         ) for mod, mod_info in mods.items()
     ]

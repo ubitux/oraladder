@@ -1,6 +1,7 @@
 mods = dict(
     ra=dict(
         label='Red Alert',
+        icon='icon-ra.png',
         url='https://github.com/OpenRA/OpenRA/releases/tag/release-20210321',
         release='release-20210321',
         supports_analysis=True,
@@ -65,6 +66,7 @@ mods = dict(
     ),
     td=dict(
         label='Tiberian Dawn',
+        icon='icon-td.png',
         url='https://github.com/OpenRA/OpenRA/releases/tag/release-20210321',
         release='release-20210321',
         mappacks=(

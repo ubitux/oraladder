@@ -4,6 +4,7 @@ include laddertools/ragl-s9.yml
 include laddertools/ragl.sql
 include ladderweb/static/*.css
 include ladderweb/static/*.js
+include ladderweb/static/*.png
 include ladderweb/static/ladder-map-pack-*.zip
 include ladderweb/templates/*.html
 include raglweb/static/*.css

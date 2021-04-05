@@ -17,7 +17,11 @@
 <nav id=menu_{{ menu_id }}>
 	<ul>
 		{%- for menu_entry in pages %}
-		<li{% if menu_entry.active %} class=active{% endif %}><a href="{{ menu_entry.url }}">{{ menu_entry.caption }}</a></li>
+		<li{% if menu_entry.active %} class=active{% endif %}>
+			<a
+				{%- if menu_entry.icon %} class="with_icon" style="background-image:url('{{ menu_entry.icon }}')"{% endif %}
+				href="{{ menu_entry.url }}">{{ menu_entry.caption }}</a>
+		</li>
 		{%- endfor %}
 	</ul>
 </nav>

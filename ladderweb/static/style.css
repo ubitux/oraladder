@@ -121,6 +121,7 @@ nav ul {
 
 nav li {
 	float: left;
+	margin: 2px;
 }
 
 nav li a {
@@ -134,6 +135,12 @@ nav li a {
 
 nav li a:hover, nav li.active {
 	background-color: var(--color_hl);
+}
+
+nav li a.with_icon {
+	background-repeat: no-repeat;
+	background-position: left center;
+	padding-left: 34px;
 }
 
 dl#faq dt {
