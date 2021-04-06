@@ -7,6 +7,36 @@ mods = dict(
         supports_analysis=True,
         mappacks=(
             dict(
+                label='2021.0 (2021-04-06)',
+                filename='ladder-map-pack-2021.0.zip',
+                changelog='''
+                    This pack is a selection of 15 maps curated by the RA
+                    Competitive Maps Committee to celebrate the end of RAGL. It
+                    includes a few popular old maps and some brand new. The
+                    balance is the same as previously (affecting Ranger, Dome
+                    and LongBow) with an additional fix for the missing phase
+                    transport sound notification. ERCC 2.1/BCC 1.0 modding is
+                    also still present.
+                ''',
+                maps=(
+                    ('Blitz', 'kazu'),
+                    ('Breaking Bad', 'Goremented'),
+                    ('Clover', 'Lad'),
+                    ('Crownsbury', 'Pinkthoth'),
+                    ('Eden Lake', 'kazu'),
+                    ('Eternal Warriors', 'J MegaTank'),
+                    ('Forgotten Plains', 'eskimo'),
+                    ('Kosovo', 'poop'),
+                    ('Marigold Town', 'Super Newbie'),
+                    ('Mountain Range Redux', 'Blackend'),
+                    ('Offensive Operation', 'Lad'),
+                    ('Onyx', 'eskimo'),
+                    ('Shadowlands', 'Lad'),
+                    ('Styx', 'Pinkthoth'),
+                    ('Treasure Hunt', 'Lad'),
+                ),
+            ),
+            dict(
                 label='2021-03-29',
                 filename='ladder-map-pack-2021-03-29.zip',
                 changelog='''
