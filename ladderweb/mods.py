@@ -7,6 +7,20 @@ mods = dict(
         supports_analysis=True,
         mappacks=(
             dict(
+                label='2021.1 (2021-04-26)',
+                filename='ladder-map-pack-2021.1.zip',
+                changelog='''
+                    Same map pack as 2021.0 with the following changes:
+                    <ul>
+                        <li>Overlay adjusted to make the minimap more visible</li>
+                        <li>Blitz bumped from 1.3 to 1.4 (rev4 to rev5)</li>
+                        <li>Kosovo updated to address symmetry issues notably</li>
+                        <li>Fix shadowlands extra buildable sandbags (thanks Goremented)</li>
+                    </ul>
+                ''',
+                maps=(),
+            ),
+            dict(
                 label='2021.0 (2021-04-06)',
                 filename='ladder-map-pack-2021.0.zip',
                 changelog='''
