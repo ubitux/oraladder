@@ -533,13 +533,13 @@ def _get_activity_stats(db):
     if not outcomes_per_day:
         return dict(dates=None, data=None, games_per_day=0)
 
-    records = {o['date']: o['count'] for o in outcomes_per_day}
     start_date = date.fromisoformat(outcomes_per_day[0]['date'])
     end_date = date.today()
     nb_days = (end_date - start_date).days
     all_days = [(start_date + timedelta(n)).strftime('%Y-%m-%d') for n in range(1, nb_days)]
-    zero_days = {d: 0 for d in all_days if d not in records}
-    records.update(zero_days)
+    db_records = {o['date']: o['count'] for o in outcomes_per_day}
+    records = {d: db_records.get(d, 0) for d in all_days}
+
     return dict(
         dates=list(records.keys()),
         data=list(records.values()),
