@@ -8,7 +8,29 @@
 	<dt>Games:</dt><dd>{{ nb_games }}</dd>
 	<dt>Players:</dt><dd>{{ nb_players }}</dd>
 	<dt>Average game duration:</dt><dd>{{ avg_duration }}</dd>
+	<dt>Average games per day:</dt><dd>{{ '%0.1f' % activity_stats.games_per_day }}</dd>
 </dl>
+
+{% if activity_stats.data %}
+<h2>Activity</h2>
+<canvas id="activity_chart"></canvas>
+<script>
+	Chart.defaults.global.defaultFontColor = "#e8e8e8";
+	var ctx = document.getElementById('activity_chart');
+	var myChart = new Chart(ctx, {
+		type: 'bar',
+		data: {
+			labels: {{ activity_stats.dates | safe }},
+			datasets: [{
+				label: 'Games played',
+				data: {{ activity_stats.data | safe }},
+				backgroundColor: '#fff',
+				fontColor: '#fff'
+			}]
+		}
+	});
+</script>
+{% endif %}
 
 {% if map_stats.data %}
 <h2>Maps</h2>

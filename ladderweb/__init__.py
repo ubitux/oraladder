@@ -22,7 +22,7 @@ import json
 import numpy as np
 import sqlite3
 import calendar
-from datetime import date
+from datetime import date, timedelta
 from flask import (
     Flask,
     current_app,
@@ -520,6 +520,33 @@ def _get_global_map_stats(db):
     )
 
 
+def _get_activity_stats(db):
+    cur = db.execute('''
+        SELECT
+            date(start_time) as date,
+            COUNT(*) as count
+        FROM outcomes
+        GROUP BY date
+        ORDER BY date ASC'''
+    )
+    outcomes_per_day = cur.fetchall()
+    if not outcomes_per_day:
+        return dict(dates=None, data=None, games_per_day=0)
+
+    records = {o['date']: o['count'] for o in outcomes_per_day}
+    start_date = date.fromisoformat(outcomes_per_day[0]['date'])
+    end_date = date.today()
+    nb_days = (end_date - start_date).days
+    all_days = [(start_date + timedelta(n)).strftime('%Y-%m-%d') for n in range(1, nb_days)]
+    zero_days = {d: 0 for d in all_days if d not in records}
+    records.update(zero_days)
+    return dict(
+        dates=list(records.keys()),
+        data=list(records.values()),
+        games_per_day=sum(records.values()) / len(records),
+    )
+
+
 @app.route('/globalstats')
 def globalstats():
     db = _db_get()
@@ -545,6 +572,7 @@ def globalstats():
         navbar_menu=menu,
         faction_stats=_get_global_faction_stats(db),
         map_stats=_get_global_map_stats(db),
+        activity_stats=_get_activity_stats(db),
         nb_games=nb_games,
         nb_players=nb_players,
         avg_duration=avg_duration,
