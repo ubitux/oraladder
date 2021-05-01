@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import re
 import colorsys
 import os
 import os.path as op
@@ -215,6 +216,13 @@ def latest_games():
     return render_template('latest.html', navbar_menu=menu, ajax_url=ajax_url)
 
 
+_tag_regex = re.compile(r'\s*\[[^\]]*\]')
+
+
+def _stripped_map_name(map_name):
+    return _tag_regex.sub('', map_name).strip()
+
+
 @app.route('/latest-js')
 def latest_games_js():
     _, cur_mod, _ = _get_request_params()
@@ -250,7 +258,7 @@ def latest_games_js():
             ),
             date=match['end_time'],
             duration=match['duration'],
-            map=match['map_title'],
+            map=_stripped_map_name(match['map_title']),
             p0=dict(
                 name=escape(match['p0_name']),
                 url=url_for('player', profile_id=match['profile_id0']) + _args_url(),
@@ -432,7 +440,7 @@ def player_games_js(profile_id):
                 url=url_for('player', profile_id=opponent_id) + _args_url(),
                 #avatar_url=avatar_url,
             ),
-            map=match['map_title'],
+            map=_stripped_map_name(match['map_title']),
             outcome=dict(
                 desc=outcome,
                 diff=diff,
