@@ -213,4 +213,9 @@ gunicorn ladderweb:app
 
 Now that the server is listening in local, we can use `nginx` to expose it to
 the outside. A `nginx.conf` configuration example file is available in the
-`misc` directory. After this last step, we are done.
+`misc` directory.
+
+Since the outcomes are stored in UTC time in the replays, you will likely want
+to align the system clock as well so that the website behaves in coordination
+(typically with regards to period resets) using for example `timedatectl
+set-timezone Etc/UTC`.
