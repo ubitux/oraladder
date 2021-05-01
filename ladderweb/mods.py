@@ -42,7 +42,7 @@ mods = dict(
                     ('Forgotten Plains', 'eskimo'),
                     ('Kosovo', 'poop'),
                     ('Marigold Town', 'Super Newbie'),
-                    ('Mountain Range Redux', 'Blackend'),
+                    ('Mountain Range Redux', 'Blackened'),
                     ('Offensive Operation', 'Lad'),
                     ('Onyx', 'eskimo'),
                     ('Shadowlands', 'Lad'),
