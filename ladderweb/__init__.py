@@ -536,7 +536,7 @@ def _get_activity_stats(db):
     start_date = date.fromisoformat(outcomes_per_day[0]['date'])
     end_date = date.today()
     nb_days = (end_date - start_date).days
-    all_days = [(start_date + timedelta(n)).strftime('%Y-%m-%d') for n in range(1, nb_days)]
+    all_days = [(start_date + timedelta(n)).strftime('%Y-%m-%d') for n in range(nb_days + 1)]
     db_records = {o['date']: o['count'] for o in outcomes_per_day}
     records = {d: db_records.get(d, 0) for d in all_days}
 
