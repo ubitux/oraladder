@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import re
 import os
 import os.path as op
 import argparse
@@ -267,6 +268,9 @@ def _prepare_instance(args, base_src_dir, map_paths):
     return src_dir, support_dir
 
 
+_banned_profile_re = re.compile(r'^\d+')
+
+
 def _run_game_server(src_dir, mod, name, port, support_dir, password, bans_file):
     support_dir = op.abspath(support_dir)
     server_args = [
@@ -288,7 +292,7 @@ def _run_game_server(src_dir, mod, name, port, support_dir, password, bans_file)
         server_args.append(f'Server.Password={password}')
     if bans_file:
         with open(bans_file) as banf:
-            ban_str = ','.join(line.strip() for line in banf)
+            ban_str = ','.join(_banned_profile_re.search(line).group() for line in banf)
             server_args.append(f'Server.ProfileIDBlacklist={ban_str}')
     logging.info('Spawning server with %s', server_args)
     os.chdir(src_dir)  # XXX: set PWD?
