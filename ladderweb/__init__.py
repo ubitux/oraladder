@@ -523,7 +523,7 @@ def _get_global_map_stats(db):
 def _get_activity_stats(db):
     cur = db.execute('''
         SELECT
-            date(start_time) as date,
+            date(end_time) as date,
             COUNT(*) as count
         FROM outcomes
         GROUP BY date
