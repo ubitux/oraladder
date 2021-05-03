@@ -107,8 +107,8 @@ class RankingELO(_RankingBase):
         return old.value + cls._k * (result - expected)
 
     def record_result(self, winner_rating, loser_rating):
-        exp0 = self._expected_score(winner_rating, loser_rating)
-        exp1 = self._expected_score(loser_rating, winner_rating)
+        exp0 = self._expected_score(loser_rating, winner_rating)
+        exp1 = self._expected_score(winner_rating, loser_rating)
         r0 = _RatingELO(self._elo(winner_rating, exp0, 1))
         r1 = _RatingELO(self._elo(loser_rating, exp1, 0))
         return r0, r1
