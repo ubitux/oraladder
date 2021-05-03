@@ -1,6 +1,5 @@
 import pytest
 from .ranking import RankingGlicko, _RatingGlicko
-from .ladder import _Player
 
 import numpy
 
