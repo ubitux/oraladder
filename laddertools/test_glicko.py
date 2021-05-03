@@ -1,5 +1,5 @@
 import pytest
-from .ranking import RankingGlicko, _RatingGlicko
+from .rankings.glicko import RankingGlicko, _RatingGlicko
 
 import numpy
 
