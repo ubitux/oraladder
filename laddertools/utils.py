@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import re
 import os
 import os.path as op
 import logging
@@ -112,3 +113,11 @@ def get_results(accounts_db, replays, period=None):
             _parse_replay(results, accounts_db, filename)
     results = _filter_period(results, period)
     return sorted(results, key=lambda r: r.end_time)
+
+
+_banned_profile_re = re.compile(r'^\d+')
+
+
+def get_profile_ids(bans_file):
+    with open(bans_file) as banf:
+        return [int(_banned_profile_re.search(line).group()) for line in banf]
