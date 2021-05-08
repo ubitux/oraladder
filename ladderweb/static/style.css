@@ -112,6 +112,7 @@ span.diffup   { font-weight: bold; color: #72ff72; }
 span.diffdown { font-weight: bold; color: #ff1a1a; }
 span.diffup::after   { content: '▲'; }
 span.diffdown::after { content: '▼'; }
+span.ghost { color: darkgrey; font-style: italic; }
 
 nav ul {
 	list-style-type: none;

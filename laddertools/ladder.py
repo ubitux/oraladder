@@ -27,7 +27,7 @@ from collections import UserDict
 
 from .replay import GamePlayerInfo
 from .ranking import ranking_systems
-from .utils import get_results
+from .utils import get_results, get_profile_ids
 
 
 class PlayerLookup(UserDict):
@@ -74,7 +74,7 @@ class PlayerLookup(UserDict):
 
 
 class _Player:
-    def __init__(self, ranking, profile_id, name, avatar_url):
+    def __init__(self, ranking, profile_id, name, avatar_url, banned=False):
         self.profile_id = profile_id
         self.name = name
         self.wins = 0
@@ -82,6 +82,7 @@ class _Player:
         self.prv_rating = ranking.get_default_rating()
         self.rating = ranking.get_default_rating()
         self.avatar_url = avatar_url
+        self.banned = banned
 
     def update_rating(self, new_rating):
         self.prv_rating = self.rating
@@ -96,6 +97,7 @@ class _Player:
             self.profile_id,
             self.name,
             self.avatar_url,
+            self.banned,
             self.wins,
             self.losses,
             self.prv_rating.display_value,
@@ -192,12 +194,17 @@ def _main(args):
 
     players, outcomes = _get_players_outcomes(accounts_db, results, args.ranking)
 
+    if args.bans_file:
+        banned_profiles = get_profile_ids(args.bans_file)
+        for player in players:
+            player.banned = player.profile_id in banned_profiles
+
     outcomes_sql = [o.sql_row for o in outcomes]
     players_sql = [p.sql_row for p in players]
     accounts_sql = [(fp, acc[0], acc[1], acc[2]) for fp, acc in accounts_db.items() if acc is not None]
 
     c.executemany('INSERT OR IGNORE INTO accounts VALUES (?,?,?,?)', accounts_sql)
-    c.executemany('INSERT OR IGNORE INTO players VALUES (?,?,?,?,?,?,?)', players_sql)
+    c.executemany('INSERT OR IGNORE INTO players VALUES (?,?,?,?,?,?,?,?)', players_sql)
     c.executemany('INSERT OR IGNORE INTO outcomes VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', outcomes_sql)
 
     conn.commit()
@@ -211,6 +218,7 @@ def run():
     parser.add_argument('-s', '--schema', default=op.join(op.dirname(__file__), 'ladder.sql'))
     parser.add_argument('-r', '--ranking', choices=ranking_systems.keys(), default='trueskill')
     parser.add_argument('-p', '--period')
+    parser.add_argument('--bans-file')
     parser.add_argument('replays', nargs='*')
     args = parser.parse_args()
 

@@ -185,7 +185,20 @@ def leaderboard():
 @app.route('/leaderboard-js')
 def leaderboard_js():
     db = _db_get()
-    cur = db.execute('''SELECT * FROM players WHERE rating > 0 ORDER BY rating DESC''')
+    cur = db.execute('''
+        SELECT
+            profile_id,
+            profile_name,
+            avatar_url,
+            wins,
+            losses,
+            prv_rating,
+            rating
+        FROM players
+        WHERE rating > 0 AND NOT banned
+        ORDER BY rating DESC
+        '''
+    )
 
     rows = []
     for i, (profile_id, profile_name, avatar_url, wins, losses, prv_rating, rating) in enumerate(cur, 1):
@@ -238,6 +251,8 @@ def latest_games_js():
             rating_1 - rating_1_prv AS diff1,
             p0.profile_name AS p0_name,
             p1.profile_name AS p1_name,
+            p0.banned AS p0_banned,
+            p1.banned AS p1_banned,
             map_title
         FROM outcomes o
         LEFT JOIN players p0 ON p0.profile_id = o.profile_id0
@@ -255,7 +270,7 @@ def latest_games_js():
                 hash=match['hash'],
                 url=url_for('replay', replay_hash=match['hash']) + _args_url(),
                 supports_analysis=mods[cur_mod].get('supports_analysis', False),
-            ),
+            ) if not any((match['p0_banned'], match['p1_banned'])) else None,
             date=match['end_time'],
             duration=match['duration'],
             map=_stripped_map_name(match['map_title']),
@@ -263,12 +278,12 @@ def latest_games_js():
                 name=escape(match['p0_name']),
                 url=url_for('player', profile_id=match['profile_id0']) + _args_url(),
                 diff=match['diff0'],
-            ),
+            ) if not match['p0_banned'] else None,
             p1=dict(
                 name=escape(match['p1_name']),
                 url=url_for('player', profile_id=match['profile_id1']) + _args_url(),
                 diff=match['diff1'],
-            ),
+            ) if not match['p1_banned'] else None,
         )
         games.append(game)
 
@@ -337,7 +352,7 @@ def _get_player_info(db, profile_id):
             FROM outcomes
             WHERE :pid IN (profile_id0, profile_id1)
         ) AS avg_game_duration
-        FROM players WHERE profile_id=:pid
+        FROM players WHERE profile_id=:pid AND NOT banned
         LIMIT 1''',
         dict(pid=profile_id)
     )
@@ -410,6 +425,8 @@ def player_games_js(profile_id):
             rating_1 - rating_1_prv AS diff1,
             p0.profile_name AS p0_name,
             p1.profile_name AS p1_name,
+            p0.banned AS p0_banned,
+            p1.banned AS p1_banned,
             map_title
         FROM outcomes o
         LEFT JOIN players p0 ON p0.profile_id = o.profile_id0
@@ -425,21 +442,27 @@ def player_games_js(profile_id):
             diff = match['diff0']
             opponent = escape(match['p1_name'])
             opponent_id = match['profile_id1']
+            opponent_banned = match['p1_banned']
+            banned = match['p0_banned']
             outcome = 'Won'
         elif match['profile_id1'] == profile_id:
             diff = match['diff1']
             opponent = escape(match['p0_name'])
             opponent_id = match['profile_id0']
+            opponent_banned = match['p0_banned']
+            banned = match['p1_banned']
             outcome = 'Lost'
         else:
             continue  # XXX shouldn't happen, assert?
+        if banned:
+            break
         game = dict(
             date=match['end_time'],
             opponent=dict(
                 name=opponent,
                 url=url_for('player', profile_id=opponent_id) + _args_url(),
                 #avatar_url=avatar_url,
-            ),
+            ) if not opponent_banned else None,
             map=_stripped_map_name(match['map_title']),
             outcome=dict(
                 desc=outcome,
@@ -450,7 +473,7 @@ def player_games_js(profile_id):
                 hash=match['hash'],
                 url=url_for('replay', replay_hash=match['hash']) + _args_url(),
                 supports_analysis=mods[cur_mod].get('supports_analysis', False),
-            ),
+            ) if not opponent_banned else None,
         )
         games.append(game)
     cur.close()
@@ -570,7 +593,7 @@ def globalstats():
     avg_duration = data['avg_duration']
     cur.close()
 
-    cur = db.execute('SELECT COUNT(*) AS nb_players FROM players')
+    cur = db.execute('SELECT COUNT(*) AS nb_players FROM players WHERE NOT banned')
     nb_players = cur.fetchone()['nb_players']
     cur.close()
 
