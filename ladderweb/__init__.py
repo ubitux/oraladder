@@ -345,7 +345,7 @@ def _get_player_info(db, profile_id):
         *, (
             SELECT COUNT(*)
             FROM players
-            WHERE rating >= (SELECT rating FROM players WHERE profile_id=:pid)
+            WHERE rating >= (SELECT rating FROM players WHERE profile_id=:pid) AND NOT banned
         ) AS rank,
         (
             SELECT strftime('%M:%S', AVG(julianday(end_time) - julianday(start_time)))
