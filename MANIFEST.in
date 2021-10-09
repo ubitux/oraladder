@@ -10,5 +10,6 @@ include ladderweb/static/ladder-map-pack-*.zip
 include ladderweb/templates/*.html
 include raglweb/static/*.css
 include raglweb/static/*.js
+include raglweb/static/ragl-map-pack-*.zip
 include raglweb/static/ragl-logo.png
 include raglweb/templates/*.html
