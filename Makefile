@@ -2,6 +2,7 @@ PYTHON ?= python3
 CURL   ?= curl
 VENV   ?= venv
 
+RAGL_MAP_POOL = misc/map-pools/ragl-s11.maps
 RAGL_MAP_PACK_VERSION = 2021-10-09
 RAGL_MAP_PACK = raglweb/static/ragl-map-pack-$(RAGL_MAP_PACK_VERSION).zip
 
@@ -61,7 +62,7 @@ wheel: $(VENV)
 mappacks: $(RAGL_MAP_PACK)
 
 $(RAGL_MAP_PACK): $(VENV)
-	$(VENV)/bin/ora-mapstool misc/map-pools/ragl-s11.maps --pack $(RAGL_MAP_PACK)
+	$(VENV)/bin/ora-mapstool $(RAGL_MAP_POOL) --pack $(RAGL_MAP_PACK)
 
 test: $(VENV)
 	$(VENV)/bin/pytest -v
