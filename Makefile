@@ -3,7 +3,7 @@ CURL   ?= curl
 VENV   ?= venv
 WGET   ?= wget --no-check-certificate
 
-RAGL_MAP_PACK_VERSION = 2020-12-28
+RAGL_MAP_PACK_VERSION = 2021-10-09
 RAGL_MAP_PACK = raglweb/static/ragl-map-pack-$(RAGL_MAP_PACK_VERSION).zip
 
 LADDER_STATIC = ladderweb/static/Chart.bundle.min.js  \
@@ -62,7 +62,7 @@ wheel: $(VENV)
 mappacks: $(RAGL_MAP_PACK)
 
 $(RAGL_MAP_PACK): $(VENV)
-	$(VENV)/bin/ora-mapstool misc/map-pools/ragl-s10.maps --pack $(RAGL_MAP_PACK)
+	$(VENV)/bin/ora-mapstool misc/map-pools/ragl-s11.maps --pack $(RAGL_MAP_PACK)
 
 test: $(VENV)
 	$(VENV)/bin/pytest -v

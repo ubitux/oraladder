@@ -1,0 +1,42 @@
+# Warning: This file is standard YAML, *not* in OpenRA mini-yaml
+
+Divisions:
+
+    Masters:
+        - [9599,  goat]
+        - [13705, Kav]
+        - [15469, Happy]
+        - [6766,  ZxGanon]
+        - [6771,  Mr Cloudy]
+        - [11705, Pinkthoth]
+        - [9877,  SinJul]
+        - [6430,  Blackened]
+        - [11435, Goremented]
+        - [7644,  KSK_Nico]
+        - [3952,  anjew]
+        - [7304,  Upps]
+        - [4527,  FiveAces]
+        - [8869,  Sigil]
+
+    Minions Alfa:
+        - [11442, Eugenator]
+        - [11855, Kaution]
+        - [8860,  ROCKhardFISTnips]
+        - [11099, Dodder]
+        - [5292,  Mo]
+        - [7387,  TTTPPP]
+        - [7617,  worldpeace]
+        - [7714,  Nilhall]
+        - [13096, MR C]
+
+    Minions Bravo:
+        - [6793,  maceman]
+        - [7813,  TiTo]
+        - [15421, Gajcus]
+        - [13710, Ekanim]
+        - [12261, DVoid]
+        - [11913, Duke Bones]
+        - [7591,  manta151]
+        - [6751,  Tailix Killa Mentor]
+        - [12654, Therapist]
+        - [6861,  potato]
