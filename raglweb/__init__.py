@@ -31,12 +31,12 @@ from flask import (
 
 # XXX: store in a file probably
 _cfg = dict(
-    start_time=date(2020, 12, 28),
+    start_time=date(2021, 10, 11),
     # We need <matchup_count> done every <matchup_delay> (one matchup
     # represents 2 games between the same players)
     matchup_delay=timedelta(weeks=1),
     matchup_count=2,
-    season=10,
+    season=11,
 )
 
 
