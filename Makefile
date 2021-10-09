@@ -1,7 +1,6 @@
 PYTHON ?= python3
 CURL   ?= curl
 VENV   ?= venv
-WGET   ?= wget --no-check-certificate
 
 RAGL_MAP_PACK_VERSION = 2021-10-09
 RAGL_MAP_PACK = raglweb/static/ragl-map-pack-$(RAGL_MAP_PACK_VERSION).zip
