@@ -1,4 +1,4 @@
-PYTHON ?= python
+PYTHON ?= python3
 CURL   ?= curl
 VENV   ?= venv
 WGET   ?= wget --no-check-certificate
