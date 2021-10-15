@@ -15,10 +15,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import os
 import os.path as op
 
 import sqlite3
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 from .playoffs import get_playoff2, get_playoff4, PlayoffOutcome
 from flask import (
     Flask,
@@ -26,17 +27,6 @@ from flask import (
     g,
     render_template,
     send_file,
-)
-
-
-# XXX: store in a file probably
-_cfg = dict(
-    start_time=date(2021, 10, 11),
-    # We need <matchup_count> done every <matchup_delay> (one matchup
-    # represents 2 games between the same players)
-    matchup_delay=timedelta(weeks=1),
-    matchup_count=2,
-    season=11,
 )
 
 
@@ -59,6 +49,8 @@ def create_app():
     app.config.from_mapping(
         DATABASE=op.join(app.instance_path, 'db-ragl.sqlite3'),
     )
+    cfg_file = os.environ.get('RAGL_CONFIG', op.join(app.instance_path, 'ragl_config.py'))
+    app.config.from_pyfile(cfg_file)
     app.teardown_appcontext(_db_close)
     return app
 
@@ -80,7 +72,8 @@ def scoreboards():
         '''
     )
 
-    max_matches = {row['division']: (row['nb_profiles'] - 1) * _cfg['matchup_count'] for row in cur}
+    matchup_count = app.config['MATCHUP_COUNT']
+    max_matches = {row['division']: (row['nb_profiles'] - 1) * matchup_count for row in cur}
 
     cur = db.execute('''
         SELECT
@@ -327,10 +320,12 @@ def player(profile_id):
             matchup_count += 1
         matches.append(opponent)
 
-    # The final time should not change if some matches get canceled, so we take into account here
-    end_time = _cfg['start_time'] + (matchup_count + matchup_canceled) * _cfg['matchup_delay'] / _cfg['matchup_count']
+    cfg = app.config
 
-    matchup_expected_done = min(int((date.today() - _cfg['start_time']) * _cfg['matchup_count'] / _cfg['matchup_delay']), matchup_count)
+    # The final time should not change if some matches get canceled, so we take into account here
+    end_time = cfg['START_TIME'] + (matchup_count + matchup_canceled) * cfg['MATCHUP_DELAY'] / cfg['MATCHUP_COUNT']
+
+    matchup_expected_done = min(int((date.today() - cfg['START_TIME']) * cfg['MATCHUP_COUNT'] / cfg['MATCHUP_DELAY']), matchup_count)
 
     if player_info['status'] == 'SF':
         status = '⛔ Season Forfeit'
@@ -348,7 +343,7 @@ def player(profile_id):
         status=status,
         matchup_done_count=matchup_done_count,
         matchup_count=matchup_count,
-        start_time=_cfg['start_time'],
+        start_time=app.config['START_TIME'],
         end_time=end_time,
     )
 
@@ -357,7 +352,12 @@ def player(profile_id):
 
 @app.route('/info')
 def info():
-    return render_template('info.html', start_time=_cfg['start_time'])
+    map_pack_version = app.config['MAP_PACK_VERSION']
+    return render_template(
+        'info.html',
+        map_pack_file=f'ragl-map-pack-{map_pack_version}.zip',
+        cfg=app.config,
+    )
 
 
 def _make_division_prefix(division_title):
@@ -367,7 +367,7 @@ def _make_division_prefix(division_title):
     if division_prefix.endswith('S'):
         division_prefix = division_prefix[:-1]
     division_prefix += ''.join(word[0] for word in words[1:])
-    season = _cfg['season']
+    season = app.config['SEASON']
     prefix = f'RAGL-S{season:02d}-{division_prefix}-'
     return prefix
 
@@ -415,7 +415,7 @@ def replay_playoff(replay_hash):
     ''', dict(hash=replay_hash))
     row = cur.fetchone()
 
-    season = _cfg['season']
+    season = app.config['SEASON']
     prefix = f'RAGL-S{season:02d}-PLAYOFF-'
 
     fullpath = row['filename']

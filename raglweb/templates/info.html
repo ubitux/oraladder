@@ -6,10 +6,11 @@
 {% block content %}
 <h2>Introduction</h2>
 <p>
-Red Alert Global League (RAGL), Season 11 is played starting {{ start_time }}.
-The end date can be flexible, however, we will aim to be finished in 10 weeks
-on 2021-12-20. This timespan includes up to 7 weeks for the group stage and 3
-weeks reserved for unforeseen delays, tiebreakers and playoffs.
+Red Alert Global League (RAGL), Season {{ cfg.SEASON }} is played starting {{
+cfg.START_TIME }}.  The end date can be flexible, however, we will aim to be
+finished in 10 weeks on 2021-12-20. This timespan includes up to 7 weeks for
+the group stage and 3 weeks reserved for unforeseen delays, tiebreakers and
+playoffs.
 </p>
 
 <p>
@@ -24,13 +25,13 @@ For details on prize pool contributions, check out the
 
 <h2>The essentials</h2>
 <dl>
-	<dt>Game version:</dt><dd><a href="https://github.com/OpenRA/OpenRA/releases/tag/release-20210321">release-20210321</a></dd>
+	<dt>Game version:</dt><dd><a href="{{ cfg.RELEASE_URL }}">{{ cfg.RELEASE }}</a></dd>
 	<dt>Game server instances:</dt><dd>|ragl.org| RAGL Server <i>N</i></dd>
-	<dt>Map pack:</dt><dd><a href="{{ url_for('static', filename='ragl-map-pack-2021-10-09.zip') }}">2021-10-09</a></dd>
-	<dt>Match schedule:</dt><dd><a href="https://forum.openra.net/viewtopic.php?f=85&t=21511">Red Alert Global League - Schedule</a></dd>
-	<dt>Contact:</dt><dd><a href="https://discord.gg/99zBDuS">Red Alert Competitive Discord</a></dd>
-	<dt>Start date:</dt><dd>{{ start_time }}</dd>
-	<dt>Current prize pool total:</dt><dd>$1600<dd>
+	<dt>Map pack:</dt><dd><a href="{{ url_for('static', filename=map_pack_file) }}">{{ cfg.MAP_PACK_VERSION }}</a></dd>
+	<dt>Match schedule:</dt><dd><a href="{{ cfg.SCHEDULE_URL }}">Red Alert Global League - Schedule</a></dd>
+	<dt>Contact:</dt><dd><a href="{{ cfg.DISCORD_URL }}">{{ cfg.DISCORD_NAME }}</a></dd>
+	<dt>Start date:</dt><dd>{{ cfg.START_TIME }}</dd>
+	<dt>Current prize pool total:</dt><dd>{{ cfg.PRIZE_POOL }}<dd>
 </dl>
 
 <h2>Format</h2>
@@ -119,7 +120,7 @@ For details on prize pool contributions, check out the
 
 <ol>
 	<li>New players have until Nov 27th to send the registration info.</li>
-	<li>Registration takes place through Discord (<a href="https://discord.gg/99zBDuS">Red Alert Competitive Discord</a>, the primary channel of communication for RAGL or send a private message to <code>@anjew</code>), email (OpenRA.RAGL@Gmail.com) or in a relevant forum thread.</li>
+	<li>Registration takes place through Discord (<a href="{{ cfg.DISCORD_URL }}">{{ cfg.DISCORD_NAME }}</a>, the primary channel of communication for RAGL or send a private message to <code>@anjew</code>), email ({{ cfg.CONTACT_MAIL }}) or in a relevant forum thread.</li>
 	<li>Registration info must include the forum account</li>
 	<li>Registered players are put onto Signup list. If the player sent his registration info but wasn't put onto Signup list then he should subsequently contact the officials no later than the final date.</li>
 </ol>
@@ -151,9 +152,9 @@ For details on prize pool contributions, check out the
 <h2>Communications</h2>
 
 Official communications between the players and with league officials are
-primarily done through Discord (<a href="https://discord.gg/99zBDuS">Red Alert
-Competitive Discord</a>, involving reporting results and various league
-business. Email address (OpenRA.RAGL@Gmail.com) is available as the auxiliary
+primarily done through Discord (<a href="{{ cfg.DISCORD_URL }}">{{
+cfg.DISCORD_NAME }}</a>, involving reporting results and various league
+business. Email address ({{ cfg.CONTACT_MAIL }}) is available as the auxiliary
 means of communication.
 
 <h3>Match scheduling</h3>
@@ -217,7 +218,7 @@ at ragl.org as completed.
 <h3>Map pool</h3>
 
 <ol>
-	<li>Map pool link: <a href="{{ url_for('static', filename='ragl-map-pack-2021-10-09.zip') }}">2021-10-09</a></li>
+	<li>Map pool link: <a href="{{ url_for('static', filename=map_pack_file) }}">{{ cfg.MAP_PACK_VERSION }}</a></li>
 	<li>All maps include a custom-made design of a Refinery (<code>ERCC</code>) made by <code>Widow</code> and <code>FRenzy</code> to improve the ore mining balance between various refinery positions. The refinery has reduced footprint (<code>3x3</code> with no additional occupied cell at the top), all of its cells except bottom-left and top-right are passable.</li>
 </ol>
 
@@ -251,11 +252,11 @@ at ragl.org as completed.
 <ol>
 	<li>The list of officials to contact is as follows:</li>
 	<ul>
-		<li>.won (.1)</li>
-		<li>Happy</li>
-		<li>Anjew</li>
+		{%- for person in cfg.STAFF %}
+		<li>{{ person }}</li>
+		{%- endfor %}
 	</ul>
-	<li>RAGL has its own discord: <a href="https://discord.gg/99zBDuS">Red Alert Competitive Discord</a>. Please post in the discord with any questions. Please, refrain from using discord personal messages unless the matter is urgent and cannot be discussed by other means.</li>
+	<li>RAGL has its own discord: <a href="{{ cfg.DISCORD_URL }}">{{ cfg.DISCORD_NAME }}</a>. Please post in the discord with any questions. Please, refrain from using discord personal messages unless the matter is urgent and cannot be discussed by other means.</li>
 	<li>League officials reserve the rights to alter or override the rulebook at any time, including during an ongoing season. All players will be immediately notified if any substantial changes are made during the season. Any change to the rulebook after player registrations are over is duplicated via a post in this thread.</li>
 	<li>all inquiries you can contact us through Discord, at OpenRA.RAGL@Gmail.com or reply on this thread.</li>
 </ol>
