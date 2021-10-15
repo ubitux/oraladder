@@ -3,7 +3,7 @@ CURL   ?= curl
 VENV   ?= venv
 
 RAGL_MAP_POOL = misc/map-pools/ragl-s11.maps
-RAGL_MAP_PACK_VERSION = 2021-10-09
+RAGL_MAP_PACK_VERSION := $(shell $(PYTHON) misc/ragl_config.py MAP_PACK_VERSION)
 RAGL_MAP_PACK = raglweb/static/ragl-map-pack-$(RAGL_MAP_PACK_VERSION).zip
 
 LADDER_STATIC = ladderweb/static/Chart.bundle.min.js  \
@@ -48,10 +48,13 @@ $(LADDER_DATABASES): instance
 ragldev: initragldev
 	FLASK_APP=raglweb FLASK_ENV=development FLASK_RUN_PORT=5001 $(VENV)/bin/flask run
 
-initragldev: $(VENV) $(RAGL_MAP_PACK) instance/db-ragl.sqlite3
+initragldev: $(VENV) $(RAGL_MAP_PACK) instance/db-ragl.sqlite3 instance/ragl_config.py
 
 instance/db-ragl.sqlite3: instance
 	$(VENV)/bin/ora-ragl -d $@
+
+instance/ragl_config.py: misc/ragl_config.py instance
+	cp $< $@
 
 instance:
 	mkdir -p $@
