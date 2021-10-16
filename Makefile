@@ -59,7 +59,7 @@ instance/ragl_config.py: misc/ragl_config.py instance
 instance:
 	mkdir -p $@
 
-wheel: $(VENV)
+wheel: $(VENV) mappacks
 	$(VENV)/bin/python -m pip install wheel && python setup.py bdist_wheel
 
 mappacks: $(RAGL_MAP_PACK)
