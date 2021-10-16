@@ -2,7 +2,7 @@ from datetime import date, timedelta
 
 SEASON = 11
 START_TIME = date(2021, 10, 11)
-MAP_PACK_VERSION = '2021-10-09'
+MAP_PACK_VERSION = '2021-10-16'
 RELEASE = 'release-20210321'
 RELEASE_URL = 'https://github.com/OpenRA/OpenRA/releases/tag/release-20210321'
 SCHEDULE_URL = 'https://forum.openra.net/viewtopic.php?f=85&t=21511'
