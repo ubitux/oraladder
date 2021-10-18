@@ -6,7 +6,7 @@ GROUP_STAGE_WEEKS = 7
 PLAYOFF_WEEKS = 3
 DURATION_WEEKS = GROUP_STAGE_WEEKS + PLAYOFF_WEEKS
 END_TIME = START_TIME + timedelta(weeks=DURATION_WEEKS)
-MAP_PACK_VERSION = '2021-10-16'
+MAP_PACK_VERSION = '2021-10-18'
 RELEASE = 'release-20210321'
 RELEASE_URL = 'https://github.com/OpenRA/OpenRA/releases/tag/release-20210321'
 SCHEDULE_URL = 'https://forum.openra.net/viewtopic.php?f=85&t=21511'
