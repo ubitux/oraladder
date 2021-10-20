@@ -323,7 +323,7 @@ def player(profile_id):
         matches.append(opponent)
 
     # The final time should not change if some matches get canceled, so we take into account here
-    end_time = cfg['START_TIME'] + (matchup_count + matchup_canceled) * cfg['MATCHUP_DELAY'] / cfg['GAMES_PER_MATCH']
+    group_stage_end_time = cfg['START_TIME'] + (matchup_count + matchup_canceled) * cfg['MATCHUP_DELAY'] / cfg['GAMES_PER_MATCH']
 
     matchup_expected_done = min(int((date.today() - cfg['START_TIME']) * cfg['GAMES_PER_MATCH'] / cfg['MATCHUP_DELAY']), matchup_count)
 
@@ -344,7 +344,7 @@ def player(profile_id):
         matchup_done_count=matchup_done_count,
         matchup_count=matchup_count,
         start_time=app.config['START_TIME'],
-        end_time=end_time,
+        end_time=group_stage_end_time,
     )
 
     return render_template('player.html', player=player, matches=matches)
