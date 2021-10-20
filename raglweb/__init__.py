@@ -72,7 +72,7 @@ def scoreboards():
         '''
     )
 
-    matchup_count = app.config['MATCHUP_COUNT']
+    matchup_count = app.config['GAMES_PER_MATCH']
     max_matches = {row['division']: (row['nb_profiles'] - 1) * matchup_count for row in cur}
 
     cur = db.execute('''
@@ -323,9 +323,9 @@ def player(profile_id):
     cfg = app.config
 
     # The final time should not change if some matches get canceled, so we take into account here
-    end_time = cfg['START_TIME'] + (matchup_count + matchup_canceled) * cfg['MATCHUP_DELAY'] / cfg['MATCHUP_COUNT']
+    end_time = cfg['START_TIME'] + (matchup_count + matchup_canceled) * cfg['MATCHUP_DELAY'] / cfg['GAMES_PER_MATCH']
 
-    matchup_expected_done = min(int((date.today() - cfg['START_TIME']) * cfg['MATCHUP_COUNT'] / cfg['MATCHUP_DELAY']), matchup_count)
+    matchup_expected_done = min(int((date.today() - cfg['START_TIME']) * cfg['GAMES_PER_MATCH'] / cfg['MATCHUP_DELAY']), matchup_count)
 
     if player_info['status'] == 'SF':
         status = '⛔ Season Forfeit'
