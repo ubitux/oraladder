@@ -19,7 +19,7 @@ import os
 import os.path as op
 
 import sqlite3
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from .playoffs import get_playoff2, get_playoff4, PlayoffOutcome
 from flask import (
     Flask,
@@ -322,10 +322,11 @@ def player(profile_id):
             matchup_count += 1
         matches.append(opponent)
 
-    # The final time should not change if some matches get canceled, so we take into account here
-    group_stage_end_time = cfg['START_TIME'] + (matchup_count + matchup_canceled) * cfg['MATCHUP_DELAY'] / cfg['GAMES_PER_MATCH']
+    group_stage_end_time = cfg['START_TIME'] + timedelta(weeks=cfg['GROUP_STAGE_WEEKS'])
+    # Calculate the fraction of the group stage that's complete.
+    group_stage_completion = min(1, max(0, (date.today() - cfg['START_TIME']) / (group_stage_end_time - cfg['START_TIME'])))
 
-    matchup_expected_done = min(int((date.today() - cfg['START_TIME']) * cfg['GAMES_PER_MATCH'] / cfg['MATCHUP_DELAY']), matchup_count)
+    matchup_expected_done = int(len(matches) * group_stage_completion)
 
     if player_info['status'] == 'SF':
         status = '⛔ Season Forfeit'
