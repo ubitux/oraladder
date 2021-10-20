@@ -15,10 +15,10 @@ PRIZE_POOL = '$1600'
 DISCORD_URL = 'https://discord.gg/99zBDuS'
 DISCORD_NAME = 'Red Alert Competitive Discord'
 
-# We need <matchup_count> done every <matchup_delay> (one matchup
+# We need <GAMES_PER_MATCH> done every <matchup_delay> (one matchup
 # represents 2 games between the same players)
 MATCHUP_DELAY = timedelta(weeks=1)
-MATCHUP_COUNT = 2
+GAMES_PER_MATCH = 2
 
 
 # Used by the Makefile to extract a value
