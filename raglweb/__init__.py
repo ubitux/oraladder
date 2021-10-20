@@ -304,12 +304,14 @@ def player(profile_id):
     records = _get_player_records(db, profile_id)
     opponents = _get_player_opponents(db, profile_id, player_info['division'])
 
+    cfg = app.config
+
     # Complete opponent information with potential records
     matches = []
     matchup_count, matchup_done_count, matchup_canceled = 0, 0, 0
     for opponent in opponents:
         games = records.get(opponent['opponent_id'], [])
-        matchup_done = len(games) == 2
+        matchup_done = len(games) == cfg['GAMES_PER_MATCH']
         opponent['games'] = games
         if 'SF' in (player_info['status'], opponent['status']):
             opponent['status'] = '⛔ Canceled'
@@ -319,8 +321,6 @@ def player(profile_id):
             matchup_done_count += matchup_done
             matchup_count += 1
         matches.append(opponent)
-
-    cfg = app.config
 
     # The final time should not change if some matches get canceled, so we take into account here
     end_time = cfg['START_TIME'] + (matchup_count + matchup_canceled) * cfg['MATCHUP_DELAY'] / cfg['GAMES_PER_MATCH']
