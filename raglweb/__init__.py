@@ -308,14 +308,13 @@ def player(profile_id):
 
     # Complete opponent information with potential records
     matches = []
-    matchup_count, matchup_done_count, matchup_canceled = 0, 0, 0
+    matchup_count, matchup_done_count = 0, 0
     for opponent in opponents:
         games = records.get(opponent['opponent_id'], [])
         matchup_done = len(games) == cfg['GAMES_PER_MATCH']
         opponent['games'] = games
         if 'SF' in (player_info['status'], opponent['status']):
             opponent['status'] = '⛔ Canceled'
-            matchup_canceled += 1
         else:
             opponent['status'] = '✅ All matches played' if matchup_done else '🕒 Pending'
             matchup_done_count += matchup_done
