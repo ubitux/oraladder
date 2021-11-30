@@ -325,7 +325,7 @@ def player(profile_id):
     # Calculate the fraction of the group stage that's complete.
     group_stage_completion = min(1, max(0, (date.today() - cfg['START_TIME']) / (group_stage_end_time - cfg['START_TIME'])))
 
-    matchup_expected_done = int(len(matches) * group_stage_completion)
+    matchup_expected_done = int(matchup_count * group_stage_completion)
 
     if player_info['status'] == 'SF':
         status = '⛔ Season Forfeit'
