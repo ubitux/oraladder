@@ -55,3 +55,8 @@ Playoffs:
             - 13705
             - 7304
             - 11705
+    Minions Championship:
+        bestof: 5
+        players:
+            - 11855
+            - 15421
