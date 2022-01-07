@@ -7,6 +7,34 @@ mods = dict(
         supports_analysis=True,
         mappacks=(
             dict(
+                label='2022.0 (2022-01-07)',
+                filename='ladder-map-pack-2022.0.zip',
+                changelog='''
+                    This map pack is selected out of 40 maps by the community
+                    <a href="https://forum.openra.net/viewtopic.php?f=82&t=21545&p=313637">
+                    with public voting</a>. Feel to participate to the upcoming
+                    polls. Events will be announced on forum and on the OpenRA
+                    Competitive Discord server, #ladder channel.
+                ''',
+                maps=(
+                    ('Agita', 'kazu'),
+                    ('Argon', 'kazu'),
+                    ('Barentsøya (BB)', 'Lucian'),
+                    ('Bucharest', 'poop'),
+                    ('Cog of War', 'netnazgul'),
+                    ('Dirge', 'Pinkthoth'),
+                    ('Discovery', 'Lad'),
+                    ('Fairyland', 'Lad'),
+                    ('Krakow', 'poop'),
+                    ('Moonopoly', 'Lad'),
+                    ('Race Tracks', 'Blackened'),
+                    ('Scorched Earth', 'J MegaTank'),
+                    ('Sun Struggle', 'Lad'),
+                    ('Trapped', 'Blackened'),
+                    ('Yukon Territory', 'wippie'),
+                ),
+            ),
+            dict(
                 label='2021.1 (2021-04-26)',
                 filename='ladder-map-pack-2021.1.zip',
                 changelog='''
