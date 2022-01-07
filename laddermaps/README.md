@@ -71,7 +71,7 @@ ora-tool mappack \
     --overlay $LADDERMAPS_DIR/overlay.png \
     --strip-tags \
     --ext $LADDERMAPS_DIR/extensions/* \
-    --rm ragl-briefing-rules.yaml lobby-rules.yaml ERCC2-rules.yaml ercc2-rules.yaml ERCC2-sequences.yaml ercc2-sequences.yaml ragl-balance.yaml ragl-briefing.yaml ragl-weapons.yaml ERCC21andBCC-rules.yaml briefing.yaml briefing-rules.yaml bain2-rules.yaml bain2-weapons.yaml ragl-actor-rules.yaml ragl-actor-sequences.yaml ragl-balance-rules.yaml tox_sign.shp .DS_Store harv-flipped_top.shp ref-anim.shp ref-bot.shp ref-top.shp \
+    --rm ragl-briefing-rules.yaml lobby-rules.yaml ERCC2-rules.yaml ercc2-rules.yaml ercc2-sequences.yaml ragl-balance.yaml ragl-briefing.yaml ragl-weapons.yaml briefing.yaml briefing-rules.yaml bain2-rules.yaml bain2-weapons.yaml ragl-actor-rules.yaml ragl-actor-sequences.yaml ragl-balance-rules.yaml tox_sign.shp .DS_Store \
     --title '{title} [ladder]' \
     --category Ladder-$LADDERMAPS_VERSION \
     --out-dir /tmp/ladder-maps \
