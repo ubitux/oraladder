@@ -1,0 +1,11 @@
+Player:
+	ClassicProductionQueue@Building:
+		BuildTimeSpeedReduction: 100, 86, 75, 67, 60, 55, 50
+	ClassicProductionQueue@Defense:
+		BuildTimeSpeedReduction: 100, 86, 75, 67, 60, 55, 50
+	ClassicProductionQueue@Infantry:
+		BuildTimeSpeedReduction: 100, 86, 75, 67, 60, 55, 50
+	ClassicProductionQueue@Ship:
+		BuildTimeSpeedReduction: 100, 86, 75, 67, 60, 55, 50
+	ClassicProductionQueue@Aircraft:
+		BuildTimeSpeedReduction: 100, 86, 75, 67, 60, 55, 50

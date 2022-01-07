@@ -1,0 +1,17 @@
+pips:
+	pip-skull: pip-skull
+		Offset: -2, 0
+
+iron:
+	idle:
+		Offset: 0,-4
+	active:
+		Offset: 0,-4
+	damaged-idle:
+		Offset: 0,-4
+	damaged-active:
+		Offset: 0,-4
+	make: ironmake
+		Offset: 0,-4
+	bib: mbIRON
+		Offset: 0,-2

@@ -1,0 +1,26 @@
+ParaBomb:
+	Range: 6c0
+	Projectile:
+		Velocity: 0, 0, -50
+	Warhead@1Dam: SpreadDamage
+		Spread: 1000
+		Versus:
+			None: 40
+			Wood: 60
+
+HellfireAG:
+	ReloadDelay: 34
+	BurstDelays: 10
+
+DogJaw:
+	Range: 3c0
+
+Nike:
+	Projectile:
+		RangeLimit: 11c0
+
+NothingFTUR:
+	ReloadDelay: 80
+	Range: 5c0
+	Projectile: Bullet
+		Speed: 1c682

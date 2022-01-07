@@ -1,0 +1,150 @@
+^Husk:
+	TransformOnCapture:
+		ForceHealthPercentage: 15
+	InfiltrateForTransform:
+		ForceHealthPercentage: 15
+
+^CommandoSkull:
+	WithDecoration@COMMANDOSKULL:
+		Image: pips
+		Sequence: pip-skull
+		Palette: effect
+		Position: TopLeft
+		ValidRelationships: Ally, Enemy, Neutral
+
+JEEP:
+	Mobile:
+		Speed: 160
+	RevealsShroud:
+		Range: 7c0
+
+DOME:
+	Valued:
+		Cost: 1500
+
+STNK:
+	Cloak:
+		RequiresCondition: !notmobile
+		UncloakOn: Attack, Heal, Dock, Unload
+
+DTRK:
+	Health:
+		HP: 2800
+	Mobile:
+		Speed: 75
+
+E7:
+	Inherits@COMMANDOSKULL: ^CommandoSkull
+	Valued:
+		Cost: 1500
+
+SPY:
+	Inherits@COMMANDOSKULL: ^CommandoSkull
+	WithDecoration@COMMANDOSKULL:
+		RequiresCondition: tanyadisguise
+	Disguise:
+		DisguisedAsConditions:
+			e7: tanyadisguise
+
+^Mine:
+	Health:
+		HP: 5000
+
+MGG:
+	WithIdleOverlay@SPINNER:
+		PauseOnCondition: undeployed
+	CreatesShroud:
+		RequiresCondition: !undeployed
+	GrantConditionOnDeploy:
+		DeployedCondition: undeployed
+
+BADR:
+	Health:
+		HP: 40000
+
+BADR.Bomber:
+	Health:
+		HP: 40000
+	AmmoPool:
+		Ammo: 10
+
+AFLD:
+	AirstrikePower@parabombs:
+		SquadSize: 1
+	Exit@1:
+		ExitCell: 1,3
+	Exit@2:
+		RequiresCondition: !being-captured
+		ExitCell: 0,0
+		Facing: 256
+
+MIG:
+	Health:
+		HP: 8000
+
+IRON:
+	Inherits@shape: ^2x2Shape
+	Building:
+		Footprint: xx xx
+		Dimensions: 2,2
+	Selectable:
+		Bounds: 48,50,0,-4
+		-DecorationBounds: 50,50,0,-12
+	GrantExternalConditionPower@IRONCURTAIN:
+		Duration: 400
+
+DOG:
+	GrantConditionOnAttack:
+		RevokeDelay: 20
+
+FTUR:
+	Armament:
+		RequiresCondition: !build-incomplete
+	Armament@nothing:
+		Weapon: NothingFTUR
+		RequiresCondition: build-incomplete
+	AttackTurreted:
+		RequiresCondition: true
+
+ATEK:
+	GpsPower:
+		PauseOnCondition: disabled || !gpsactivated
+		ChargeInterval: 0
+		RevealDelay: 30
+		DisplayTimerRelationships: None
+		Prerequisites: gpsactive
+		StartFullyCharged: True
+	SpawnActorPower:
+		PauseOnCondition: disabled
+		Actor: powergps
+		Icon: gps
+		LifeTime: 1500
+		ChargeInterval: 6000
+		Description: GPS Satellite
+		LongDesc: Reveals map terrain and provides tactical\ninformation. Requires power and active radar.
+		EffectImage: crate-effects
+		EffectSequence: gps
+		EffectPalette: effect
+		LaunchSpeechNotification: SatelliteInitialzed
+		IncomingSpeechNotification: SatelliteInitialzed
+		DisplayTimerRelationships: Ally, Enemy, Neutral
+	GrantConditionOnPrerequisite@gpsactivation:
+		Prerequisites: gpsactive
+		Condition: gpsactivated
+
+powergps:
+	Interactable: 
+	EditorOnlyTooltip:
+		Name: (reveals area to owner)
+	AlwaysVisible: 
+	Immobile:
+		OccupiesSpace: false
+	BodyOrientation:
+		QuantizedFacings: 1
+	WithSpriteBody: 
+	RenderSpritesEditorOnly:
+		Image: camera
+	MapEditorData:
+		Categories: System
+	ProvidesPrerequisite@gap:
+		Prerequisite: gpsactive
