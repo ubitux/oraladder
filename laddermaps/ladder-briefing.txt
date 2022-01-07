@@ -3,17 +3,28 @@
  OpenRA Competitive 1v1 ladder
 
 This map features:
-- ERCC refinery 2.1 by FRenzy and Widow
-- BCC Rax 1.0 by Widow
-- Custom RAGL balance:
-    * Ranger:
-        + Vision from 8c0 to 7c0
-        + Speed from 170 to 160
-    * Dome:
-        + Price from 1800 to 1500
-    * LongBow:
-        + Reload Delay from 30 to 34
-        + Burst Delay from 7 to 10
-- Fix for the missing phase transport sound notification
+- ERCC refinery 2.1, BCC rax 1.0, ACC airfield 1.0
+- Husks are restored with 15% health (down from 25%)
+- Ranger speed 160 (down from 170), vision 7c0 (down from 8c0)
+- Radar Dome cost 1500 (down from 1800)
+- Phase Transport uncloak on load and unload
+- Demo truck health 2800 (down from 5000), speed 75 (down from 85)
+- Tanya cost 1500 (up from 1200), added skull icon
+- Spy added skull icon when disguised as Tanya
+- Mine health 5000 (down from 10000)
+- MGG has deployable shroud
+- Parabombs come from a single badger (down from 3), with health 40000 (up from 30000) and 10 bombs (up from 5)
+- Each bomb has range 6c0 (up from 3c0), fall speed 50 (up from 40), spread 1000 (up from 768), damage vs none 40 (up from 30) and vs wood 60 (up from 30)
+- Mig health 8000 (down from 10000)
+- Longbow anti-ground reload delay 34 (up from 30), burst delay 10 (up from 7)
+- Dog chew time 20 (down from 45), jump 3c0 (up from 2c0)
+- Flame tower can aim while being built
+- SAM missile max range 11c0 (up from 9c0)
+- Iron Curtain footprint is now 2x2 (up from 2x1) and duration is 400 ticks (down from 500)
+- GPS charge time 4 mins (down from 8 mins), now needs manually firing, units revealed for 1 min
+- Modified production queue timings (except vehicles): 100, 86, 75, 67, 60, 55, 50 (rather than 100, 85, 75, 65, 60, 55, 50)
+
+Credits for various things: Darkademic, FRenzy, Pinkthoth, Punsho, TTTPPP,
+Widow and probably many others
 
 See oraladder.net for more information.
