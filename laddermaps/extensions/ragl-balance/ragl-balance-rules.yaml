@@ -1,0 +1,13 @@
+JEEP:
+	Mobile:
+		Speed: 160
+	RevealsShroud:
+		Range: 7c0
+
+DOME:
+	Valued:
+		Cost: 1500
+
+STNK:
+	Cloak:
+		UncloakOn: Attack, Heal, Dock, Unload

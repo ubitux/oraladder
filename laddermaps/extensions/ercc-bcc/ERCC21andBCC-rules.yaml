@@ -1,0 +1,143 @@
+PROC:
+	RenderSprites:
+		Image: ref-bot
+	Building:
+		Footprint: =+x +=+ x==
+		Dimensions: 3,3
+		LocalCenterOffset: 0,-512,0
+	Refinery:
+		DockAngle: 768
+		DockOffset: 1,1
+	FreeActor:
+		Actor: HARV
+		SpawnOffset: 1,1
+		Facing: 768
+	Selectable:
+		Bounds: 72,45,0,-4
+		DecorationBounds: 72,75,1,-4
+	-WithIdleOverlay@TOP:
+	WithIdleOverlay@topsolid:
+		Sequence: topsolid
+		RequiresCondition: !cloak
+	ExternalCondition@cloak:
+		Condition: cloak
+	WithIdleOverlay@cloak:
+		Sequence: topsolid
+		Palette: cloak
+		IsPlayerPalette: true
+	-HitShape:
+	-HitShape@BOTTOMLEFT:
+	-HitShape@TOP:
+
+	HitShape@TOPLEFT:
+		TargetableOffsets: 0,-1052,0
+		Type: Rectangle
+			TopLeft: -1536, -256
+			BottomRight: -256,256
+
+	HitShape@TOPRIGHT:
+		TargetableOffsets: 1050,1152,0  ,   620,830,0
+		Type: Rectangle
+			TopLeft: 256, -1024
+			BottomRight: 1536, 256
+
+	HitShape@BOTRIGHT:
+		TargetableOffsets: -1600,1052,0
+		Type: Rectangle
+			TopLeft: 256, 718
+			BottomRight: 1536, 1280
+
+	HitShape@BOTLEFT:
+		TargetableOffsets: -1600,-1252,0  ,  -1700,-730,0
+		Type: Rectangle
+			TopLeft: -1536, 768
+			BottomRight: -256, 2048
+
+^Palettes:
+	PaletteFromPaletteWithAlpha@cloak:
+		Name: cloak
+		BasePalette: player
+		Alpha: 0.45
+
+^Infantry:
+	Inherits@PROC: ^AffectsPROC2
+E7:
+	Inherits@PROC: ^AffectsPROC
+	-GrantConditionOnAttack@proc:
+E6:
+	Inherits@PROC: ^AffectsPROC
+	-GrantConditionOnAttack@proc:
+SPY:
+	Inherits@PROC: ^AffectsPROC
+	-GrantConditionOnAttack@proc:
+THF:
+	Inherits@PROC: ^AffectsPROC
+	-GrantConditionOnAttack@proc:
+
+^AffectsPROC:
+	ProximityExternalCondition@cloak:
+		Condition: cloak
+		ValidRelationships: enemy, neutral, ally
+		Range: 0c552
+		RequiresCondition: !moving
+	GrantConditionOnMovement@proc:
+		Condition: moving
+
+^AffectsPROC2:
+	GrantConditionOnAttack@proc:
+		Condition: attack
+		ArmamentNames: primary, secondary, garrisoned
+		RevokeDelay: 50
+	ProximityExternalCondition@cloak:
+		Condition: cloak
+		ValidRelationships: enemy, neutral, ally
+		Range: 0c412
+		RequiresCondition: attack
+
+BARR:
+	Selectable:
+		Bounds: 48,20
+		DecorationBounds: 48,48
+	HitShape:
+		UseTargetableCellsOffsets: false
+		TargetableOffsets: 0,0,0, 630,-512,0, 355,512,0, -281,-512,0, -630,512,0
+		Type: Rectangle
+			TopLeft: -1036, -768
+			BottomRight: 1036,1036
+	Building:
+		Footprint: x= xx ==
+		Dimensions: 2,3
+		LocalCenterOffset: 0,-200,0
+	RallyPoint:
+	Exit@1:
+		RequiresCondition: !being-captured
+		SpawnOffset: 700,-100,0
+		ExitCell: 1,0
+		ProductionTypes: Soldier, Infantry
+	Exit@2:
+		RequiresCondition: !being-captured
+		SpawnOffset: -700,600,0
+		ExitCell: 0,2
+		ProductionTypes: Soldier, Infantry
+
+TENT:
+	Selectable:
+		Bounds: 48,20
+		DecorationBounds: 48,48
+	Building:
+		Footprint: x= xx ==
+		Dimensions: 2,3
+		LocalCenterOffset: 0,-200,0
+	RallyPoint:
+	Exit@1:
+		RequiresCondition: !being-captured
+		SpawnOffset: 700,-100,0
+		ExitCell: 1,0
+		Facing: 512
+		ProductionTypes: Soldier, Infantry
+	Exit@2:
+		RequiresCondition: !being-captured
+		SpawnOffset: -700,600,0
+		ExitCell: 0,2
+		Facing: 1024
+		ProductionTypes: Soldier, Infantry

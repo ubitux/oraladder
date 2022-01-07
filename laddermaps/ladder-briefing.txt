@@ -1,0 +1,19 @@
+
+       | oraladder.net |
+ OpenRA Competitive 1v1 ladder
+
+This map features:
+- ERCC refinery 2.1 by FRenzy and Widow
+- BCC Rax 1.0 by Widow
+- Custom RAGL balance:
+    * Ranger:
+        + Vision from 8c0 to 7c0
+        + Speed from 170 to 160
+    * Dome:
+        + Price from 1800 to 1500
+    * LongBow:
+        + Reload Delay from 30 to 34
+        + Burst Delay from 7 to 10
+- Fix for the missing phase transport sound notification
+
+See oraladder.net for more information.
