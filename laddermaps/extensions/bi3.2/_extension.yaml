@@ -1,4 +1,4 @@
-Rules: bi-balance-rules.yaml, bi-player-rules.yaml, bi-briefing-rules.yaml, bi-lobby-rules.yaml
+Rules: bi-balance-rules.yaml, bi-player-rules.yaml
 
 Weapons: bi-weapons.yaml
 
