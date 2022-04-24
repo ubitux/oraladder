@@ -1,0 +1,41 @@
+# Warning: This file is standard YAML, *not* in OpenRA mini-yaml
+
+Divisions:
+
+    Masters:
+        - [7304,  Upps]
+        - [6771,  Mr Cloudy]
+        - [6430,  Blackened]
+        - [11435, Goremented]
+        - [3952,  anjew]
+        - [8869,  Sigil]
+        - [11855, Kaution]
+        - [15421, Gajcus]
+        - [16222, despro]
+        - [11442, Eugenator]
+        - [6793,  maceman]
+
+    Minions:
+        - [4527,  FiveAces]
+        - [5292,  Mo]
+        - [13710, Ekanim]
+        - [6941,  Jur]
+        - [15899, Tux]
+        - [11913, Duke Bones]
+        - [7617,  worldpeace]
+        - [11099, Dodder]
+        - [16401, Margot Honecker]
+        - [7387,  TTTPPP]
+        - [7714,  Nilhall]
+
+    Recruits:
+        - [16066, milkman]
+        - [15428, BeTe]
+        - [10549, Azure Anemone]
+        - [6881,  spetsnaz84]
+        - [16338, Leaf]
+        - [9800,  Mees]
+        - [14769, chouchani]
+        - [13086, RobLoweEscobar]
+        - [16677, jawsh]
+        - [16889, WalterWh]

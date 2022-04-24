@@ -1,4 +1,5 @@
 include laddertools/ladder.sql
+include laddertools/ragl-s12.yml
 include laddertools/ragl-s11.yml
 include laddertools/ragl-s10.yml
 include laddertools/ragl-s9.yml
