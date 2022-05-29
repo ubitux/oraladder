@@ -1,0 +1,7 @@
+FROM oraladder/base:latest
+
+RUN make initragldev
+
+RUN . venv/bin/activate && pip install gunicorn
+
+CMD ["venv/bin/gunicorn", "-b", "0.0.0.0:8000", "raglweb:app"]

@@ -1,0 +1,23 @@
+FROM python:3.9-slim
+
+RUN useradd -m -s /bin/bash openra \
+    && apt-get update && apt-get install -y --no-install-recommends make \
+    && apt-get clean
+
+RUN mkdir /home/openra/oraladder
+
+WORKDIR /home/openra/oraladder
+
+ADD ./laddermaps ./laddermaps
+ADD ./laddertools ./laddertools
+ADD ./ladderweb ./ladderweb
+ADD ./misc ./misc
+ADD ./raglweb ./raglweb
+ADD ./Makefile ./
+ADD ./MANIFEST.in ./
+ADD ./setup.py ./
+ADD ./LICENSE ./
+
+RUN chown openra: -R /home/openra
+
+USER openra
