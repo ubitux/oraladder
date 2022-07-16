@@ -191,6 +191,7 @@ def _main(args):
     c.execute('DROP TABLE IF EXISTS playoff_outcomes')
     c.execute('DROP TABLE IF EXISTS playoff_playersets')
     c.execute('DROP TABLE IF EXISTS playoffs')
+    c.execute('DROP TABLE IF EXISTS forfeit_games')
 
     with open(args.schema) as f:
         c.executescript(f.read())
@@ -217,6 +218,9 @@ def _main(args):
     playoffs = players_info.get('Playoffs')
     if playoffs:
         _handle_extra_outcomes(c, extra_outcomes, playoffs)
+
+    if 'Forfeit_Games' in players_info.keys():
+        c.executemany('INSERT OR IGNORE INTO forfeit_games VALUES (?,?,?,?)', players_info['Forfeit_Games'])
 
     conn.commit()
     conn.close()
