@@ -9,14 +9,14 @@ Divisions:
         - [11435, Goremented]
         - [3952,  anjew]
         - [8869,  Sigil]
-        - [11855, Kaution]
+        - [4527,  FiveAces]
         - [15421, Gajcus]
         - [16222, despro]
         - [11442, Eugenator]
         - [6793,  maceman]
 
     Minions:
-        - [4527,  FiveAces]
+        - [16066, milkman]
         - [5292,  Mo]
         - [13710, Ekanim]
         - [6941,  Jur]
@@ -29,7 +29,7 @@ Divisions:
         - [7714,  Nilhall]
 
     Recruits:
-        - [16066, milkman]
+        - [6751, Tailix Killa Mentor]
         - [15428, BeTe]
         - [10549, Azure Anemone]
         - [6881,  spetsnaz84]
@@ -39,3 +39,25 @@ Divisions:
         - [13086, RobLoweEscobar]
         - [16677, jawsh]
         - [16889, WalterWh]
+
+Forfeit:
+    - 6771
+    - 16677
+    - 16889
+    - 13086
+
+Forfeit_Games:
+    # - [ winner_id, loser_id, decision date (YYYY-MM-DD), reason ]
+    - [7714, 7617, 2022-06-20, "Failed to organize game"]
+    - [7714, 7617, 2022-06-20, "Failed to organize game"]
+    - [7387, 7617, 2022-06-20, "Failed to organize game"]
+    - [7387, 7617, 2022-06-20, "Failed to organize game"]
+
+Playoffs:
+    Masters Finale:
+        bestof: 5
+        players:
+            - 16222
+            - 6430
+            - 15421
+            - 6793
