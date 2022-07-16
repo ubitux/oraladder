@@ -83,7 +83,7 @@ def get_playoff4(n, players, records):
     fp0_wins, fp1_wins = _extract_records(records, fp0, fp1, n)
     finale_scores = {fp0: fp0_wins, fp1: fp1_wins}
     if win_score in {fp0_wins, fp1_wins}:
-        finale_status = (_GOLD, _SILVER) if fp0 == win_score else (_SILVER, _GOLD)
+        finale_status = (_GOLD, _SILVER) if fp0_wins == win_score else (_SILVER, _GOLD)
     else:
         finale_status = (None, None)
     matchups.append(('Final', finale_status, (fp0, fp1), (fp0_wins, fp1_wins)))
