@@ -27,6 +27,7 @@ from flask import (
     g,
     render_template,
     send_file,
+    jsonify,
 )
 
 
@@ -198,6 +199,14 @@ def games():
     db = _db_get()
     games = _get_games(db, 'outcomes')
     return render_template('games.html', games=games)
+
+
+@app.route('/games/json')
+def games_json():
+    db = _db_get()
+    games = _get_games(db, 'playoff_outcomes')
+    games += _get_games(db, 'outcomes')
+    return jsonify(games)
 
 
 def _get_player_info(db, profile_id):
