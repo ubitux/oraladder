@@ -45,6 +45,12 @@ def _db_close(e=None):
         db.close()
 
 
+def _ordered_alphanumerically(x: str, y: str) -> bool:
+    # returns True if x is the alphanumerically higher-ranked string,
+    # i.e. "abcde" before "efgh"
+    return x.lower() < y.lower()
+
+
 def create_app():
     app = Flask(__name__)
     app.config.from_mapping(
@@ -198,6 +204,15 @@ def playoffs():
 def games():
     db = _db_get()
     games = _get_games(db, 'outcomes')
+
+    # create an unspoiled list of games (players ordered alphanumerically, additional "winner" attribute)
+    for game in games:
+        p0, p0_id, p1, p1_id = game['p0'], game['p0_id'], game['p1'], game['p1_id']
+        # re-order players alphanumerically if necessary
+        if not _ordered_alphanumerically(p0, p1):
+            game.update(p0=p1, p0_id=p1_id, p1=p0, p1_id=p0_id)
+        game['winner'] = p0
+
     return render_template('games.html', games=games)
 
 
