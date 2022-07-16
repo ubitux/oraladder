@@ -38,7 +38,7 @@
 			<td>{{ game.date }}</td>
 			<td class="map">{{ game.map }}</td>
 			<td class="spoiler">{{ game.outcome }}</td>
-			<td><a href="{{ url_for('replay', replay_hash=game.hash) }}">📥</a></td>
+			<td>{%- if game.hash -%}<a href="{{ url_for('replay', replay_hash=game.hash) }}">📥</a>{%- endif -%}</td>
 			{%- endfor -%}
 			{% else -%}
 			<td class="nogame" colspan="4">No game recorded</td>

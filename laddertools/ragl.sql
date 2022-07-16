@@ -57,3 +57,10 @@ CREATE TABLE playoffs (
 	label   TEXT NOT NULL PRIMARY KEY,
 	bestof  INTEGER NOT NULL
 );
+
+CREATE TABLE forfeit_games (
+	profile_id0           INTEGER NOT NULL,
+	profile_id1           INTEGER NOT NULL,
+	decision_timestamp    TEXT NOT NULL,
+	reason                TEXT DEFAULT NULL
+)

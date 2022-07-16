@@ -17,10 +17,9 @@
 
 import os
 import os.path as op
-
 import sqlite3
 from datetime import date, datetime, timedelta
-from .playoffs import get_playoff2, get_playoff4, PlayoffOutcome
+
 from flask import (
     Flask,
     current_app,
@@ -29,6 +28,12 @@ from flask import (
     send_file,
     jsonify,
 )
+
+from .forfeit_games import (
+    get_player_forfeit_games,
+    get_forfeit_win_loss_stats,
+)
+from .playoffs import get_playoff2, get_playoff4, PlayoffOutcome
 
 
 def _db_get():
@@ -96,11 +101,14 @@ def scoreboards():
         '''
     )
 
+    forfeit_games = get_forfeit_win_loss_stats(db)
+
     scoreboards = {}
     for profile_id, profile_name, avatar_url, wins, losses, division, status in cur:
         rows = scoreboards.get(division, [])
-        nb_played = wins + losses
-        matchup_done_count = wins + losses
+        forfeit_wins = forfeit_games[profile_id]['wins']
+        forfeit_losses = forfeit_games[profile_id]['losses']
+        nb_played = wins + forfeit_wins + losses + forfeit_losses
         if status == 'SF':
             status = '⛔ Season Forfeit'
         elif nb_played == max_matches[division]:
@@ -109,17 +117,23 @@ def scoreboards():
             status = ''  # TODO: handle late status
 
         rows.append(dict(
-            row_id=len(rows) + 1,
             profile_id=profile_id,
             name=profile_name,
             avatar_url=avatar_url,
             played=nb_played,
             max_matches=max_matches[division],
-            wins=wins,
-            losses=losses,
-            winrate=wins / nb_played * 100 if nb_played else 0,
+            wins=wins + forfeit_wins,
+            losses=losses + forfeit_losses,
+            winrate=(wins + forfeit_wins) / nb_played * 100 if nb_played else 0,
             status=status or '',
         ))
+
+        # Take into account forfeit games when sorting the list
+        rows = sorted(rows, key=lambda row: (row["wins"], row["winrate"]), reverse=True)
+        # Set player rank based on sorted list
+        for i, r in enumerate(rows, 1):
+            r['row_id'] = 'SF' if "Season Forfeit" in r['status'] else i
+
         scoreboards[division] = rows
 
     return render_template('scoreboards.html', scoreboards=scoreboards)
@@ -326,6 +340,7 @@ def player(profile_id):
 
     player_info = _get_player_info(db, profile_id)
     records = _get_player_records(db, profile_id)
+    records = records | get_player_forfeit_games(db, profile_id)
     opponents = _get_player_opponents(db, profile_id, player_info['division'])
 
     cfg = app.config
