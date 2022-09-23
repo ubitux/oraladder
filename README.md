@@ -1,5 +1,10 @@
 # OpenRA ladder
 
+**This repository is deprecated, ownership has been transferred to
+https://github.com/suhrm1/oraladder**
+
+---
+
 This repository contains all the sources used by the OpenRA community
 competitive 1v1 ladder hosted on [oraladder.net](http://oraladder.net).
 
